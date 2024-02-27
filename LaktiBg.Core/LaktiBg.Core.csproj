@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LaktiBg.Infrastructure\LaktiBg.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

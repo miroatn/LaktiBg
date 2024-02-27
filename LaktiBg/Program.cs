@@ -1,4 +1,4 @@
-using LaktiBg.Data;
+using LaktiBg.Infrastructure.Data;
 using LaktiBg.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

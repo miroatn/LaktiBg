@@ -1,7 +1,6 @@
-﻿using LaktiBg.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
+using LaktiBg.Infrastructure.Data;
 
 namespace LaktiBg.Extensions
 {

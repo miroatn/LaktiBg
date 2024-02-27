@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.19" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LaktiBg.Core\LaktiBg.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace LaktiBg.Data
+namespace LaktiBg.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
