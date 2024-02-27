@@ -10,7 +10,6 @@ namespace LaktiBg.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
 
-
             return services;
         }
         public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
