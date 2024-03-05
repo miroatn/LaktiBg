@@ -10,6 +10,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         {
             Participants = new List<UsersEvents>();
             Comments = new List<Comment>();
+            Types = new List<EventType>();
         }
 
         [Key]
@@ -24,7 +25,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         public int TypeId { get; set; }
 
         [Required]
-        public EventType Type { get; set; } = null!;
+        public ICollection<EventType> Types { get; set; }
 
         [Required]
         public DateTime CreationDate { get; set; }

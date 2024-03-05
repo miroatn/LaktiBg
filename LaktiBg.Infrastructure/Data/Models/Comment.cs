@@ -18,7 +18,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         [ForeignKey(nameof(Author))]
         public string AuthorId { get; set; } = string.Empty;
 
-        public IdentityUser Author { get; set; } = null!;
+        public ApplicationUser Author { get; set; } = null!;
 
         [Required]
         [ForeignKey(nameof(Event))]

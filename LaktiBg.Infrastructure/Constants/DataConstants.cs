@@ -20,6 +20,21 @@
             public const int RatingMinValue = 1;
         }
 
+        public static class UserConstants 
+        {
+            public const int FirstNameMaxLenght = 100;
+            public const int FirstNameMinLenght = 2;
+
+            public const int LastNameMaxLenght = 100;
+            public const int LastNameMinLenght = 2;
+
+            public const int RatingMaxValue = 7;
+            public const int RatingMinValue = 1;
+
+            public const int DescriptionMaxLenght = 500;
+            public const int DescriptionMinLenght = 5;
+        } 
+
         public static class EventTypeConstants
         {
             public const int NameMaxLenght = 100;

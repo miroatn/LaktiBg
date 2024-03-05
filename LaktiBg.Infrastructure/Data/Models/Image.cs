@@ -13,7 +13,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         [ForeignKey(nameof(User))]
         public string UserId { get; set; } = string.Empty;
 
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         [ForeignKey(nameof(Place))]
