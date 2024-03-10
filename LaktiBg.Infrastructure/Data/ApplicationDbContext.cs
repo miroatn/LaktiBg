@@ -1,4 +1,5 @@
 ﻿using LaktiBg.Infrastructure.Data.Models;
+using LaktiBg.Infrastructure.Data.SeedDb;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +31,6 @@ namespace LaktiBg.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            base.OnModelCreating(builder);
-
             builder.Entity<UsersEvents>()
                 .HasKey(e => new {e.EventId, e.UserId});
 
@@ -42,6 +41,9 @@ namespace LaktiBg.Infrastructure.Data
 
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
+            builder.ApplyConfiguration(new EventTypeConfiguration());
+
+            base.OnModelCreating(builder);
 
         }
     }
