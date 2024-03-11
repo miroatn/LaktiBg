@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using static LaktiBg.Infrastructure.Constants.DataConstants.UserConstants;
 
 namespace LaktiBg.Areas.Identity.Pages.Account
 {
@@ -76,7 +78,7 @@ namespace LaktiBg.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Email*")]
             public string Email { get; set; }
 
             /// <summary>
@@ -86,7 +88,7 @@ namespace LaktiBg.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Password*")]
             public string Password { get; set; }
 
             /// <summary>
@@ -94,9 +96,29 @@ namespace LaktiBg.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Confirm password*")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "First name*")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last name*")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Birthdate")]
+            [DataType(DataType.Date)]
+            [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+            public DateTime? Birthdate { get; set; }
+
+            [Display(Name = "Address")]
+            public string Address { get; set; }
+
+            [Display(Name = "Description")]
+            [StringLength(DescriptionMaxLenght, MinimumLength = DescriptionMinLenght, ErrorMessage ="The {0} field must be between {2} and {1} characters long")]
+            public string Description { get; set; }
         }
 
 
@@ -112,10 +134,37 @@ namespace LaktiBg.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+
                 var user = CreateUser();
+                
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                //This code is for custom prop in user
+
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+
+                if (Input.Birthdate != null)
+                {
+                    user.BirthDate = Input.Birthdate;
+                }
+
+                user.Rating = 5;
+                user.RegistrationDate = DateTime.Now;
+
+                if (Input.Address != null)
+                {
+                    user.Address = Input.Address;
+                }
+
+                if (Input.Description != null)
+                {
+                    user.Description = Input.Description;
+                }
+                
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -154,16 +203,16 @@ namespace LaktiBg.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
