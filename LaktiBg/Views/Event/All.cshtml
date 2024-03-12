@@ -1,0 +1,37 @@
+﻿@model List<EventViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Events</title>
+</head>
+<body>
+    <h1>Events</h1>
+    <table>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <div class="card border-success mb-3" style="max-width: 18rem;">
+                  <div class="card-header bg-transparent border-success">@item.Name</div>
+                  <div class="card-body text-success">
+                    <h5 class="card-title">Час на лактирането: @item.StartDate</h5>
+                    <p class="card-text">Лактирането ще се проведе в @item.Place.Name </p>
+                    <p class="card-text">@item.Description</p>
+                  </div>
+                  <div class="card-footer bg-transparent border-success">Минимална възраст: 
+                      @if(item.MinAgeRequired != null)
+                      {
+                            @item.MinAgeRequired
+                      }
+                      else
+                      {
+                            <p>Няма минимална възраст</p>
+                      }
+                    </div> 
+                        
+                </div>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
