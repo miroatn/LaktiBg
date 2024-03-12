@@ -2,6 +2,8 @@
 {
     public static class DataConstants
     {
+        public const string DateTimeFormat = "dd/MM/yyyy HH:mm";
+
         public static class EventConstants
         {
             public const int NameMaxLenght = 100;
