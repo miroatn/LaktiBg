@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LaktiBg.Infrastructure.Data;
+using LaktiBg.Infrastructure.Data.Common;
+using LaktiBg.Core.Contracts.Event;
+using LaktiBg.Core.Services.EventServices;
 
 namespace LaktiBg.Extensions
 {
@@ -8,6 +11,7 @@ namespace LaktiBg.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<IEventService, EventService>();
 
             return services;
         }
@@ -17,6 +21,8 @@ namespace LaktiBg.Extensions
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddScoped<IRepository, Repository>();
 
             return services;
         }
