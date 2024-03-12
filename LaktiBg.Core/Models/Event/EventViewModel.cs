@@ -21,7 +21,7 @@ namespace LaktiBg.Core.Models.Event
 
         public Place Place { get; set; } = null!;
 
-        public string OrganizerId { get; set; }
+        public string OrganizerId { get; set; } = string.Empty;
 
         public int? MinRatingRequired { get; set; }
 
