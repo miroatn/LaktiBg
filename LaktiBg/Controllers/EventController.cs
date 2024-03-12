@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LaktiBg.Controllers
 {
-    [Authorize]
-    public class EventController : Controller
+    public class EventController : BaseController
     {
         public IActionResult Index()
         {
