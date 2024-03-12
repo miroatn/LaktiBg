@@ -20,7 +20,7 @@ namespace LaktiBg.Core.Services.EventServices
         {
             repository = _repository;
         }
-        public async Task<IEnumerable<EventViewModel>> All()
+        public async Task<IEnumerable<EventViewModel>> AllAsync()
         {
             return await repository.AllReadOnly<Event>()
                 .Select(e => new EventViewModel()
