@@ -7,7 +7,7 @@ namespace LaktiBg.Infrastructure.Data.Models
     {
         public EventType()
         {
-            Events = new List<Event>();
+            Events = new List<EventTypeConnection>();
         }
 
         [Key]
@@ -17,6 +17,6 @@ namespace LaktiBg.Infrastructure.Data.Models
         [MaxLength(NameMaxLenght)]
         public string Name { get; set; } = string.Empty;
 
-        ICollection<Event> Events { get; set; }
+        ICollection<EventTypeConnection> Events { get; set; }
     }
 }

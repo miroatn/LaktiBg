@@ -28,6 +28,8 @@ namespace LaktiBg.Infrastructure.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
 
+        public DbSet<EventTypeConnection> EventTypeConnections { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -38,6 +40,9 @@ namespace LaktiBg.Infrastructure.Data
                 .HasOne(u => u.User)
                 .WithMany(u => u.Friends)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<EventTypeConnection>()
+                .HasKey(etc => new {etc.EventId, etc.EventTypeId});
 
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
