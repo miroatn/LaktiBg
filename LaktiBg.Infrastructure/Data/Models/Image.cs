@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,19 +10,21 @@ namespace LaktiBg.Infrastructure.Data.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        public byte[] Bytes { get; set; } = null!;
+        public string Description { get; set; } = string.Empty;
+        public string FileExtension { get; set; } = string.Empty;
+        
+        public decimal Size { get; set; }
+
         [ForeignKey(nameof(User))]
-        public string UserId { get; set; } = string.Empty;
+        public string? UserId { get; set; } 
 
         public ApplicationUser User { get; set; } = null!;
 
-        [Required]
         [ForeignKey(nameof(Place))]
-        public int PlaceId { get; set; }
+        public int? PlaceId { get; set; }
 
         public Place Place { get; set; } = null!;
 
-        [Required]
-        public string Url { get; set; } = string.Empty;
     }
 }
