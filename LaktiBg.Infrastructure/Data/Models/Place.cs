@@ -20,8 +20,10 @@ namespace LaktiBg.Infrastructure.Data.Models
 
         public string? OwnerId { get; set; }
 
+        [MaxLength(ContactMaxLenght)]
         public string? Contact { get; set; }
 
+        [MaxLength(AddressMaxLenght)]
         public string? Address { get; set; }
 
         [Required]
