@@ -20,25 +20,31 @@ namespace LaktiBg.Core.Services.EventServices
         {
             repository = _repository;
         }
-        public async Task<IEnumerable<EventViewModel>> AllAsync()
+
+        public Task<IEnumerable<EventViewModel>> AllAsync()
         {
-            return await repository.AllReadOnly<Event>()
-                .Select(e => new EventViewModel()
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Types = e.Types,
-                    StartDate = e.StartDate.ToString(DateTimeFormat),
-                    Place = e.Place,
-                    OrganizerId = e.OrganizerId,
-                    MinRatingRequired = e.MinRatingRequired,
-                    ParticipantsMaxCount = e.ParticipantsMaxCount,
-                    MinAgeRequired = e.MinAgeRequired,
-                    Description = e.Description,
-                    Participants = e.Participants,
-                    Comments = e.Comments,
-                })
-                .ToListAsync();
+            throw new NotImplementedException();
         }
+
+        //public async Task<IEnumerable<EventViewModel>> AllAsync()
+        //{
+        //    return await repository.AllReadOnly<Event>()
+        //        .Select(e => new EventViewModel()
+        //        {
+        //            Id = e.Id,
+        //            Name = e.Name,
+        //            Types = e.Types,
+        //            StartDate = e.StartDate.ToString(DateTimeFormat),
+        //            Place = e.Place,
+        //            OrganizerId = e.OrganizerId,
+        //            MinRatingRequired = e.MinRatingRequired,
+        //            ParticipantsMaxCount = e.ParticipantsMaxCount,
+        //            MinAgeRequired = e.MinAgeRequired,
+        //            Description = e.Description,
+        //            Participants = e.Participants,
+        //            Comments = e.Comments,
+        //        })
+        //        .ToListAsync();
+        //}
     }
 }
