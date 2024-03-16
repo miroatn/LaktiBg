@@ -30,80 +30,80 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
             AlcoholType = new EventType()
             {
                 Id = 1,
-                Name = "Alcohol"
+                Name = "Алкохол"
             };
 
             VeganType = new EventType()
             {
                 Id = 2,
-                Name = "Vegan"
+                Name = "Веган"
             };
 
 
             PartyType = new EventType()
             {
                 Id = 3,
-                Name = "Party"
+                Name = "Парти"
             };
 
             MeatType = new EventType()
             {
                 Id = 4,
-                Name = "Meat"
+                Name = "Месо"
             };
 
             HikingType = new EventType()
             {
                 Id = 5,
-                Name = "Hiking"
+                Name = "Tуризъм"
             };
 
             SmokingType = new EventType()
             {
                 Id = 6,
-                Name = "Smoking"
+                Name = "За пушачи"
             };
 
             LoudMusic = new EventType()
             {
                 Id = 7,
-                Name = "Loud music"
+                Name = "Силна музика"
             };
 
             MovieType = new EventType()
             {
                 Id = 8,
-                Name = "Movie"
+                Name = "Филм"
             };
 
             VegetarianType = new EventType()
             {
                 Id = 9,
-                Name = "Vegetarian"
+                Name = "Вегетарианско"
             };
 
             GuesthouseType = new EventType()
             {
                 Id = 10,
-                Name = "Guesthouse"
+                Name = "Къща за гости"
             };
 
             HomePartyType = new EventType()
             {
                 Id = 11,
-                Name = "Home party"
+                Name = "Домашно парти"
             };
 
             RestaurantType = new EventType()
             {
                 Id = 12,
-                Name = "Restaurant"
+                Name = "Ресторант"
             };
 
             HutType = new EventType()
             {
                 Id = 13,
-                Name = "Hut"
+                Name = "Хижа"
             };
         }
     }

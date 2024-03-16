@@ -134,67 +134,67 @@ namespace LaktiBg.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            Name = "Meat"
+                            Name = "Месо"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Movie"
+                            Name = "Филм"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Smoking"
+                            Name = "За пушачи"
                         },
                         new
                         {
                             Id = 13,
-                            Name = "Hut"
+                            Name = "Хижа"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Hiking"
+                            Name = "Tуризъм"
                         },
                         new
                         {
                             Id = 1,
-                            Name = "Alcohol"
+                            Name = "Алкохол"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Guesthouse"
+                            Name = "Къща за гости"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Party"
+                            Name = "Парти"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "Home party"
+                            Name = "Домашно парти"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Loud music"
+                            Name = "Силна музика"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Vegan"
+                            Name = "Веган"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Vegetarian"
+                            Name = "Вегетарианско"
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Restaurant"
+                            Name = "Ресторант"
                         });
                 });
 
@@ -221,15 +221,25 @@ namespace LaktiBg.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("PlaceId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Bytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("FileExtension")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Size")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -237,7 +247,8 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.HasIndex("PlaceId");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Images");
                 });
@@ -611,15 +622,11 @@ namespace LaktiBg.Infrastructure.Migrations
                 {
                     b.HasOne("LaktiBg.Infrastructure.Data.Models.Place", "Place")
                         .WithMany("Images")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PlaceId");
 
                     b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "User")
                         .WithOne("Avatar")
-                        .HasForeignKey("LaktiBg.Infrastructure.Data.Models.Image", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LaktiBg.Infrastructure.Data.Models.Image", "UserId");
 
                     b.Navigation("Place");
 

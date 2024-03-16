@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaktiBg.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240314150047_EventTypeMappingTableAdded")]
-    partial class EventTypeMappingTableAdded
+    [Migration("20240316082941_Renewed")]
+    partial class Renewed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -131,73 +131,6 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EventTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 4,
-                            Name = "Meat"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Movie"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Smoking"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Hut"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Hiking"
-                        },
-                        new
-                        {
-                            Id = 1,
-                            Name = "Alcohol"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Guesthouse"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Party"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Home party"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Loud music"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Vegan"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Vegetarian"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Restaurant"
-                        });
                 });
 
             modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.EventTypeConnection", b =>
@@ -223,15 +156,25 @@ namespace LaktiBg.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("PlaceId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Bytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("FileExtension")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Size")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -239,7 +182,8 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.HasIndex("PlaceId");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Images");
                 });
@@ -613,15 +557,11 @@ namespace LaktiBg.Infrastructure.Migrations
                 {
                     b.HasOne("LaktiBg.Infrastructure.Data.Models.Place", "Place")
                         .WithMany("Images")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PlaceId");
 
                     b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "User")
                         .WithOne("Avatar")
-                        .HasForeignKey("LaktiBg.Infrastructure.Data.Models.Image", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LaktiBg.Infrastructure.Data.Models.Image", "UserId");
 
                     b.Navigation("Place");
 

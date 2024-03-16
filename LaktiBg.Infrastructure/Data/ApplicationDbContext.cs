@@ -44,6 +44,15 @@ namespace LaktiBg.Infrastructure.Data
             builder.Entity<EventTypeConnection>()
                 .HasKey(etc => new {etc.EventId, etc.EventTypeId});
 
+            builder.Entity<Image>()
+                .Property(i => i.PlaceId)
+                .IsRequired(false);
+
+            builder.Entity<Image>()
+            .Property(i => i.UserId)
+            .IsRequired(false);
+
+
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
             builder.ApplyConfiguration(new EventTypeConfiguration());

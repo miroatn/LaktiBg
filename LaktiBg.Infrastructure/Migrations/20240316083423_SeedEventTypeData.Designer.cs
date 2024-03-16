@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaktiBg.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240305172941_Initial")]
-    partial class Initial
+    [Migration("20240316083423_SeedEventTypeData")]
+    partial class SeedEventTypeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -123,9 +123,6 @@ namespace LaktiBg.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("EventId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -133,9 +130,89 @@ namespace LaktiBg.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
-
                     b.ToTable("EventTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 4,
+                            Name = "Месо"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Филм"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "За пушачи"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Хижа"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Tуризъм"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Name = "Алкохол"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Къща за гости"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Парти"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Домашно парти"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Силна музика"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Веган"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Вегетарианско"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Ресторант"
+                        });
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.EventTypeConnection", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventId", "EventTypeId");
+
+                    b.HasIndex("EventTypeId");
+
+                    b.ToTable("EventTypeConnections");
                 });
 
             modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Image", b =>
@@ -146,15 +223,25 @@ namespace LaktiBg.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("PlaceId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Bytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("FileExtension")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Size")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -162,7 +249,8 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.HasIndex("PlaceId");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Images");
                 });
@@ -513,26 +601,34 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.Navigation("Place");
                 });
 
-            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.EventType", b =>
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.EventTypeConnection", b =>
                 {
-                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Event", null)
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Event", "Event")
                         .WithMany("Types")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.EventType", "EventType")
+                        .WithMany()
+                        .HasForeignKey("EventTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("EventType");
                 });
 
             modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Image", b =>
                 {
                     b.HasOne("LaktiBg.Infrastructure.Data.Models.Place", "Place")
                         .WithMany("Images")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PlaceId");
 
                     b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "User")
                         .WithOne("Avatar")
-                        .HasForeignKey("LaktiBg.Infrastructure.Data.Models.Image", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LaktiBg.Infrastructure.Data.Models.Image", "UserId");
 
                     b.Navigation("Place");
 

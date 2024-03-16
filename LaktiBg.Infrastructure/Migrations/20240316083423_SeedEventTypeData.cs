@@ -4,28 +4,28 @@
 
 namespace LaktiBg.Infrastructure.Migrations
 {
-    public partial class SeedEventType : Migration
+    public partial class SeedEventTypeData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
                 table: "EventTypes",
-                columns: new[] { "Id", "EventId", "Name" },
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, null, "Alcohol" },
-                    { 2, null, "Vegan" },
-                    { 3, null, "Party" },
-                    { 4, null, "Meat" },
-                    { 5, null, "Hiking" },
-                    { 6, null, "Smoking" },
-                    { 7, null, "Loud music" },
-                    { 8, null, "Movie" },
-                    { 9, null, "Vegetarian" },
-                    { 10, null, "Guesthouse" },
-                    { 11, null, "Home party" },
-                    { 12, null, "Restaurant" },
-                    { 13, null, "Hut" }
+                    { 1, "Алкохол" },
+                    { 2, "Веган" },
+                    { 3, "Парти" },
+                    { 4, "Месо" },
+                    { 5, "Tуризъм" },
+                    { 6, "За пушачи" },
+                    { 7, "Силна музика" },
+                    { 8, "Филм" },
+                    { 9, "Вегетарианско" },
+                    { 10, "Къща за гости" },
+                    { 11, "Домашно парти" },
+                    { 12, "Ресторант" },
+                    { 13, "Хижа" }
                 });
         }
 
