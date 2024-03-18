@@ -1,8 +1,10 @@
 ﻿using LaktiBg.Core.Contracts.Place;
 using LaktiBg.Core.Models.Image;
 using LaktiBg.Core.Models.PlaceModels;
+using LaktiBg.Core.Services.ImageServices;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace LaktiBg.Core.Services.PlaceServices
 {
@@ -25,17 +27,26 @@ namespace LaktiBg.Core.Services.PlaceServices
                 {
                     using (var memoryStream = new MemoryStream())
                     {
-                        await file.CopyToAsync(memoryStream);
-                        string fileExtention = Path.GetExtension(file.FileName.ToLower());
 
-                        if (memoryStream.Length < 4194304 && isPhoto(fileExtention))
+                        var outputPath = Path.Combine("uploads", file.FileName);
+                        var imageService = new ImageService();
+                        await imageService.CompressAndSaveImageAsync(file, outputPath, 30);
+
+
+                        string fileExtention = Path.GetExtension(file.FileName.ToLower());
+                        byte[] reducedFile = File.ReadAllBytes(outputPath);
+
+                        await file.CopyToAsync(memoryStream);
+                        
+
+                        if (reducedFile.Length < 4194304 && isPhoto(fileExtention))
                         {
                             var newphoto = new ImageViewModel()
                             {
-                                Bytes = memoryStream.ToArray(),
+                                Bytes = reducedFile,
                                 Description = file.FileName,
                                 FileExtension = Path.GetExtension(file.FileName),
-                                Size = file.Length,
+                                Size = reducedFile.Length,
                             };
 
                             imageModels.Add(newphoto);
@@ -44,6 +55,8 @@ namespace LaktiBg.Core.Services.PlaceServices
                         {
                             //ModelState.AddModelError("File", "The file is too large.");
                         }
+
+                        //TODO: Deleting the file from folder after uploading
                     }
 
                 }
@@ -83,17 +96,18 @@ namespace LaktiBg.Core.Services.PlaceServices
             return place.Id;
         }
 
-        private bool isPhoto(string fileExtention)
-        {
-            return fileExtention == ".jpg" 
-                || fileExtention == ".jpeg" 
-                || fileExtention == ".png" 
-                || fileExtention == ".bmp";
-        }
 
         public Task<int> CreateAsync(PlaceFormModel model)
         {
             throw new NotImplementedException();
+        }
+
+        private bool isPhoto(string fileExtention)
+        {
+            return fileExtention == ".jpg"
+                || fileExtention == ".jpeg"
+                || fileExtention == ".png"
+                || fileExtention == ".bmp";
         }
     }
 }
