@@ -26,6 +26,16 @@
                     <li><a class="dropdown-item" href="@Url.Action("Add", "Event")">Добави</a></li>
                   </ul>
                 </div>
+                </button>
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Места
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="@Url.Action("All", "Place")">Всички</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Add", "Place")">Добави</a></li>
+                  </ul>
+                </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @await Component.InvokeAsync(nameof(MainMenuComponent))
                     <partial name="_LoginPartial" />
