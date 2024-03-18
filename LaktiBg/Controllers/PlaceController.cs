@@ -45,9 +45,20 @@ namespace LaktiBg.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(int id)
         {
-            throw new NotImplementedException();
+            var model = await placeService.Details(id);
+
+            return View(model);
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> All()
+        {
+            var models = await placeService.AllAsync();
+
+            return View(models);
         }
     }
 }
