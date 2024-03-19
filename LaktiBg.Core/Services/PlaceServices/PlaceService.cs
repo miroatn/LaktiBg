@@ -95,7 +95,8 @@ namespace LaktiBg.Core.Services.PlaceServices
                             //ModelState.AddModelError("File", "The file is too large.");
                         }
 
-                        //TODO: Deleting the file from folder after uploading
+                        File.Delete(outputPath);
+
                     }
 
                 }
