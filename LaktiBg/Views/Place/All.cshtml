@@ -11,18 +11,33 @@
         <tbody>
             @foreach (var item in Model.Where(x => x.IsPublic == true || x.OwnerId == User.Id()))
             {
-                        <div class="card border-success mb-3" style="max-width: 18rem;">
-                      <div class="card-header bg-transparent border-success">Име на мястото: @item.Name</div>
-                          <div class = "row justify-content-center">
-                          <img src="@item.ImagesToShow.First()" alt="Image" width="200" height="auto"/>
+               <div class="card border-success mb-3" style="max-width: 26rem;">
+                    <div class="card-header bg-transparent border-success">Име на мястото: @item.Name</div>
+                        <div class = "row justify-content-center">
+                        <img src="@item.ImagesToShow.First()" alt="Image" width="200" height="auto"/>
+                        </div>
+                    <div class="card-body text-success">
+                    <h5 class="card-title">Контакт: @item.Contact</h5>
+                    <p class="card-text">Адрес: @item.Address </p>
+                </div>
+                    <div class="card-footer bg-transparent border-success">Рейтинг: @item.Rating</div> 
+                   <div class="container">
+                     <div class="row">
+                              <div class="col-md-3">
+                                    <button type="button" asp-controller="Place" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success btn-lg" >Детайли</button>
                           </div>
-                      <div class="card-body text-success">
-                        <h5 class="card-title">Контакт: @item.Contact</h5>
-                        <p class="card-text">Адрес: @item.Address </p>
-                      </div>
-                      <div class="card-footer bg-transparent border-success">Рейтинг: @item.Rating</div> 
-                          <a asp-controller="Place" asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Детайли</a>
-                    </div>      
+                    @if (User.Id() == item.OwnerId)
+                    {
+                            <div class="col-md-4 mx-3">
+                                    <button type="button" asp-controller="Place" asp-action="Edit" class="btn btn-outline-primary btn-lg">Редактиране</button>
+                            </div>
+                                    <div class="col-md-4">
+                                    <button type="button" asp-controller="Place" asp-action="Details" class="btn btn-outline-danger btn-lg">Изтрий</button>
+                            </div>
+                    }
+                 </div>
+               </div> 
+               </div>
             }
         </tbody>
     </table>
