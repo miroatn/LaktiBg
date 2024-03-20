@@ -134,9 +134,25 @@ namespace LaktiBg.Core.Services.PlaceServices
             return place.Id;
         }
 
-        public Task Delete(int id)
+        public async Task DeletePlace(int id)
         {
-            throw new NotImplementedException();
+            Place? place = await repository.GetByIdAsync<Place>(id);
+
+            if (place != null)
+            {
+                List<Image> placeImages = await repository.All<Image>()
+                                                          .Where(i => i.PlaceId == id)
+                                                          .ToListAsync();
+
+                if (placeImages.Count != 0)
+                {
+                    await repository.RemoveRange(placeImages);
+                }
+
+                await repository.RemoveAsync(place);
+            }
+
+            await repository.SaveChangesAsync();
         }
 
         public async Task DeleteImage(int imageId)
@@ -150,11 +166,6 @@ namespace LaktiBg.Core.Services.PlaceServices
                 await repository.RemoveAsync(image);
                 await repository.SaveChangesAsync();
             }
-        }
-
-        public Task DeletePlace(int placeId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<PlaceViewModel> Details(int id)
@@ -287,7 +298,7 @@ namespace LaktiBg.Core.Services.PlaceServices
             return imagesToShow;
         }
 
-        public async Task<PlaceFormModel> FindPlaceById(int id)
+        public async Task<PlaceFormModel> GetPlaceFormModelByPlaceId(int id)
         {
             var model = await repository.AllReadOnly<Place>()
                   .Where(p => p.Id == id)

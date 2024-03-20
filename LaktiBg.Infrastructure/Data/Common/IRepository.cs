@@ -13,6 +13,8 @@
         Task<T?> GetByIdAsync<T>(object id) where T : class;
 
         Task RemoveAsync<T>(T entity) where T : class;
+
+        Task RemoveRange<T>(IEnumerable<T> entities) where T : class;
  
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LaktiBg.Core.Models.PlaceModels;
+using LaktiBg.Infrastructure.Data.Models;
 
 namespace LaktiBg.Core.Contracts.Place
 {
@@ -12,11 +13,11 @@ namespace LaktiBg.Core.Contracts.Place
 
         Task Edit(PlaceFormModel model);
 
-        Task Delete(int id);
+        Task DeletePlace(int placeId);
 
         Task<bool> PlaceExistById(int id);
 
-        Task<PlaceFormModel> FindPlaceById(int id);
+        Task<PlaceFormModel> GetPlaceFormModelByPlaceId(int id);
 
         Task<bool> IsUserOwner(string userId, int placeId);
 
@@ -26,7 +27,6 @@ namespace LaktiBg.Core.Contracts.Place
 
         Task<int> FindPlaceIdByImageId(int imageId);
 
-        Task DeletePlace(int placeId);
 
     }
 }

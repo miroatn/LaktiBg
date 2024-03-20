@@ -45,5 +45,10 @@ namespace LaktiBg.Infrastructure.Data.Common
         {
             DbSet<T>().Remove(entity);
         }
+
+        public async Task RemoveRange<T>(IEnumerable<T> entities) where T : class
+        {
+            DbSet<T>().RemoveRange(entities);
+        }
     }
 }
