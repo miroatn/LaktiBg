@@ -10,6 +10,8 @@ namespace LaktiBg.Core.Models.PlaceModels
 {
     public class PlaceFormModel
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(NameMaxLenght,
             MinimumLength = NameMinlenght,

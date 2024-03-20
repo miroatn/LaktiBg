@@ -60,5 +60,78 @@ namespace LaktiBg.Controllers
 
             return View(models);
         }
+
+        [HttpGet]
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (await placeService.PlaceExistById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            string userId = User.Id();
+
+            if (await placeService.IsUserOwner(userId, id) == false)
+            {
+                return BadRequest();
+            }
+
+            var formModel = await placeService.FindPlaceById(id);
+
+            return View(formModel);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Edit(PlaceFormModel model)
+        {
+            if (await placeService.PlaceExistById(model.Id) == false)
+            {
+                return BadRequest();
+            }
+
+            string userId = User.Id();
+
+            if (await placeService.IsUserOwner(userId, model.Id) == false)
+            {
+                return BadRequest();
+            }
+
+            await placeService.Edit(model);
+
+            return RedirectToAction("All", "Place");
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> DeleteImages(int id)
+        {
+            ImagesViewModel model = new ImagesViewModel();
+
+            model.PlaceId = id;
+            model.imagesToShow = await placeService.FindImagesByPlaceId(id);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteImage(int id)
+        {
+            int placeId = await placeService.FindPlaceIdByImageId(id);
+
+            await placeService.DeleteImage(id);
+
+            return RedirectToAction("DeleteImages", new {id = placeId});
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> DeletePlace(int id)
+        {
+
+        }
+
+        
     }
 }

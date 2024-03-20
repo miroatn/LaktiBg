@@ -9,5 +9,24 @@ namespace LaktiBg.Core.Contracts.Place
         Task<IEnumerable<PlaceViewModel>> AllAsync();
 
         Task<PlaceViewModel> Details(int id);
+
+        Task Edit(PlaceFormModel model);
+
+        Task Delete(int id);
+
+        Task<bool> PlaceExistById(int id);
+
+        Task<PlaceFormModel> FindPlaceById(int id);
+
+        Task<bool> IsUserOwner(string userId, int placeId);
+
+        Task DeleteImage(int imageId);
+
+        Task<Dictionary<int, string>> FindImagesByPlaceId(int placeId);
+
+        Task<int> FindPlaceIdByImageId(int imageId);
+
+        Task DeletePlace(int placeId);
+
     }
 }

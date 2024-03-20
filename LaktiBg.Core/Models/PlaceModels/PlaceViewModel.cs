@@ -1,4 +1,5 @@
 ﻿using LaktiBg.Core.Models.Image;
+using Microsoft.AspNetCore.Http;
 
 namespace LaktiBg.Core.Models.PlaceModels
 {
@@ -21,5 +22,7 @@ namespace LaktiBg.Core.Models.PlaceModels
         public List<string> ImagesToShow { get; set; } = new List<string>();
 
         public decimal Rating { get; set; }
+
+        public IFormFileCollection? Files { get; set; }
     }
 }
