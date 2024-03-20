@@ -49,8 +49,12 @@ namespace LaktiBg.Infrastructure.Data
                 .IsRequired(false);
 
             builder.Entity<Image>()
-            .Property(i => i.UserId)
-            .IsRequired(false);
+                .Property(i => i.UserId)
+                .IsRequired(false);
+
+            builder.Entity<Image>()
+                .Property(i => i.EventId)
+                .IsRequired(false);
 
 
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());

@@ -26,5 +26,10 @@ namespace LaktiBg.Infrastructure.Data.Models
 
         public Place Place { get; set; } = null!;
 
+        [ForeignKey(nameof(Event))]
+        public int? EventId { get; set; }
+
+        public Event Event { get; set; } = null!;
+
     }
 }

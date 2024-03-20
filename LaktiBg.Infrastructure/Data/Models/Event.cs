@@ -11,6 +11,7 @@ namespace LaktiBg.Infrastructure.Data.Models
             Participants = new List<UsersEvents>();
             Comments = new List<Comment>();
             Types = new List<EventTypeConnection>();
+            Images = new List<Image>();
         }
 
         [Key]
@@ -68,6 +69,8 @@ namespace LaktiBg.Infrastructure.Data.Models
         public ICollection<UsersEvents> Participants { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
+
+        public ICollection<Image> Images { get; set; }
 
     }
 }
