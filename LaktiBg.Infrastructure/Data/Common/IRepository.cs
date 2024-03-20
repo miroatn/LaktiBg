@@ -12,5 +12,7 @@
 
         Task<T?> GetByIdAsync<T>(object id) where T : class;
 
+        Task RemoveAsync<T>(T entity) where T : class;
+ 
     }
 }

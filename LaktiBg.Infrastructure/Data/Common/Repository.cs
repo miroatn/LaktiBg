@@ -40,5 +40,10 @@ namespace LaktiBg.Infrastructure.Data.Common
         {
             return await DbSet<T>().FindAsync(id);
         }
+
+        public async Task RemoveAsync<T>(T entity) where T : class
+        {
+            DbSet<T>().Remove(entity);
+        }
     }
 }
