@@ -1,0 +1,15 @@
+﻿@model ImagesViewModel
+
+<h2>Images</h2>
+
+<div class="row">
+    @foreach (var kvp in Model.imagesToShow)
+    {
+        var image = kvp.Value;
+        <img class="d-block w-50" style="height:500px"
+        src="@image" alt="@image">
+        int id = kvp.Key;
+        int placeId = Model.PlaceId;
+            <a asp-controller="Place" asp-action="DeleteImage" asp-route-id=@id asp-route-placeId=@placeId class="btn btn-outline-danger mb-2 w-100 p-3 fw-bold">Изтрий снимки</a>
+    }
+</div>
