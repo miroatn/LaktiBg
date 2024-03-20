@@ -77,7 +77,7 @@ namespace LaktiBg.Controllers
                 return BadRequest();
             }
 
-            var formModel = await placeService.FindPlaceById(id);
+            var formModel = await placeService.GetPlaceFormModelByPlaceId(id);
 
             return View(formModel);
         }
@@ -129,7 +129,14 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> DeletePlace(int id)
         {
+            if (await placeService.PlaceExistById(id) == false)
+            {
+                return BadRequest();
+            }
 
+            await placeService.DeletePlace(id);
+
+            return RedirectToAction("All");
         }
 
         
