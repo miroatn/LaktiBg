@@ -26,7 +26,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         public int TypeId { get; set; }
 
         [Required]
-        public ICollection<EventTypeConnection> Types { get; set; }
+        public IList<EventTypeConnection> Types { get; set; }
 
         [Required]
         public DateTime CreationDate { get; set; }
