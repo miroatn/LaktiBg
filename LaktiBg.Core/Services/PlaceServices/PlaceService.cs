@@ -1,4 +1,4 @@
-﻿using LaktiBg.Core.Contracts.Place;
+﻿using LaktiBg.Core.Contracts.PlaceServices;
 using LaktiBg.Core.Models.Image;
 using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Core.Services.ImageServices;
