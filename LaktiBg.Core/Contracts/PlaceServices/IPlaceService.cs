@@ -1,7 +1,7 @@
 ﻿using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Infrastructure.Data.Models;
 
-namespace LaktiBg.Core.Contracts.Place
+namespace LaktiBg.Core.Contracts.PlaceServices
 {
     public interface IPlaceService
     {
