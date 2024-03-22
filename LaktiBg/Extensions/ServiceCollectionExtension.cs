@@ -4,7 +4,7 @@ using LaktiBg.Infrastructure.Data;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Core.Contracts.Event;
 using LaktiBg.Core.Services.EventServices;
-using LaktiBg.Core.Contracts.Place;
+using LaktiBg.Core.Contracts.PlaceServices;
 using LaktiBg.Core.Services.PlaceServices;
 
 namespace LaktiBg.Extensions
