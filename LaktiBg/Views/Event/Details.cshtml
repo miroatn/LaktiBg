@@ -1,0 +1,55 @@
+﻿@model IEnumerable<EventViewModel>
+
+@{
+    ViewBag.Title = "Event Details";
+}
+
+@foreach (var mdl in Model)
+{
+                <h2>@mdl.Name</h2>
+
+            <p><strong>Start Date:</strong> @mdl.StartDate</p>
+            <p><strong>Place:</strong> @mdl.Place.Name</p>
+            <p><strong>Organizer:</strong> @mdl.OrganizerId</p>
+            <p><strong>Is Public:</strong> @mdl.IsPublic</p>
+            <p><strong>Is Deleted:</strong> @mdl.IsDeleted</p>
+            <p><strong>Is Visible:</strong> @mdl.IsVisible</p>
+            <p><strong>Is Finished:</strong> @mdl.IsFinished</p>
+            <p><strong>Min Rating Required:</strong> @mdl.MinRatingRequired</p>
+            <p><strong>Participants Max Count:</strong> @mdl.ParticipantsMaxCount</p>
+            <p><strong>Min Age Required:</strong> @mdl.MinAgeRequired</p>
+            <p><strong>Description:</strong> @mdl.Description</p>
+
+            <h3>Event Types:</h3>
+            <ul>
+        @foreach (var type in mdl.Types)
+        {
+                    <li>@type.Name</li>
+        }
+            </ul>
+
+            <h3>Participants:</h3>
+            <ul>
+        @foreach (var participant in mdl.Participants)
+        {
+                    <li>@participant.Name</li>
+        }
+            </ul>
+
+            <h3>Comments:</h3>
+            <ul>
+        @foreach (var comment in mdl.Comments)
+        {
+                   <li>@comment.Text</li>
+        }
+            </ul>
+
+            <h3>Images:</h3>
+            <ul>
+        @foreach (var image in mdl.ImagesToShow)
+        {
+                   <li><img src="@image" alt="Event Image" /></li>
+        }
+            </ul>
+}
+
