@@ -66,11 +66,12 @@ namespace LaktiBg.Infrastructure.Data.Models
         [MaxLength(DescriptionMaxLenght)]
         public string Description { get; set; } = string.Empty;
 
-        public ICollection<UsersEvents> Participants { get; set; }
+        public IEnumerable<UsersEvents> Participants { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
 
-        public ICollection<Image> Images { get; set; }
+        public IEnumerable<Image> Images { get; set; }
+
 
     }
 }
