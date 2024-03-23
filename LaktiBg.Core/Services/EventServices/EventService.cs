@@ -229,5 +229,6 @@ namespace LaktiBg.Core.Services.EventServices
                                                                     .Any(p => p.UserId == userId));
 
         }
+
     }
 }

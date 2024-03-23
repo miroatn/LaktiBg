@@ -108,6 +108,8 @@ namespace LaktiBg.Controllers
                 return RedirectToAction("All");
             }
 
+            
+
             await eventService.ParticipateInEvent(id, userId);
 
             return RedirectToAction("All");

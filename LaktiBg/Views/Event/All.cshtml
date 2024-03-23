@@ -33,9 +33,26 @@
             <p><strong>Описание:</strong> @mdl.Description</p>
     </p>
      <a asp-controller="Event" asp-action="Details" asp-route-id="@mdl.Id" class="btn btn-primary">Детайли</a>
-     <a asp-controller="Event" asp-action="Participate" asp-route-id="@mdl.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
-    </div>
+
+     @if (mdl.Participants.Count >= mdl.ParticipantsMaxCount)
+        {
+             <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
+        }
+        else
+        {
+            <a asp-controller="Event" asp-action="Participate" asp-route-id="@mdl.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
+        }
+        </div>
     </div>
 
+
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 }
 
