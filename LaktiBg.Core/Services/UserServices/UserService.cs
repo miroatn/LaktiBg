@@ -19,5 +19,13 @@ namespace LaktiBg.Core.Services.UserServices
             return await repository.AllReadOnly<ApplicationUser>()
                 .AnyAsync(u => u.Id == userId);
         }
+
+        public async Task<string> GetUsersNameByIdAsync(string userId)
+        {
+           var user = await repository.AllReadOnly<ApplicationUser>()
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user?.FirstName + " " + user?.LastName;
+        }
     }
 }

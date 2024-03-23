@@ -7,14 +7,15 @@ using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using static LaktiBg.Infrastructure.Constants.DataConstants;
+using static LaktiBg.Core.Constants.MessageConstants;
 
 namespace LaktiBg.Core.Services.EventServices
 {
     public class EventService : IEventService
     {
         private readonly IRepository repository;
+
 
         public EventService(IRepository _repository)
         {
@@ -120,21 +121,27 @@ namespace LaktiBg.Core.Services.EventServices
         {
 
             IEnumerable<EventViewModel> models =  await repository.AllReadOnly<Event>()
+                .Where(e => e.IsDeleted == false)
                 .Select(e => new EventViewModel()
                 {
                     Id = e.Id,
                     Name = e.Name,
                     Types = e.Types.Select(t => new EventTypeViewModel
                     {
-                       Id = e.Id,
-                       Name = e.Name
+                       Name = t.EventType.Name,
                     }).ToList(),
                     StartDate = e.StartDate.ToString(DateTimeFormat),
                     Place = e.Place,
+                    IsVisible = e.IsVisible,
+                    IsFinished = e.IsFinished,
+                    IsPublic = e.IsPublic,
                     OrganizerId = e.OrganizerId,
                     MinRatingRequired = e.MinRatingRequired,
+                    MinRatingToShow = e.MinRatingRequired != null ? e.MinRatingRequired.ToString() : NoRestrictionAdded,
                     ParticipantsMaxCount = e.ParticipantsMaxCount,
+                    ParticipantsMaxCountToShow = e.ParticipantsMaxCount != null ? e.ParticipantsMaxCount.ToString() : NoRestrictionAdded,
                     MinAgeRequired = e.MinAgeRequired,
+                    MinAgeRequiredToShow = e.MinAgeRequired != null ? e.MinAgeRequired.ToString() : NoRestrictionAdded,
                     Description = e.Description,
                     Participants = e.Participants.Select(p => new UserViewModel
                     {
@@ -160,6 +167,14 @@ namespace LaktiBg.Core.Services.EventServices
                 })
                 .ToListAsync();
 
+            foreach (var model in models)
+            {
+                model.Organizer = await GetUsersNameByIdAsync(model.OrganizerId);
+
+                model.TypesToShow = string.Join(", ", model.Types.Select(t => t.Name));
+            }
+
+
             List<byte[]> imageBytesList = new List<byte[]>();
 
             foreach (var model in models)
@@ -173,6 +188,46 @@ namespace LaktiBg.Core.Services.EventServices
             }
 
             return models;
+        }
+
+        private async Task<string> GetUsersNameByIdAsync(string userId)
+        {
+            var user = await repository.AllReadOnly<ApplicationUser>()
+                 .FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user?.FirstName + " " + user?.LastName;
+        }
+
+        public async Task<bool> CheckEventById(int id)
+        {
+            return await repository.AllReadOnly<Event>()
+                .AnyAsync(u => u.Id == id);
+        }
+
+        public async Task ParticipateInEvent(int id, string userId)
+        {
+            Event? currentEvent = await repository.All<Event>()
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync();
+
+            UsersEvents userEvent = new UsersEvents()
+            {
+                EventId = id,
+                UserId = userId
+            };
+
+            currentEvent?.Participants.Add(userEvent);
+
+            await repository.SaveChangesAsync();
+
+        }
+
+        public async Task<bool> CheckIfUserIsAlreadyInEvent(int id, string userId)
+        {
+            return await repository.AllReadOnly<Event>()
+                                    .AnyAsync(u => u.Id == id && u.Participants
+                                                                    .Any(p => p.UserId == userId));
+
         }
     }
 }
