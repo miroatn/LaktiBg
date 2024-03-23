@@ -1,4 +1,4 @@
-﻿using LaktiBg.Core.Models.Event;
+﻿using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Infrastructure.Data.Models;
 
@@ -7,7 +7,6 @@ namespace LaktiBg.Core.Contracts.Event
     public interface IEventService
     {
         Task<IEnumerable<EventViewModel>> AllAsync();
-
 
         Task<IEnumerable<EventTypeViewModel>> GetEventTypeViewsAsync();
 
@@ -18,5 +17,6 @@ namespace LaktiBg.Core.Contracts.Event
         Task<Place> GetPlaceByIdAsync(int id);
 
         Task AddAsync(EventFormModel viewModel);
+
     }
 }

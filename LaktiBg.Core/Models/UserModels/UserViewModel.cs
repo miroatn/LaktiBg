@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaktiBg.Core.Models.Event
+namespace LaktiBg.Core.Models.UserModels
 {
-    public class EventTypeViewModel
+    public class UserViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;
     }

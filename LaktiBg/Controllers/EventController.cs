@@ -1,14 +1,8 @@
 ﻿using LaktiBg.Core.Contracts.Event;
-using LaktiBg.Core.Models.Event;
+using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Extensions;
-using LaktiBg.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Globalization;
-using System;
-using static LaktiBg.Infrastructure.Constants.DataConstants;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace LaktiBg.Controllers
 {
@@ -40,7 +34,7 @@ namespace LaktiBg.Controllers
             {
                 model.Types = eventTypes;
             }
-  
+
             IEnumerable<PlaceEventModel> places = await eventService.GetPlacesViewsAsync();
 
             if (places != null)
@@ -94,5 +88,11 @@ namespace LaktiBg.Controllers
 
             return RedirectToAction("All", "Event");
         }
+
     }
+          
+
 }
+
+
+

@@ -1,4 +1,4 @@
-﻿namespace LaktiBg.Core.Models.Image
+﻿namespace LaktiBg.Core.Models.ImageModels
 {
     public class ImageViewModel
     {

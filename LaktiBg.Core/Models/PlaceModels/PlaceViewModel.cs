@@ -1,4 +1,4 @@
-﻿using LaktiBg.Core.Models.Image;
+﻿using LaktiBg.Core.Models.ImageModels;
 using Microsoft.AspNetCore.Http;
 
 namespace LaktiBg.Core.Models.PlaceModels

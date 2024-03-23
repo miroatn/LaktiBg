@@ -1,4 +1,4 @@
-﻿using LaktiBg.Core.Models.Image;
+﻿using LaktiBg.Core.Models.ImageModels;
 using System.ComponentModel.DataAnnotations;
 using static LaktiBg.Infrastructure.Constants.DataConstants.PlaceConstants;
 using static LaktiBg.Core.Constants.MessageConstants;

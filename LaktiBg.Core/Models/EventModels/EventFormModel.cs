@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using static LaktiBg.Core.Constants.MessageConstants;
 using static LaktiBg.Infrastructure.Constants.DataConstants.EventConstants;
 
-namespace LaktiBg.Core.Models.Event
+namespace LaktiBg.Core.Models.EventModels
 {
     public class EventFormModel
     {
