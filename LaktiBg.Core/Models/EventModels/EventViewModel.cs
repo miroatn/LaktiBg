@@ -23,11 +23,15 @@ namespace LaktiBg.Core.Models.EventModels
 
         public ICollection<EventTypeViewModel> Types { get; set; }
 
+        public string TypesToShow { get; set; } = string.Empty;
+
         public string StartDate { get; set; } = string.Empty;
 
         public Place Place { get; set; } = null!;
 
         public string OrganizerId { get; set; } = string.Empty;
+
+        public string Organizer { get; set; } = string.Empty;
 
         public bool IsPublic { get; set; } = false;
 
@@ -39,9 +43,14 @@ namespace LaktiBg.Core.Models.EventModels
 
         public int? MinRatingRequired { get; set; }
 
+        public string? MinRatingToShow { get; set; }
+
         public int? ParticipantsMaxCount { get; set; }
+        public string? ParticipantsMaxCountToShow { get; set; }
 
         public int? MinAgeRequired { get; set; }
+
+        public string? MinAgeRequiredToShow { get; set; }
 
         public string Description { get; set; } = string.Empty;
 
