@@ -1,37 +1,41 @@
-﻿@model List<EventViewModel>
+﻿@model IEnumerable<EventViewModel>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Events</title>
-</head>
-<body>
-    <h1>Events</h1>
-    <table>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <div class="card border-success mb-3" style="max-width: 18rem;">
-                  <div class="card-header bg-transparent border-success">@item.Name</div>
-                  <div class="card-body text-success">
-                    <h5 class="card-title">Час на лактирането: @item.StartDate</h5>
-                    <p class="card-text">Лактирането ще се проведе в @item.Place.Name </p>
-                    <p class="card-text">@item.Description</p>
-                  </div>
-                  <div class="card-footer bg-transparent border-success">Минимална възраст: 
-                      @if(item.MinAgeRequired != null)
-                      {
-                            @item.MinAgeRequired
-                      }
-                      else
-                      {
-                            <p>Няма минимална възраст</p>
-                      }
-                    </div> 
-                        
-                </div>
-            }
-        </tbody>
-    </table>
-</body>
-</html>
+@{
+    ViewBag.Title = "Event Details";
+}
+
+@foreach (var mdl in Model.Where(m => m.IsVisible == true && m.IsFinished == false && m.IsDeleted == false))
+{
+    <div class="card text-center">
+    <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="true" href="#">Събитие</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Place" asp-action="Details"  asp-route-id=@mdl.Place.Id class="nav-link">Място</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link disabled" aria-disabled="true">Снимки???</a>
+        </li>
+    </ul>
+    </div>
+    <div class="card-body">
+    <h5 class="card-title">@mdl.Name</h5>
+    <p class="card-text">
+            <p><strong>Старт:</strong> @mdl.StartDate</p>
+            <p><strong>Място:</strong> @mdl.Place.Name</p>
+            <p><strong>Тип на събитието:</strong> @mdl.TypesToShow</p>
+            <p><strong>Организатор:</strong> @mdl.Organizer</p>
+            <p><strong>Минимален необходим рейтинг:</strong> @mdl.MinRatingToShow</p>
+            <p><strong>Брой на участниците:</strong> @mdl.Participants.Count() / @mdl.ParticipantsMaxCountToShow</p>
+            <p><strong>Минимална възраст на участниците:</strong> @mdl.MinAgeRequiredToShow</p>
+            <p><strong>Описание:</strong> @mdl.Description</p>
+    </p>
+     <a asp-controller="Event" asp-action="Details" asp-route-id="@mdl.Id" class="btn btn-primary">Детайли</a>
+     <a asp-controller="Event" asp-action="Participate" asp-route-id="@mdl.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
+    </div>
+    </div>
+
+}
+
