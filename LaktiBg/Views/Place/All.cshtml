@@ -24,7 +24,8 @@
                     <p class="card-text">Адрес: @item.Address </p>
                 </div>
                     <div class="card-footer bg-transparent border-success">Рейтинг: @item.Rating</div> 
-                                 <a asp-controller="Place" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success mb-2 w-100 p-3 fw-bold">Детайли</a>
+                      <a asp-controller="Place" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success mb-2 w-100 p-3 fw-bold">Детайли</a>
+                      <a asp-controller="Place" asp-action="Participate" asp-route-id="@item.Id" class="btn btn-outline-success mb-2 w-100 p-3 fw-bold">Лактирай</a>
                  </div>
             }
         </tbody>

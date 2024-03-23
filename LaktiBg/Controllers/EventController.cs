@@ -89,6 +89,29 @@ namespace LaktiBg.Controllers
             return RedirectToAction("All", "Event");
         }
 
+        [HttpGet]
+
+        public async Task<IActionResult> Participate(int id, string userId)
+        {
+            if (User.Id() != userId)
+            {
+                return BadRequest();
+            }
+
+            if (await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await eventService.CheckIfUserIsAlreadyInEvent(id, userId) == true)
+            {
+                return RedirectToAction("All");
+            }
+
+            await eventService.ParticipateInEvent(id, userId);
+
+            return RedirectToAction("All");
+        }
     }
           
 
