@@ -9,6 +9,7 @@ using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using static LaktiBg.Infrastructure.Constants.DataConstants;
 using static LaktiBg.Core.Constants.MessageConstants;
+using LaktiBg.Core.Contracts.User;
 
 namespace LaktiBg.Core.Services.EventServices
 {
@@ -16,10 +17,13 @@ namespace LaktiBg.Core.Services.EventServices
     {
         private readonly IRepository repository;
 
+        private readonly IUserService userService;
 
-        public EventService(IRepository _repository)
+
+        public EventService(IRepository _repository, IUserService _userService)
         {
             repository = _repository;
+            userService = _userService;
         }
 
         public async Task AddAsync(EventFormModel model)
@@ -117,7 +121,7 @@ namespace LaktiBg.Core.Services.EventServices
                 }).ToListAsync();
         }
 
-        public async Task<IEnumerable<EventViewModel>> AllAsync()
+        public async Task<IEnumerable<EventViewModel>> AllAsync(string userId)
         {
 
             IEnumerable<EventViewModel> models =  await repository.AllReadOnly<Event>()
@@ -172,6 +176,10 @@ namespace LaktiBg.Core.Services.EventServices
                 model.Organizer = await GetUsersNameByIdAsync(model.OrganizerId);
 
                 model.TypesToShow = string.Join(", ", model.Types.Select(t => t.Name));
+
+                model.UserAge = await userService.GetUsersAgeById(userId);
+
+                model.UserRating = await userService.GetUsersRatingById(userId);
             }
 
 

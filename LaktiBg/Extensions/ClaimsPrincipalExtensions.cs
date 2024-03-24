@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using LaktiBg.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace LaktiBg.Extensions
 {
@@ -8,5 +10,6 @@ namespace LaktiBg.Extensions
         {
             return user.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+
     }
 }

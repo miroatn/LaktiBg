@@ -17,7 +17,8 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> All()
         {
-            var model = await eventService.AllAsync();
+            string userId = User.Id();
+            var model = await eventService.AllAsync(userId);
 
             return View(model);
         }

@@ -21,7 +21,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         [MaxLength(LastNameMaxLenght)]
         public string LastName { get; set; } = string.Empty;
 
-        public DateTime? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         [Range(RatingMinValue, RatingMaxValue)]
         [Precision(18, 2)]

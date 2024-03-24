@@ -43,7 +43,11 @@ namespace LaktiBg.Core.Models.EventModels
 
         public int? MinRatingRequired { get; set; }
 
+        public int UserAge { get; set; }
+
         public string? MinRatingToShow { get; set; }
+
+        public decimal UserRating { get; set; }
 
         public int? ParticipantsMaxCount { get; set; }
         public string? ParticipantsMaxCountToShow { get; set; }

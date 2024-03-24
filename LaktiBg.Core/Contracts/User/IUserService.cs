@@ -11,5 +11,9 @@ namespace LaktiBg.Core.Contracts.User
         public Task<bool> ExistById(string userId);
 
         public Task<string> GetUsersNameByIdAsync(string userId);
+
+        public Task<int> GetUsersAgeById(string userId);
+
+        public Task<decimal> GetUsersRatingById(string userId);
     }
 }

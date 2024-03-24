@@ -6,7 +6,7 @@ namespace LaktiBg.Core.Contracts.Event
 {
     public interface IEventService
     {
-        Task<IEnumerable<EventViewModel>> AllAsync();
+        Task<IEnumerable<EventViewModel>> AllAsync(string userId);
 
         Task<IEnumerable<EventTypeViewModel>> GetEventTypeViewsAsync();
 

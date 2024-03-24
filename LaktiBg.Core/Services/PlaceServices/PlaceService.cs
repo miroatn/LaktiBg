@@ -1,4 +1,6 @@
-﻿using LaktiBg.Core.Contracts.PlaceServices;
+﻿using LaktiBg.Core.Contracts.Event;
+using LaktiBg.Core.Contracts.PlaceServices;
+using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.ImageModels;
 using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Core.Services.ImageServices;
@@ -15,6 +17,7 @@ namespace LaktiBg.Core.Services.PlaceServices
         public PlaceService(IRepository _repository)
         {
             repository = _repository;
+
         }
 
         public async Task<IEnumerable<PlaceViewModel>> AllAsync()

@@ -27,5 +27,24 @@ namespace LaktiBg.Core.Services.UserServices
 
             return user?.FirstName + " " + user?.LastName;
         }
+
+        public async Task<int> GetUsersAgeById(string userId)
+        {
+            ApplicationUser? user = await repository.AllReadOnly<ApplicationUser>()
+                        .FirstOrDefaultAsync(u => u.Id == userId);
+
+            int Years = new DateTime(DateTime.Now.Subtract(user.BirthDate).Ticks).Year - 1;
+
+            return Years;
+        }
+
+        public async Task<decimal> GetUsersRatingById(string userId)
+        {
+            return await repository.AllReadOnly<ApplicationUser>()
+                .Where(u => u.Id == userId)
+                .Select(u => u.Rating)
+                .FirstOrDefaultAsync();
+
+        }
     }
 }

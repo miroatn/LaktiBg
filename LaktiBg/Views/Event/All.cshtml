@@ -34,9 +34,10 @@
     </p>
      <a asp-controller="Event" asp-action="Details" asp-route-id="@mdl.Id" class="btn btn-primary">Детайли</a>
 
-     @if (mdl.Participants.Count >= mdl.ParticipantsMaxCount)
+        @if (mdl.Participants.Count >= mdl.ParticipantsMaxCount || mdl.UserAge < mdl.MinAgeRequired || mdl.UserRating < mdl.MinRatingRequired)
         {
-             <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
+                
+                <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
         }
         else
         {
@@ -44,7 +45,6 @@
         }
         </div>
     </div>
-
 
 }
 
