@@ -75,7 +75,7 @@ namespace LaktiBg.Core.Services.EventServices
 
             foreach (var id in ids)
             {
-                EventTypeConnection? connection = await repository.All<EventType>()
+                EventTypeConnection? connection = await repository.AllReadOnly<EventType>()
                                                         .Where(x => x.Id == id)
                                                         .Select(x => new EventTypeConnection
                                                         {
@@ -240,7 +240,7 @@ namespace LaktiBg.Core.Services.EventServices
 
         }
 
-        public async Task<EventViewModel> GetEventByIdAsync(int id, string userId)
+        public async Task<EventViewModel> GetEventViewModelByIdAsync(int id, string userId)
         {
             EventViewModel? model = await repository.AllReadOnly<Event>()
             .Where(e => e.IsDeleted == false && e.Id == id)
@@ -355,6 +355,111 @@ namespace LaktiBg.Core.Services.EventServices
                 currentEvent.IsDeleted = true;
                 await repository.SaveChangesAsync();
             
+            }
+        }
+
+        public async Task<EventFormModel> GetEventFormModelByIdAsync(int id)
+        {
+            IEnumerable<EventTypeViewModel> types = await repository.All<EventType>()
+                                                    .Select(et => new EventTypeViewModel
+                                                    {
+                                                        Id = et.Id,
+                                                        Name= et.Name,
+                                                    }).ToListAsync();
+
+            IEnumerable<PlaceEventModel> places = await repository.All<Place>()
+                                                    .Select(p => new PlaceEventModel
+                                                    {
+                                                        Id = p.Id,
+                                                        Name = p.Name,
+                                                        Address = p.Address,
+                                                        Rating = p.Rating,
+                                                    }).ToListAsync();
+
+            EventFormModel? currentEvent = await repository.All<Event>()
+                            .Where(e => e.Id == id)
+                            .Select(e => new EventFormModel
+                            {
+                                Id = e.Id,
+                                Name = e.Name,
+                                StartDate = e.StartDate,
+                                IsPublic = e.IsPublic,
+                                IsVisible = e.IsVisible,
+                                OrganizerId = e.OrganizerId,
+                                MinRatingRequired = e.MinRatingRequired,
+                                ParticipantsMaxCount = e.ParticipantsMaxCount,
+                                MinAgeRequired = e.MinAgeRequired,
+                                Description = e.Description,
+
+                            }).FirstOrDefaultAsync();
+
+            if (currentEvent != null)
+            {
+                currentEvent.Types = types;
+                currentEvent.Places = places;
+            }
+
+            return currentEvent;
+        }
+
+        public async Task EditAsync(EventFormModel model)
+        {
+            Event? currentEvent = await repository.All<Event>()
+                                            .Where(x => x.Id == model.Id)
+                                            .FirstOrDefaultAsync();
+
+            if (currentEvent != null)
+            {
+                Place place = await GetPlaceByIdAsync(model.SelectedPlaceId);
+
+                IList<EventTypeConnection> eventTypesToDelete = await repository.All<EventTypeConnection>()
+                                                                        .Where(etc => etc.EventId == currentEvent.Id)
+                                                                        .ToListAsync();
+
+                if (eventTypesToDelete != null)
+                {
+                    await repository.RemoveRange<EventTypeConnection>(eventTypesToDelete);
+                    await repository.SaveChangesAsync();
+
+                }
+
+
+                IList<EventTypeConnection> types = await GetEventTypeConnections(model.SelectedTypes);
+
+                   
+                if (types == null)
+                {
+                    //TODO
+                }
+                else
+                {
+                    foreach (var type in types)
+                    {
+                        type.EventId = model.Id;
+                        await repository.AddAsync(type);
+                    }
+                    
+                }
+
+                if (place == null)
+                {
+                    //TODO
+                }
+                else
+                {
+                    currentEvent.Place = place;
+                }
+
+                currentEvent.Name = model.Name;
+                currentEvent.StartDate = model.StartDate;
+                currentEvent.IsPublic = model.IsPublic;
+                currentEvent.IsVisible = model.IsVisible;
+                currentEvent.MinRatingRequired = model.MinRatingRequired;
+                currentEvent.ParticipantsMaxCount = model.ParticipantsMaxCount;
+                currentEvent.MinAgeRequired = model.MinRatingRequired;
+                currentEvent.Description = model.Description;
+
+                await repository.SaveChangesAsync();
             }
         }
     }

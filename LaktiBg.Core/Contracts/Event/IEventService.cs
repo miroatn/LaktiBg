@@ -24,9 +24,13 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task<bool> CheckIfUserIsAlreadyInEvent(int id, string userId);
 
-        Task<EventViewModel> GetEventByIdAsync(int id, string userId);
+        Task<EventViewModel> GetEventViewModelByIdAsync(int id, string userId);
 
         Task DeleteAsync(int id);
+
+        Task<EventFormModel> GetEventFormModelByIdAsync(int id);
+
+        Task EditAsync(EventFormModel model);
 
     }
 }

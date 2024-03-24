@@ -1,6 +1,8 @@
 ﻿using LaktiBg.Core.Contracts.Event;
+using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.PlaceModels;
+using LaktiBg.Core.Services.UserServices;
 using LaktiBg.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +12,12 @@ namespace LaktiBg.Controllers
     {
         private readonly IEventService eventService;
 
-        public EventController(IEventService _eventService)
+        private readonly IUserService userService;
+
+        public EventController(IEventService _eventService, IUserService _userService)
         {
             eventService = _eventService;
+            userService = _userService;
         }
 
         public async Task<IActionResult> All()
@@ -27,6 +32,11 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> Add()
         {
+            if (await userService.ExistById(User.Id()) == false)
+            {
+                return BadRequest();
+            }
+
             EventFormModel model = new EventFormModel();
 
             IEnumerable<EventTypeViewModel> eventTypes = await eventService.GetEventTypeViewsAsync();
@@ -57,6 +67,11 @@ namespace LaktiBg.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(EventFormModel model)
         {
+            if (await userService.ExistById(User.Id()) == false)
+            {
+                return BadRequest();
+            }
+
             string organizerid = User.Id();
 
             if (organizerid == null)
@@ -89,6 +104,52 @@ namespace LaktiBg.Controllers
 
             return RedirectToAction("All", "Event");
         }
+
+        [HttpGet]
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (await userService.ExistById(User.Id()) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            var model = await eventService.GetEventFormModelByIdAsync(id);
+
+
+
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Edit(EventFormModel model)
+        {
+            if (await userService.ExistById(User.Id()) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await eventService.CheckEventById(model.Id) == false)
+            {
+                return BadRequest();
+            }
+
+            await eventService.EditAsync(model);
+
+            return RedirectToAction("Details", "Event", new {id = model.Id});
+        }
+
 
         [HttpGet]
 
@@ -126,7 +187,7 @@ namespace LaktiBg.Controllers
             }
 
             string userId = User.Id();
-            var model = await eventService.GetEventByIdAsync(id, userId);
+            var model = await eventService.GetEventViewModelByIdAsync(id, userId);
 
             return View(model);
         }
@@ -141,7 +202,7 @@ namespace LaktiBg.Controllers
             }
 
             string userId = User.Id();
-            var model = await eventService.GetEventByIdAsync(id, userId);
+            var model = await eventService.GetEventViewModelByIdAsync(id, userId);
 
             return View(model);
         }
@@ -150,10 +211,12 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
+           
             await eventService.DeleteAsync(id);
 
             return RedirectToAction("All", "Event");
         }
+
     }
           
 

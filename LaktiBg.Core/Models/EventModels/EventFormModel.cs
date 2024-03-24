@@ -8,6 +8,8 @@ namespace LaktiBg.Core.Models.EventModels
 {
     public class EventFormModel
     {
+        public int Id { get; set; }
+
         [StringLength(NameMaxLenght,
             MinimumLength = NameMinLenght, 
             ErrorMessage = LenghtMessage)]

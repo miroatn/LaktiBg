@@ -38,12 +38,14 @@
         }
         else
         {
-                    <a asp-controller="Event" asp-action="Participate" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
+            <a asp-controller="Event" asp-action="Participate" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
         }
         </div>
 
         @if (User.Id() == Model.OrganizerId)
         {
+            <div><a asp-controller="Event" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редактирай събитието</a></div>
+
             <div><a asp-controller="Event" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Изтрий събитието</a></div>
         }
 
