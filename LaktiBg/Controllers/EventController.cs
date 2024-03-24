@@ -115,6 +115,36 @@ namespace LaktiBg.Controllers
 
             return RedirectToAction("All");
         }
+
+        [HttpGet]
+        
+        public async Task<IActionResult> Details(int id)
+        {
+            if(await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            string userId = User.Id();
+            var model = await eventService.GetEventByIdAsync(id, userId);
+
+            return View(model);
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> Participants(int id)
+        {
+            if (await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            string userId = User.Id();
+            var model = await eventService.GetEventByIdAsync(id, userId);
+
+            return View(model);
+        }
     }
           
 

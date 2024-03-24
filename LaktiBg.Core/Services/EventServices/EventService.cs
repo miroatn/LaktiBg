@@ -121,6 +121,8 @@ namespace LaktiBg.Core.Services.EventServices
                 }).ToListAsync();
         }
 
+
+
         public async Task<IEnumerable<EventViewModel>> AllAsync(string userId)
         {
 
@@ -238,5 +240,81 @@ namespace LaktiBg.Core.Services.EventServices
 
         }
 
+        public async Task<EventViewModel> GetEventByIdAsync(int id, string userId)
+        {
+            EventViewModel? model = await repository.AllReadOnly<Event>()
+            .Where(e => e.IsDeleted == false && e.Id == id)
+            .Select(e => new EventViewModel()
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Types = e.Types.Select(t => new EventTypeViewModel
+                {
+                    Name = t.EventType.Name,
+                }).ToList(),
+                StartDate = e.StartDate.ToString(DateTimeFormat),
+                Place = e.Place,
+                IsVisible = e.IsVisible,
+                IsFinished = e.IsFinished,
+                IsPublic = e.IsPublic,
+                OrganizerId = e.OrganizerId,
+                MinRatingRequired = e.MinRatingRequired,
+                MinRatingToShow = e.MinRatingRequired != null ? e.MinRatingRequired.ToString() : NoRestrictionAdded,
+                ParticipantsMaxCount = e.ParticipantsMaxCount,
+                ParticipantsMaxCountToShow = e.ParticipantsMaxCount != null ? e.ParticipantsMaxCount.ToString() : NoRestrictionAdded,
+                MinAgeRequired = e.MinAgeRequired,
+                MinAgeRequiredToShow = e.MinAgeRequired != null ? e.MinAgeRequired.ToString() : NoRestrictionAdded,
+                Description = e.Description,
+                Participants = e.Participants.Select(p => new UserViewModel
+                {
+                    Id = p.UserId,
+                    Name = p.User.FirstName + " " + p.User.LastName,
+                }).ToList(),
+                Comments = e.Comments.Select(c => new CommentViewModel
+                {
+                    Id = c.Id,
+                    Text = c.Text,
+                    AuthorId = c.AuthorId,
+                    EventId = c.EventId,
+                }).ToList(),
+                Images = e.Images.Select(i => new ImageViewModel
+                {
+                    Id = i.Id,
+                    Bytes = i.Bytes,
+                    Description = i.Description,
+                    FileExtension = i.FileExtension,
+                    Size = i.Size,
+                    PlaceId = i.PlaceId,
+                }).ToList(),
+            })
+            .FirstOrDefaultAsync();
+
+            if (model != null)
+            {
+
+                model.Organizer = await GetUsersNameByIdAsync(model.OrganizerId);
+
+                model.TypesToShow = string.Join(", ", model.Types.Select(t => t.Name));
+
+                model.UserAge = await userService.GetUsersAgeById(userId);
+
+                model.UserRating = await userService.GetUsersRatingById(userId);
+
+
+                List<byte[]> imageBytesList = new List<byte[]>();
+
+                foreach (var image in model.Images)
+                {
+                    string base64String = Convert.ToBase64String(image.Bytes);
+                    string imageDataURL = $"data:image/png;base64,{base64String}";
+                    model.ImagesToShow.Add(imageDataURL);
+                }
+
+                return model;
+
+            }
+
+            return null;
+        }
     }
 }

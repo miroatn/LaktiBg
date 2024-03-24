@@ -24,5 +24,7 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task<bool> CheckIfUserIsAlreadyInEvent(int id, string userId);
 
+        Task<EventViewModel> GetEventByIdAsync(int id, string userId);
+
     }
 }
