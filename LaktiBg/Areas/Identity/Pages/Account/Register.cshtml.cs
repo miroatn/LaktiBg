@@ -101,17 +101,17 @@ namespace LaktiBg.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-            [Display(Name = "First name*")]
+            [Display(Name = "Име*")]
             public string FirstName { get; set; }
 
             [Required]
-            [Display(Name = "Last name*")]
+            [Display(Name = "Фамилия")]
             public string LastName { get; set; }
 
-            [Display(Name = "Birthdate")]
+            [Display(Name = "Рожденна дата")]
             [DataType(DataType.Date)]
             [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-            public DateTime? Birthdate { get; set; }
+            public DateTime Birthdate { get; set; }
 
             [Display(Name = "Address")]
             public string Address { get; set; }
