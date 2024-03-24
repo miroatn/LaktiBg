@@ -145,6 +145,15 @@ namespace LaktiBg.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await eventService.DeleteAsync(id);
+
+            return RedirectToAction("All", "Event");
+        }
     }
           
 

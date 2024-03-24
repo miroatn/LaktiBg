@@ -34,7 +34,6 @@
 
         @if (Model.Participants.Count >= Model.ParticipantsMaxCount || Model.UserAge < Model.MinAgeRequired || Model.UserRating < Model.MinRatingRequired)
         {
-
                     <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
         }
         else
@@ -42,6 +41,12 @@
                     <a asp-controller="Event" asp-action="Participate" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
         }
         </div>
+
+        @if (User.Id() == Model.OrganizerId)
+        {
+            <div><a asp-controller="Event" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Изтрий събитието</a></div>
+        }
+
     </div>
 
     <h3>Коментари:</h3>

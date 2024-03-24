@@ -316,5 +316,46 @@ namespace LaktiBg.Core.Services.EventServices
 
             return null;
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            Event? currentEvent = await repository.All<Event>()
+                                    .Where(e => e.Id == id)
+                                    .FirstOrDefaultAsync();
+
+            List<Comment> comments = await repository.All<Comment>()
+                                        .Where(c => c.EventId == id)
+                                        .ToListAsync();
+
+            List<Image> images = await repository.All<Image>()
+                                        .Where(c => c.EventId == id)
+                                        .ToListAsync();
+
+            List<EventTypeConnection> etc = await repository.All<EventTypeConnection>()
+                                            .Where(c => c.EventId == id)
+                                            .ToListAsync();
+
+            if (currentEvent != null)
+            {
+                if (comments != null)
+                {
+                    await repository.RemoveRange<Comment>(comments);
+                }
+
+                if (images != null)
+                {
+                    await repository.RemoveRange<Image>(images);
+                }
+
+                if (etc != null)
+                {
+                    await repository.RemoveRange<EventTypeConnection>(etc);
+                }
+
+                currentEvent.IsDeleted = true;
+                await repository.SaveChangesAsync();
+            
+            }
+        }
     }
 }
