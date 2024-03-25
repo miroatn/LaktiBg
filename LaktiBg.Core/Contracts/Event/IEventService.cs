@@ -34,5 +34,7 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task LeaveEvent(int id, string userId);
 
+        Task<string> GetEventNameByIdAsync(int id);
+
     }
 }

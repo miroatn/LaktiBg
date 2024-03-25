@@ -476,5 +476,15 @@ namespace LaktiBg.Core.Services.EventServices
             }
 
         }
+
+        public async Task<string> GetEventNameByIdAsync(int id)
+        {
+            string? eventName = await repository.All<Event>()
+                                    .Where(e => e.Id == id)
+                                    .Select(e => e.Name)
+                                    .FirstOrDefaultAsync();
+
+            return eventName;
+        }
     }
 }

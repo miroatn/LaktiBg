@@ -8,11 +8,11 @@ namespace LaktiBg.Core.Constants
 {
     public static class MessageConstants
     {
-        public const string RequiredMessage = "The {0} field is required.";
+        public const string RequiredMessage = "Полето {0} е задължително.";
 
-        public const string LenghtMessage = "The {0} field must be between {2} and {1} characters long.";
+        public const string LenghtMessage = "Полето {0} трябва да съдържа между {2} и {1} символа.";
 
-        public const string RatingRange = "The rating must be between {0} and {1}";
+        public const string RatingRange = "Рейтинга трябва да бъде между {0} и {1}";
 
         public const string NoRestrictionAdded = "Няма зададено ограничение";
     }

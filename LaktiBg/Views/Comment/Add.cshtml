@@ -1,0 +1,19 @@
+﻿@model CommentFormModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добави нов коментар</title>
+</head>
+<body>
+    <h1>Добави нов коментар</h1>
+    <form asp-controller="Comment" asp-action="Add" method="post">
+        <div>
+            <label for="text">Коментар:</label>
+            <textarea id="text" name="text" rows="5" cols="40" required>@Model.Text</textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+        <button type="submit">Добави коментар</button>
+    </form>
+</body>
+</html>

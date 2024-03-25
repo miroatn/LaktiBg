@@ -15,6 +15,9 @@
             <a asp-controller="Event" asp-action="Participants" asp-route-id=@Model.Id class="nav-link">Участници</a>
         </li>
         <li class="nav-item">
+            <a asp-controller="Comment" asp-action="All" asp-route-id=@Model.Id class="nav-link">Коментари</a>
+        </li>
+        <li class="nav-item">
             <a asp-controller="Place" asp-action="Details" asp-route-id=@Model.Place.Id class="nav-link">Място</a>
         </li>
     </ul>
@@ -55,14 +58,6 @@
         }
 
     </div>
-
-    <h3>Коментари:</h3>
-    <ul>
-@foreach (var comment in Model.Comments)
-{
-            <li>@comment.Text</li>
-}
-    </ul>
 
     <h3>Снимки:</h3>
     <ul>
