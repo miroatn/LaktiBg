@@ -165,16 +165,9 @@ namespace LaktiBg.Controllers
                 return BadRequest();
             }
 
-            if (await eventService.CheckIfUserIsAlreadyInEvent(id, userId) == true)
-            {
-                return RedirectToAction("All");
-            }
-
-            
-
             await eventService.ParticipateInEvent(id, userId);
 
-            return RedirectToAction("All");
+            return RedirectToAction("Details", new {id = id});
         }
 
         [HttpGet]
@@ -215,6 +208,30 @@ namespace LaktiBg.Controllers
             await eventService.DeleteAsync(id);
 
             return RedirectToAction("All", "Event");
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> Leave(int id, string userId)
+        {
+            if (await eventService.CheckIfUserIsAlreadyInEvent(id, userId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await userService.ExistById(userId) == false)
+            {
+                return Unauthorized();
+            }
+
+            await eventService.LeaveEvent(id, userId);
+
+            return RedirectToAction("All");
         }
 
     }

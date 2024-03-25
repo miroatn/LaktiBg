@@ -1,5 +1,5 @@
 ﻿@model EventViewModel
-
+@inject IEventService eventService
 @{
     ViewBag.Title = "Event Details";
 }
@@ -32,9 +32,14 @@
             <p><strong>Описание:</strong> @Model.Description</p>
     </p>
 
-        @if (Model.Participants.Count >= Model.ParticipantsMaxCount || Model.UserAge < Model.MinAgeRequired || Model.UserRating < Model.MinRatingRequired)
+
+        @if (await eventService.CheckIfUserIsAlreadyInEvent(Model.Id, User.Id()))
         {
-                    <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
+            <a asp-controller="Event" asp-action="Leave" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Отпиши се</a>
+        }
+        else if(Model.Participants.Count >= Model.ParticipantsMaxCount || Model.UserAge < Model.MinAgeRequired || Model.UserRating < Model.MinRatingRequired)
+        {
+             <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
         }
         else
         {

@@ -462,5 +462,19 @@ namespace LaktiBg.Core.Services.EventServices
                 await repository.SaveChangesAsync();
             }
         }
+
+        public async Task LeaveEvent(int id, string userId)
+        {
+            UsersEvents? usersEvent = await repository.All<UsersEvents>()
+                                             .Where(ue => ue.UserId == userId && ue.EventId == id)
+                                             .FirstOrDefaultAsync();
+
+            if (usersEvent != null)
+            {
+                await repository.RemoveAsync<UsersEvents>(usersEvent);
+                await repository.SaveChangesAsync();
+            }
+
+        }
     }
 }

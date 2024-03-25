@@ -32,5 +32,7 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task EditAsync(EventFormModel model);
 
+        Task LeaveEvent(int id, string userId);
+
     }
 }
