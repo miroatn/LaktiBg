@@ -6,7 +6,31 @@
     <title>Всички коментари</title>
 </head>
 <body>
-    <h1>Всички коментари</h1>
+    <div class="card text-center">
+    <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+            <a asp-controller="Event" asp-action="Details" asp-route-id=@ViewBag.EventId class="nav-link">Събитие</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Event" asp-action="Participants" asp-route-id=@ViewBag.EventId class="nav-link">Участници</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="true" href="#">Коментари</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Place" asp-action="Details" asp-route-id=@ViewBag.EventId class="nav-link">Място</a>
+        </li>
+    </ul>
+    </div>
+    <div class="card-body">
+    <h3 class="card-title">@ViewBag.EventName</h3>
+
+    <div class="row justify-content-center">
+    <div class="col-auto">
+    <h4>Всички коментари</h4>
+      </div>
+    </div>
 
         @foreach (var comment in Model)
         {
@@ -27,7 +51,8 @@
                                <div class="d-flex flex-row align-items-center" >
                                    @if (User.Id() == comment.AuthorId)
                                         {
-                                         <a asp-controller="Comment" asp-action="Delete" asp-route-id="@ViewBag.EventId" class="btn btn-primary"
+                                         <a asp-controller="Comment" asp-action="Delete" asp-route-eventId="@ViewBag.EventId" asp-route-id=@comment.Id
+                                          asp-route-userId=@User.Id() class="btn btn-primary"
                                             method="post" style="background-color: transparent; border: 0; padding: 0;">
                                          <img src="~/Images/trashcan.png" alt="Delete Comment" width="15" height="20"
                                         style="background-color: transparent; " /></a>
@@ -47,7 +72,6 @@
     <div class="col-auto">
         <a asp-controller="Comment" asp-action="Add" asp-route-id="@ViewBag.EventId" class="btn btn-primary" method="post">Добави коментар</a>
     </div>
-
 </div>
 </body>
 </html>

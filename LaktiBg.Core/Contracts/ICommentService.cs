@@ -5,8 +5,14 @@ namespace LaktiBg.Core.Contracts
 {
     public interface ICommentService
     {
-        Task<IEnumerable<CommentViewModel>> GetCommentsByEventId(int eventId);
+        Task<IEnumerable<CommentViewModel>> GetCommentsByEventIdAsync(int eventId);
 
-        Task AddComment(CommentFormModel commentViewModel, int id);
+        Task AddCommentAsync(CommentFormModel commentViewModel, int id);
+
+        Task DeleteAsync(int id);
+
+        Task<bool> CommentExistByIdAsync(int id);
+
+        Task<bool> IsUserOwnerOfCommentAsync(int id,int eventId, string userId);
     }
 }

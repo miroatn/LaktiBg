@@ -49,7 +49,7 @@ namespace LaktiBg.Controllers
 
             model.AuthorId = User.Id();
 
-            await commentService.AddComment(model, id);
+            await commentService.AddCommentAsync(model, id);
 
             return RedirectToAction("All", new {id = id});
 
@@ -59,10 +59,33 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> All(int id)
         {
-            IEnumerable<CommentViewModel> models = await commentService.GetCommentsByEventId(id);
+            IEnumerable<CommentViewModel> models = await commentService.GetCommentsByEventIdAsync(id);
             ViewBag.EventId = id;
+            ViewBag.EventName = await eventService.GetEventNameByIdAsync(id);
 
             return View(models);
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> Delete(int id, int eventId)
+        {
+            if (await commentService.CommentExistByIdAsync(id) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await commentService.IsUserOwnerOfCommentAsync(id,eventId, User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            await commentService.DeleteAsync(id);
+
+            ViewBag.EventId = id;
+            ViewBag.EventName = await eventService.GetEventNameByIdAsync(id);
+
+            return RedirectToAction("All", new {id = eventId});
         }
     }
 }
