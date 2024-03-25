@@ -8,6 +8,8 @@ using LaktiBg.Core.Contracts.PlaceServices;
 using LaktiBg.Core.Services.PlaceServices;
 using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Services.UserServices;
+using LaktiBg.Core.Contracts;
+using LaktiBg.Core.Services.CommentServices;
 
 namespace LaktiBg.Extensions
 {
@@ -18,6 +20,7 @@ namespace LaktiBg.Extensions
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IPlaceService, PlaceService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             return services;
         }

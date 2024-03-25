@@ -23,4 +23,8 @@
     <ProjectReference Include="..\LaktiBg.Core\LaktiBg.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Comment\" />
+  </ItemGroup>
+
 </Project>
