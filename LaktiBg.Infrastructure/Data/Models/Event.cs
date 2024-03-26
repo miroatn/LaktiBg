@@ -21,9 +21,6 @@ namespace LaktiBg.Infrastructure.Data.Models
         [MaxLength(NameMaxLenght)]
         public string Name { get; set; } = string.Empty;
 
-        [Required]
-        [ForeignKey(nameof(Type))]
-        public int TypeId { get; set; }
 
         [Required]
         public IList<EventTypeConnection> Types { get; set; }
