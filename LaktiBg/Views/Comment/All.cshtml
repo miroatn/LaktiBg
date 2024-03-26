@@ -42,12 +42,16 @@
                       <div class="card-body">
                         <p>@comment.Text</p>
 
-                        <div class="d-flex justify-content-between">
-                          <div class="d-flex flex-row align-items-center">
-                                <img src="~/Images/user.png" alt="avatar" width="25"
-                              height="25" />
-                            <p class="small mb-0 ms-2">@comment.AuthorName</p>
-                          </div>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <img src="~/Images/user.png" alt="avatar" width="25" height="25" />
+                                        <p class="small mb-0 ms-2">@comment.AuthorName</p>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                       <p class="small text-muted mb-0 ms-2">@comment.DateTime</p>
+                                    </div>
+                                </div>
                                <div class="d-flex flex-row align-items-center" >
                                    @if (User.Id() == comment.AuthorId)
                                         {

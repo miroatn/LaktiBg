@@ -28,6 +28,7 @@ namespace LaktiBg.Core.Services.CommentServices
                 Text = model.Text,
                 AuthorId = model.AuthorId,
                 EventId = id,
+                DateTime = DateTime.Now,
             };
 
             await repository.AddAsync(comment);
@@ -65,6 +66,7 @@ namespace LaktiBg.Core.Services.CommentServices
                                         Text = c.Text,
                                         AuthorId = c.AuthorId,
                                         EventId = c.EventId,
+                                        DateTime = c.DateTime,
                                     })
                                     .ToListAsync();
 

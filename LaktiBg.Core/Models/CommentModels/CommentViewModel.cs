@@ -9,5 +9,7 @@
         public string AuthorName { get; set; } = string.Empty;
 
         public string EventTitle { get; set; } = string.Empty;
+
+        public DateTime DateTime { get; set; }
     }
 }
