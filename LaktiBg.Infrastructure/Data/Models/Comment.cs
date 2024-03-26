@@ -24,5 +24,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         public int EventId { get; set; }
 
         public Event Event { get; set; } = null!;
+
+        public DateTime DateTime { get; set; }
     }
 }
