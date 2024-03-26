@@ -1,5 +1,4 @@
 ﻿using LaktiBg.Core.Models.PlaceModels;
-using LaktiBg.Infrastructure.Data.Models;
 
 namespace LaktiBg.Core.Contracts.PlaceServices
 {
@@ -21,11 +20,6 @@ namespace LaktiBg.Core.Contracts.PlaceServices
 
         Task<bool> IsUserOwner(string userId, int placeId);
 
-        Task DeleteImage(int imageId);
-
-        Task<Dictionary<int, string>> FindImagesByPlaceId(int placeId);
-
-        Task<int> FindPlaceIdByImageId(int imageId);
 
 
     }

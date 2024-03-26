@@ -1,9 +1,7 @@
-﻿using LaktiBg.Core.Contracts.Event;
+﻿using LaktiBg.Core.Contracts.ImageService;
 using LaktiBg.Core.Contracts.PlaceServices;
-using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.ImageModels;
 using LaktiBg.Core.Models.PlaceModels;
-using LaktiBg.Core.Services.ImageServices;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +11,12 @@ namespace LaktiBg.Core.Services.PlaceServices
     public class PlaceService : IPlaceService
     {
         private readonly IRepository repository;
+        private readonly IImageService imageService;
 
-        public PlaceService(IRepository _repository)
+        public PlaceService(IRepository _repository, IImageService _imageService)
         {
             repository = _repository;
+            imageService = _imageService;
 
         }
 
@@ -59,65 +59,12 @@ namespace LaktiBg.Core.Services.PlaceServices
 
         public async Task<int> CreateAsync(PlaceFormModel model, string ownerId)
         {
-            List<ImageViewModel> imageModels = new List<ImageViewModel>();
+            IList<Image> images = new List<Image>();
 
             if (model.Files != null)
             {
-                foreach (var file in model.Files)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
+                images = await imageService.GetImagesFromViewModelAsync(model.Files);
 
-                        var outputPath = Path.Combine("uploads", file.FileName);
-                        var imageService = new ImageService();
-                        await imageService.CompressAndSaveImageAsync(file, outputPath, 30);
-
-
-                        string fileExtention = Path.GetExtension(file.FileName.ToLower());
-                        byte[] reducedFile = File.ReadAllBytes(outputPath);
-
-                        await file.CopyToAsync(memoryStream);
-                        
-
-                        if (reducedFile.Length < 4194304 && isPhoto(fileExtention))
-                        {
-                            var newphoto = new ImageViewModel()
-                            {
-                                Bytes = reducedFile,
-                                Description = file.FileName,
-                                FileExtension = Path.GetExtension(file.FileName),
-                                Size = reducedFile.Length,
-                            };
-
-                            imageModels.Add(newphoto);
-                        }
-                        else
-                        {
-                            //ModelState.AddModelError("File", "The file is too large.");
-                        }
-
-                        File.Delete(outputPath);
-
-                    }
-
-                }
-
-            }
-
-            List<Image> images = new List<Image>();
-
-            foreach (var item in imageModels)
-            {
-                var image = new Image()
-                {
-                    Bytes = item.Bytes,
-                    Description = item.Description,
-                    FileExtension = item.FileExtension,
-                    Size = item.Size,
-                    PlaceId = item.PlaceId,
-                };
-
-                images.Add(image);
             }
 
             Place place = new Place()
@@ -156,19 +103,6 @@ namespace LaktiBg.Core.Services.PlaceServices
             }
 
             await repository.SaveChangesAsync();
-        }
-
-        public async Task DeleteImage(int imageId)
-        {
-
-            Image? image = await repository.All<Image>()
-                .Where(x => x.Id == imageId).FirstOrDefaultAsync();
-
-            if (image != null)
-            {
-                await repository.RemoveAsync(image);
-                await repository.SaveChangesAsync();
-            }
         }
 
         public async Task<PlaceViewModel> Details(int id)
@@ -212,63 +146,12 @@ namespace LaktiBg.Core.Services.PlaceServices
         {
             Place? place = await repository.GetByIdAsync<Place>(model.Id);
 
-            List<ImageViewModel> imageModels = new List<ImageViewModel>();
+            IList<Image> images = new List<Image>();
 
             if (model.Files != null)
             {
-                foreach (var file in model.Files)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
+                images = await imageService.GetImagesFromViewModelAsync(model.Files);
 
-                        var outputPath = Path.Combine("uploads", file.FileName);
-                        var imageService = new ImageService();
-                        await imageService.CompressAndSaveImageAsync(file, outputPath, 30);
-
-
-                        string fileExtention = Path.GetExtension(file.FileName.ToLower());
-                        byte[] reducedFile = File.ReadAllBytes(outputPath);
-
-                        await file.CopyToAsync(memoryStream);
-
-
-                        if (reducedFile.Length < 4194304 && isPhoto(fileExtention))
-                        {
-                            var newphoto = new ImageViewModel()
-                            {
-                                Bytes = reducedFile,
-                                Description = file.FileName,
-                                FileExtension = Path.GetExtension(file.FileName),
-                                Size = reducedFile.Length,
-                            };
-
-                            imageModels.Add(newphoto);
-                        }
-                        else
-                        {
-                            //ModelState.AddModelError("File", "The file is too large.");
-                        }
-
-                        File.Delete(outputPath);
-                    }
-                }
-
-            }
-
-            List<Image> images = new List<Image>();
-
-            foreach (var item in imageModels)
-            {
-                var image = new Image()
-                {
-                    Bytes = item.Bytes,
-                    Description = item.Description,
-                    FileExtension = item.FileExtension,
-                    Size = item.Size,
-                    PlaceId = item.PlaceId,
-                };
-
-                images.Add(image);
             }
 
             if (place != null) 
@@ -284,22 +167,6 @@ namespace LaktiBg.Core.Services.PlaceServices
 
         }
 
-        public async Task<Dictionary<int, string>> FindImagesByPlaceId(int placeId)
-        {
-            Dictionary<int, string> imagesToShow = new Dictionary<int, string>();
-            List<Image> images = await repository.All<Image>()
-                                                .Where(x => x.PlaceId == placeId)
-                                                .ToListAsync();
-
-            foreach (var image in images)
-            {
-                string base64String = Convert.ToBase64String(image.Bytes);
-                string imageDataURL = $"data:image/png;base64,{base64String}";
-                imagesToShow.Add(image.Id, imageDataURL);
-            }
-
-            return imagesToShow;
-        }
 
         public async Task<PlaceFormModel> GetPlaceFormModelByPlaceId(int id)
         {
@@ -328,19 +195,6 @@ namespace LaktiBg.Core.Services.PlaceServices
             return model;
         }
 
-        public async Task<int> FindPlaceIdByImageId(int imageId)
-        {
-            Image? image = await repository.GetByIdAsync<Image>(imageId);
-
-            if (image != null && image.PlaceId != null)
-            {
-                return (int)image.PlaceId;
-            }
-
-            return 0;
-            
-        }
-
         public async Task<bool> IsUserOwner(string userId, int placeId)
         {
             return await repository.AllReadOnly<Place>()
@@ -353,13 +207,5 @@ namespace LaktiBg.Core.Services.PlaceServices
                 .AnyAsync(p => p.Id == id);
         }
 
-
-        private bool isPhoto(string fileExtention)
-        {
-            return fileExtention == ".jpg"
-                || fileExtention == ".jpeg"
-                || fileExtention == ".png"
-                || fileExtention == ".bmp";
-        }
     }
 }

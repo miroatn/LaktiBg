@@ -2,7 +2,7 @@
 {
     public class ImagesViewModel
     {
-        public int PlaceId { get; set; }
+        public int EntityId { get; set; }
 
         public Dictionary<int, string> imagesToShow = new Dictionary<int, string>();
     }

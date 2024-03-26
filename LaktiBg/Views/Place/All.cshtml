@@ -12,9 +12,10 @@
             @foreach (var item in Model.Where(x => x.IsPublic == true || x.OwnerId == User.Id()))
             {
                <div class="card border-success mb-3" style="max-width: 26rem;">
+              <div class="card-header bg-transparent border-success">Име на мястото: @item.Name</div>
                 @if (item.ImagesToShow.Count > 0)
                 {
-                    <div class="card-header bg-transparent border-success">Име на мястото: @item.Name</div>
+
                     <div class = "row justify-content-center">
                     <img src="@item.ImagesToShow.First()" alt="Image" width="200" height="auto"/>
                     </div>

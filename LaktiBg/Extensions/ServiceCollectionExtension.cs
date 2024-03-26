@@ -10,6 +10,8 @@ using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Services.UserServices;
 using LaktiBg.Core.Contracts;
 using LaktiBg.Core.Services.CommentServices;
+using LaktiBg.Core.Contracts.ImageService;
+using LaktiBg.Core.Services.ImageServices;
 
 namespace LaktiBg.Extensions
 {
@@ -21,6 +23,7 @@ namespace LaktiBg.Extensions
             services.AddScoped<IPlaceService, PlaceService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IImageService, ImageService>();
 
             return services;
         }

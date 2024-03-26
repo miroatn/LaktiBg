@@ -104,27 +104,6 @@ namespace LaktiBg.Controllers
             return RedirectToAction("All", "Place");
         }
 
-        [HttpGet]
-
-        public async Task<IActionResult> DeleteImages(int id)
-        {
-            ImagesViewModel model = new ImagesViewModel();
-
-            model.PlaceId = id;
-            model.imagesToShow = await placeService.FindImagesByPlaceId(id);
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DeleteImage(int id)
-        {
-            int placeId = await placeService.FindPlaceIdByImageId(id);
-
-            await placeService.DeleteImage(id);
-
-            return RedirectToAction("DeleteImages", new {id = placeId});
-        }
 
         [HttpGet]
 
