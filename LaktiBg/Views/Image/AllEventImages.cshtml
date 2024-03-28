@@ -1,4 +1,5 @@
 ﻿@model EventViewModel
+@inject IEventService eventService
 
 
 <div class="card text-center">
@@ -51,13 +52,20 @@
 
 <br />
 
-<form enctype="multipart/form-data" asp-controller="Image" asp-action="AddImagesToEvent" method="post">
-        <div class="form-group">
-            <label asp-for="Files">Добавете снимки</label>
-            <input asp-for="Files" type="file" class="form-control-file" id="exampleFormControlFile1" multiple>
-        </div>
-        <div class="text-center">
-            <input asp-controller="Image" asp-action="AddImagesToEvent" asp-route-id="@Model.Id" class="btn btn-primary mt-3"  type="submit" value="Запази" />
-        </div>
-</form>
+@if (await eventService.CheckIfUserIsAlreadyInEvent(Model.Id, User.Id()))
+{
+        <form enctype="multipart/form-data" asp-controller="Image" asp-action="AddImagesToEvent" method="post">
+    <div class="form-group">
+        <label asp-for="Files">Добавете снимки</label>
+        <input asp-for="Files" type="file" class="form-control-file" id="exampleFormControlFile1" multiple>
+    </div>
+    <div class="text-center">
+        <input asp-controller="Image" asp-action="AddImagesToEvent" asp-route-id="@Model.Id" class="btn btn-primary mt-3"  type="submit" value="Запази" />
+    </div>
+        </form>
+
+    <br />
+
+     <a asp-controller="Image" asp-action="DeleteImages" asp-route-id="@Model.Id" asp-route-entityType="Event" class="btn btn-outline-danger mb-2 w-75 p-3 fw-bold">Изтрий снимки</a>
+}
 

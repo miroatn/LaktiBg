@@ -1,6 +1,6 @@
 ﻿@model ImagesViewModel
 
-<h2>Images</h2>
+<h2>Снимки</h2>
 
 <div class="row">
     @foreach (var kvp in Model.imagesToShow)
@@ -9,6 +9,6 @@
             <img class="d-block w-50" style="height:500px"
             src="@image" alt="@image">
         int id = kvp.Key;
-           <a asp-controller="Image" asp-action="DeleteImage" asp-route-id=@id asp-route-entityId=@Model.EntityId class="btn btn-outline-danger mb-2 w-100 p-3 fw-bold">Изтрий снимки</a>
+           <a asp-controller="Image" asp-action="DeleteImage" asp-route-id=@id asp-route-entityId=@Model.EntityId  asp-route-entityType="@Model.EntityType" class="btn btn-outline-danger mb-2 w-100 p-3 fw-bold">Изтрий снимки</a>
     }
 </div>

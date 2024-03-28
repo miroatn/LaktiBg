@@ -20,23 +20,33 @@ namespace LaktiBg.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DeleteImages(int id)
+        public async Task<IActionResult> DeleteImages(int id, string entityType)
         {
             ImagesViewModel model = new ImagesViewModel();
 
             model.EntityId = id;
-            model.imagesToShow = await imageService.ConvertImagesToStringAsync(await imageService.GetImagesByIdAsync(id,"Place"));
+            if (entityType == "Place")
+            {
+                model.imagesToShow = await imageService.ConvertImagesToStringAsync(await imageService.GetImagesByIdAsync(id, "Place"));
+            }
+            else if (entityType == "Event")
+            {
+                model.imagesToShow = await imageService.ConvertImagesToStringAsync(await imageService.GetImagesByIdAsync(id, "Event"));
+
+            }
+
+            model.EntityType = entityType;
 
             return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> DeleteImage(int id, int entityId)
+        public async Task<IActionResult> DeleteImage(int id, int entityId, string entityType)
         {
 
             await imageService.DeleteImage(id);
 
-            return RedirectToAction("DeleteImages", new { id = entityId });
+            return RedirectToAction("DeleteImages", new { id = entityId, entityType = entityType});
         }
 
         [HttpGet]
