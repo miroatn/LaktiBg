@@ -15,5 +15,7 @@ namespace LaktiBg.Core.Contracts.ImageService
         Task DeleteImage(int imageId);
 
         Task<IList<Image>> GetImagesFromViewModelAsync(IFormFileCollection files);
+
+        Task SaveImagesToEventAsync(IFormFileCollection files, int eventId);
     }
 }

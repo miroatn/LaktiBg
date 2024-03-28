@@ -19,6 +19,9 @@
             <a class="nav-link active" aria-current="true" href="#">Коментари</a>
         </li>
         <li class="nav-item">
+            <a asp-controller="Image" asp-action="AllEventImages" asp-route-id=@ViewBag.EventId class="nav-link">Снимки</a>
+        </li>
+        <li class="nav-item">
             <a asp-controller="Place" asp-action="Details" asp-route-id=@ViewBag.EventId class="nav-link">Място</a>
         </li>
     </ul>

@@ -1,6 +1,8 @@
-﻿using LaktiBg.Core.Contracts.ImageService;
+﻿using LaktiBg.Core.Contracts.Event;
+using LaktiBg.Core.Contracts.ImageService;
 using LaktiBg.Core.Models.ImageModels;
 using LaktiBg.Infrastructure.Data.Common;
+using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
@@ -11,16 +13,18 @@ namespace LaktiBg.Core.Services.ImageServices
     public class ImageService : IImageService
     {
         private readonly IRepository repository;
+        private readonly IEventService eventService;
 
-        public ImageService(IRepository _repository)
+        public ImageService(IRepository _repository, IEventService _eventService)
         {
             repository = _repository;
+            eventService = _eventService;
         }
 
         public async Task CompressAndSaveImageAsync(IFormFile imageFile, string outputPath, int quality)
         {
             using var imageStream = imageFile.OpenReadStream();
-            using var image = Image.Load(imageStream);
+            using var image = SixLabors.ImageSharp.Image.Load(imageStream);
             var encoder = new JpegEncoder
             {
                 Quality = quality, // Adjust this value for desired compression quality
@@ -145,6 +149,8 @@ namespace LaktiBg.Core.Services.ImageServices
         }
 
 
+
+
         private bool isPhoto(string fileExtention)
         {
             return fileExtention == ".jpg"
@@ -153,5 +159,17 @@ namespace LaktiBg.Core.Services.ImageServices
                 || fileExtention == ".bmp";
         }
 
+        public async Task SaveImagesToEventAsync(IFormFileCollection files, int eventId)
+        {
+            Event currentEvent = await eventService.GetEventByIdAsync(eventId);
+
+            IList<Infrastructure.Data.Models.Image> images = await GetImagesFromViewModelAsync(files);
+
+            if (currentEvent != null)
+            {
+                currentEvent.Images = images;
+                await repository.SaveChangesAsync();
+            }
+        }
     }
 }

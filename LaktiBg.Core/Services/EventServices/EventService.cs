@@ -240,7 +240,7 @@ namespace LaktiBg.Core.Services.EventServices
 
         }
 
-        public async Task<EventViewModel> GetEventViewModelByIdAsync(int id, string userId)
+        public async Task<EventViewModel> GetEventViewModelByIdAsync(int id)
         {
             EventViewModel? model = await repository.AllReadOnly<Event>()
             .Where(e => e.IsDeleted == false && e.Id == id)
@@ -295,10 +295,6 @@ namespace LaktiBg.Core.Services.EventServices
                 model.Organizer = await GetUsersNameByIdAsync(model.OrganizerId);
 
                 model.TypesToShow = string.Join(", ", model.Types.Select(t => t.Name));
-
-                model.UserAge = await userService.GetUsersAgeById(userId);
-
-                model.UserRating = await userService.GetUsersRatingById(userId);
 
 
                 List<byte[]> imageBytesList = new List<byte[]>();
@@ -485,6 +481,13 @@ namespace LaktiBg.Core.Services.EventServices
                                     .FirstOrDefaultAsync();
 
             return eventName;
+        }
+
+        public async Task<Event> GetEventByIdAsync(int id)
+        {
+            return await repository.All<Event>()
+                                    .Where(e => e.Id == id)
+                                    .FirstOrDefaultAsync();
         }
     }
 }

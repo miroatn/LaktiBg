@@ -19,6 +19,9 @@
             <a asp-controller="Comment" asp-action="All" asp-route-id=@Model.Id class="nav-link">Коментари</a>
         </li>
         <li class="nav-item">
+            <a asp-controller="Image" asp-action="AllEventImages" asp-route-id=@Model.Id class="nav-link">Снимки</a>
+        </li>
+        <li class="nav-item">
             <a asp-controller="Place" asp-action="Details" asp-route-id=@Model.Place.Id class="nav-link">Място</a>
         </li>
     </ul>

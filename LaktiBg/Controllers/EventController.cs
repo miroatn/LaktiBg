@@ -180,7 +180,9 @@ namespace LaktiBg.Controllers
             }
 
             string userId = User.Id();
-            var model = await eventService.GetEventViewModelByIdAsync(id, userId);
+            var model = await eventService.GetEventViewModelByIdAsync(id);
+            model.UserAge = await userService.GetUsersAgeById(userId);
+            model.UserRating = await userService.GetUsersRatingById(userId);
 
             return View(model);
         }
@@ -195,7 +197,9 @@ namespace LaktiBg.Controllers
             }
 
             string userId = User.Id();
-            var model = await eventService.GetEventViewModelByIdAsync(id, userId);
+            var model = await eventService.GetEventViewModelByIdAsync(id);
+            model.UserAge = await userService.GetUsersAgeById(userId);
+            model.UserRating = await userService.GetUsersRatingById(userId);
 
             return View(model);
         }

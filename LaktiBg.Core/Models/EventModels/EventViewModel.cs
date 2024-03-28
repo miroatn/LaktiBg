@@ -2,6 +2,7 @@
 using LaktiBg.Core.Models.ImageModels;
 using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace LaktiBg.Core.Models.EventModels
@@ -65,5 +66,7 @@ namespace LaktiBg.Core.Models.EventModels
         public ICollection<ImageViewModel> Images { get; set; }
 
         public IList<string> ImagesToShow { get; set; }
+
+        public IFormFileCollection? Files { get; set; }
     }
 }

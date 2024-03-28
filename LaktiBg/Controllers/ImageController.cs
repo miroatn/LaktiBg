@@ -1,6 +1,7 @@
-﻿using LaktiBg.Core.Contracts.ImageService;
+﻿using LaktiBg.Core.Contracts.Event;
+using LaktiBg.Core.Contracts.ImageService;
+using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.ImageModels;
-using LaktiBg.Core.Services.PlaceServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LaktiBg.Controllers
@@ -9,9 +10,13 @@ namespace LaktiBg.Controllers
     {
         private readonly IImageService imageService;
 
-        public ImageController(IImageService _imageService)
+        private readonly IEventService eventService;
+
+        public ImageController(IImageService _imageService, IEventService _eventService)
         {
             imageService = _imageService;
+            eventService = _eventService;
+
         }
 
         [HttpGet]
@@ -32,6 +37,37 @@ namespace LaktiBg.Controllers
             await imageService.DeleteImage(id);
 
             return RedirectToAction("DeleteImages", new { id = entityId });
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> AllEventImages(int id)
+        {
+            EventViewModel currentEvent = await eventService.GetEventViewModelByIdAsync(id);
+
+            return View(currentEvent);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> AddImagesToEvent(EventViewModel model, int id)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            if (await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            if (model.Files != null)
+            {
+                await imageService.SaveImagesToEventAsync(model.Files, id);
+            }
+
+            return RedirectToAction("AllEventImages", new { id });
         }
     }
 }
