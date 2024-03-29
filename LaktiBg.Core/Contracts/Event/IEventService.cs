@@ -1,5 +1,6 @@
 ﻿using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.PlaceModels;
+using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Infrastructure.Data.Models;
 
 namespace LaktiBg.Core.Contracts.Event
@@ -37,6 +38,7 @@ namespace LaktiBg.Core.Contracts.Event
         Task<string> GetEventNameByIdAsync(int id);
 
         Task<Infrastructure.Data.Models.Event> GetEventByIdAsync(int id);
+
 
     }
 }
