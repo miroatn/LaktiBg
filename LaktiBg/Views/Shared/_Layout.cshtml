@@ -36,7 +36,10 @@
                     <li><a class="dropdown-item" href="@Url.Action("Add", "Place")">Добави</a></li>
                   </ul>
                 </div>
+                <a asp-controller="User" asp-action="ViewProfile" asp-route-id="@User.Id()" class="nav-link">Профил</a>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    
                     @await Component.InvokeAsync(nameof(MainMenuComponent))
                     <partial name="_LoginPartial" />
                 </div>
