@@ -149,7 +149,7 @@ namespace LaktiBg.Core.Services.EventServices
                     MinAgeRequired = e.MinAgeRequired,
                     MinAgeRequiredToShow = e.MinAgeRequired != null ? e.MinAgeRequired.ToString() : NoRestrictionAdded,
                     Description = e.Description,
-                    Participants = e.Participants.Select(p => new UserViewModel
+                    Participants = e.Participants.Select(p => new UserEventViewModel
                     {
                         Id = p.UserId,
                         Name = p.User.FirstName + " " + p.User.LastName,
@@ -265,7 +265,7 @@ namespace LaktiBg.Core.Services.EventServices
                 MinAgeRequired = e.MinAgeRequired,
                 MinAgeRequiredToShow = e.MinAgeRequired != null ? e.MinAgeRequired.ToString() : NoRestrictionAdded,
                 Description = e.Description,
-                Participants = e.Participants.Select(p => new UserViewModel
+                Participants = e.Participants.Select(p => new UserEventViewModel
                 {
                     Id = p.UserId,
                     Name = p.User.FirstName + " " + p.User.LastName,

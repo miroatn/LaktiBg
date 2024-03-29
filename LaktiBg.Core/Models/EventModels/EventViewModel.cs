@@ -13,7 +13,7 @@ namespace LaktiBg.Core.Models.EventModels
         public EventViewModel()
         {
             Types = new List<EventTypeViewModel>();
-            Participants = new List<UserViewModel>();
+            Participants = new List<UserEventViewModel>();
             Comments = new List<CommentViewModel>();
             Images = new List<ImageViewModel>();
             ImagesToShow = new List<string>();
@@ -59,7 +59,7 @@ namespace LaktiBg.Core.Models.EventModels
 
         public string Description { get; set; } = string.Empty;
 
-        public ICollection<UserViewModel> Participants { get; set; }
+        public ICollection<UserEventViewModel> Participants { get; set; }
 
         public ICollection<CommentViewModel> Comments { get; set; }
 
