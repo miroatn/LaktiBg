@@ -135,6 +135,14 @@ namespace LaktiBg.Core.Services.ImageServices
             return imagesToShow;
         }
 
+        public async Task<string> ConvertImageToStringAsync(Infrastructure.Data.Models.Image image)
+        {
+            string base64String = Convert.ToBase64String(image.Bytes);
+            string imageDataURL = $"data:image/png;base64,{base64String}";
+
+            return imageDataURL;
+        }
+
         public async Task DeleteImage(int imageId)
         {
 

@@ -16,6 +16,8 @@ namespace LaktiBg.Core.Contracts.ImageService
 
         Task<IList<Image>> GetImagesFromViewModelAsync(IFormFileCollection files);
 
+        Task<string> ConvertImageToStringAsync(Image image);
+
         Task SaveImagesToEventAsync(IFormFileCollection files, int eventId);
     }
 }

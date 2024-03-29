@@ -1,4 +1,5 @@
 ﻿@model UserViewModel
+@inject IUserService userService
 
 <section style="background-color: #eee;">
   <div class="container py-5">
@@ -6,9 +7,12 @@
       <div class="col">
         <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
           <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">User</a></li>
-            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+              @if (User.Id() == Model.Id)
+                {
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
+                    <li class="breadcrumb-item"><a href="#">User</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
+                }
           </ol>
         </nav>
       </div>
@@ -23,8 +27,20 @@
             <h5 class="my-3">@Model.FirstName @Model.LastName</h5>
             <p class="text-muted mb-1">Рейтинг: @Model.Rating</p>
             <div class="d-flex justify-content-center mb-2">
-              <button type="button" class="btn btn-primary">Follow</button>
-              <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                @if (User.Id() != Model.Id)
+                            {
+                                if (await userService.CheckIfUserIsFriend(User.Id(), Model.Id) == false)
+                                {
+                                       <a asp-controller="User" asp-action="AddFriend" asp-route-friendId="@Model.Id" asp-route-userId=@User.Id() class="btn btn-primary">Добави приятел</a>
+                                }
+                                else
+                                {
+                                        <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Добави приятел</button>
+                                }
+            
+                               <button type="button" class="btn btn-outline-primary ms-1">Message</button>  
+                            }
+
             </div>
           </div>
         </div>

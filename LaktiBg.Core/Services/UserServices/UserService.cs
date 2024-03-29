@@ -1,9 +1,11 @@
 ﻿using LaktiBg.Core.Contracts.Event;
+using LaktiBg.Core.Contracts.ImageService;
 using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp.Formats;
 
 namespace LaktiBg.Core.Services.UserServices
 {
@@ -108,6 +110,52 @@ namespace LaktiBg.Core.Services.UserServices
                                                         UserId = ue.UserId,
                                                         EventId = ue.Event.Id,
                                                     }).ToListAsync();
+        }
+
+        public async Task AddFriendAsync(string userId, string friendId)
+        {
+            UserFriends userFriends = new UserFriends() 
+            { 
+                UserId = userId,
+                UserFriendId = friendId
+            };
+
+            ApplicationUser? currentUser = await repository.All<ApplicationUser>()
+                                                .Where(au => au.Id == userId)
+                                                .FirstOrDefaultAsync();
+
+            if (currentUser != null)
+            {
+                currentUser.Friends.Add(userFriends);
+            }
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task<IList<FriendViewModel>> GetUserFriendsAsync(string userId)
+        {
+            List<FriendViewModel> friends = await repository.AllReadOnly<UserFriends>()
+                                    .Where(uf => uf.UserId == userId)
+                                    .Select(uf => new FriendViewModel
+                                    {
+                                        Id = uf.UserFriendId,
+                                        Name = uf.UserFriend.FirstName + " " + uf.UserFriend.LastName,
+                                        Image = uf.UserFriend.Avatar,
+                                        Email = uf.UserFriend.Email,
+                                    })
+                                    .ToListAsync();
+
+
+
+            return friends;
+        }
+
+        public async Task<bool> CheckIfUserIsFriend(string userId, string friendId)
+        {
+            return await repository.AllReadOnly<UserFriends>()
+                                   .AnyAsync(uf => (uf.UserId == userId && uf.UserFriendId == friendId) ||
+                                   (uf.UserId == friendId && uf.UserFriendId == userId));
+
         }
     }
 }

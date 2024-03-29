@@ -19,5 +19,11 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<ICollection<UsersEventsViewModel>> GetUsersOnGoingEventsAsync(string userId);
 
+        Task AddFriendAsync(string userId, string friendId);
+
+        Task<IList<FriendViewModel>> GetUserFriendsAsync(string userId);
+
+        Task<bool> CheckIfUserIsFriend(string userId, string friendId);
+
     }
 }
