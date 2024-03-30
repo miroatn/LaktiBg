@@ -36,5 +36,7 @@ namespace LaktiBg.Core.Contracts.User
 
         Task UpdateUserRatingAsync(string userId, string direction);
 
+        Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId);
+
     }
 }

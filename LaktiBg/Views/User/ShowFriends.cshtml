@@ -7,10 +7,11 @@
       <div class="col">
         <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
           <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Приятели</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
-                            (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
+    <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
+    <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
+        (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
+    <li class="breadcrumb-item"><a asp-controller="User" asp-action="MyEvents" asp-route-userId="@User.Id()">Моите събития</a></li>
+    <li class="breadcrumb-item"><a asp-controller="User" asp-action="ViewProfile" asp-route-id="@User.Id()">Профил</a></li>
           </ol>
         </nav>
       </div>

@@ -119,6 +119,23 @@ namespace LaktiBg.Core.Services.UserServices
                                                     }).ToListAsync();
         }
 
+        public async Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId)
+        {
+            return await repository.AllReadOnly<UsersEvents>()
+                                                    .Where(ue => ue.Event.OrganizerId == userId)
+                                                    .OrderByDescending(ue => ue.Event.StartDate)
+                                                    .Select(ue => new UsersEventsViewModel
+                                                    {
+                                                        UserId = ue.UserId,
+                                                        EventId = ue.Event.Id,
+                                                        EventName = ue.Event.Name,
+                                                        EventDate = ue.Event.StartDate,
+                                                        Status = ue.Event.IsFinished == true ? "Приключил" : "Настоящ"
+                                                       
+                                                    })
+                                                    .ToListAsync();
+        }
+
         public async Task AddFriendAsync(string userId, string friendId)
         {
             UserFriends userFriends = new UserFriends() 

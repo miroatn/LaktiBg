@@ -151,6 +151,18 @@ namespace LaktiBg.Controllers
             return RedirectToAction("ViewProfile", new { id = userId });
         }
 
+        public async Task<IActionResult> MyEvents(string userId)
+        {
+            if (await userService.ExistById(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            var models = await userService.GetUserEventsAsync(userId);
+
+            return View(models);
+        }
+
 
     }
 
