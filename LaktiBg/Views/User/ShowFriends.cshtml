@@ -1,4 +1,5 @@
 ﻿@model IList<FriendViewModel>
+@inject IUserService userService
 
     <section style="background-color: #eee;">
   <div class="container py-5">
@@ -7,7 +8,9 @@
         <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
           <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="#">Приятели</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
+                            (@await userService.GetFriendRequestCountAsync(User.Id()))
+                        </a></li>
                         <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
           </ol>
         </nav>

@@ -10,7 +10,8 @@
               @if (User.Id() == Model.Id)
                 {
                     <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
-                    <li class="breadcrumb-item"><a href="#">User</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
+                       (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
                     <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
                 }
           </ol>

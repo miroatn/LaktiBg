@@ -135,7 +135,7 @@ namespace LaktiBg.Core.Services.UserServices
         public async Task<IList<FriendViewModel>> GetUserFriendsAsync(string userId)
         {
             List<FriendViewModel> friends = await repository.AllReadOnly<UserFriends>()
-                                    .Where(uf => uf.UserId == userId)
+                                    .Where(uf => uf.UserId == userId && uf.IsAccepted == true)
                                     .Select(uf => new FriendViewModel
                                     {
                                         Id = uf.UserFriendId,
@@ -206,6 +206,21 @@ namespace LaktiBg.Core.Services.UserServices
             }
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<string> GetFriendRequestCountAsync(string userId)
+        {
+            int result = await repository.AllReadOnly<UserFriends>()
+                                        .Where(uf => uf.UserFriendId == userId 
+                                            && uf.IsAccepted == false)
+                                        .CountAsync();
+
+            if (result == 0)
+            {
+                return "0";
+            }
+
+            return result.ToString();
         }
     }
 }
