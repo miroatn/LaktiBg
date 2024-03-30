@@ -32,6 +32,11 @@ namespace LaktiBg.Controllers
 
             UserViewModel model = await userService.GetUserViewModelByIdAsync(id);
 
+            if (model.AvatarBytes != null)
+            {
+                model.AvatarToShow = await imageService.ConvertBytesToStringAsync(model.AvatarBytes);
+            }
+
             return View(model);
         }
 
@@ -116,6 +121,25 @@ namespace LaktiBg.Controllers
             return RedirectToAction("ShowFriends", new { userId = userId});
 
         }
+
+        public async Task<IActionResult> RemoveFriend(string userId, string friendId)
+        {
+            if (await userService.ExistById(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await userService.ExistById(friendId) == false)
+            {
+                return BadRequest();
+            }
+
+            await userService.RemoveFriendAsync(userId, friendId);
+
+            return RedirectToAction("ShowFriends", new { userId = userId });
+        }
+
+       
     }
 
 

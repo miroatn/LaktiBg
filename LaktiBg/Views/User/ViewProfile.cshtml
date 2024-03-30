@@ -23,8 +23,16 @@
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-              class="rounded-circle img-fluid" style="width: 150px;">
+             @if (Model.AvatarToShow != string.Empty)
+                {
+                        <img src="@Model.AvatarToShow" alt="avatar"
+                            class="rounded-circle img-fluid" style="width: 150px;">
+                }
+                else
+                {
+                        <img src="~/Images/user.png" alt="avatar"
+                        class="rounded-circle img-fluid" style="width: 150px;">   
+                }
             <h5 class="my-3">@Model.FirstName @Model.LastName</h5>
             <p class="text-muted mb-1">Рейтинг: @Model.Rating</p>
             <div class="d-flex justify-content-center mb-2">
@@ -41,7 +49,18 @@
             
                                <button type="button" class="btn btn-outline-primary ms-1">Message</button>  
                             }
-
+                            else
+                            {
+                              <form enctype="multipart/form-data" asp-controller="Image" asp-action="AddImagesToEvent" method="post">
+                                <div class="form-group">
+                                    <label asp-for="File">Смени снимката</label>
+                                    <input asp-for="File" type="file" class="form-control-file" id="exampleFormControlFile1">
+                                </div>
+                                <div class="text-center">
+                                        <input asp-controller="Image" asp-action="AddProfileAvatar" asp-route-userId = "@User.Id()" class="btn btn-primary mt-3"  type="submit" value="Запази" />
+                                </div>
+                               </form>
+                            }
             </div>
           </div>
         </div>

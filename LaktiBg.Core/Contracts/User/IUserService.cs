@@ -32,5 +32,7 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<string> GetFriendRequestCountAsync(string userId);
 
+        Task RemoveFriendAsync(string userId, string friendId);
+
     }
 }

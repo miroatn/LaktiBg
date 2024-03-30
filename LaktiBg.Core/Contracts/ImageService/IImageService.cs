@@ -1,4 +1,5 @@
 ﻿using LaktiBg.Core.Models.ImageModels;
+using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -19,5 +20,11 @@ namespace LaktiBg.Core.Contracts.ImageService
         Task<string> ConvertImageToStringAsync(Image image);
 
         Task SaveImagesToEventAsync(IFormFileCollection files, int eventId);
+
+        Task<Image> ConvertFileToImageAsync(IFormFile file);
+
+        Task AddNewUserAvatar(UserViewModel model, string userId);
+
+        Task<string> ConvertBytesToStringAsync(byte[] bytes);
     }
 }

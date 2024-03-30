@@ -9,8 +9,7 @@
           <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="#">Приятели</a></li>
                         <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
-                            (@await userService.GetFriendRequestCountAsync(User.Id()))
-                        </a></li>
+                            (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
                         <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
           </ol>
         </nav>
@@ -29,12 +28,12 @@
 
                         @if (item.ImageToShow == string.Empty)
                             {
-                                <img  src="~/Images/user.png" width="15" height="20"
+                                <img  src="~/Images/user.png" width="50"
                                 style="background-color: transparent; " />          
                             }
                             else
                             {
-                                <img  src="@item.ImageToShow" width="15" height="20"
+                                <img  src="@item.ImageToShow" width="50" 
                                 style="background-color: transparent; " />                   
                             }
                   
@@ -43,7 +42,9 @@
                         <p class="text-muted mb-0">@item.Email</p>
                         </div>
                     </div>
-                        <a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@item.Id" role="button">View</a>
+                        <a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@item.Id" role="button">Профил</a>
+                        <a asp-controller="User" asp-action="RemoveFriend" asp-route-friendId="@item.Id" asp-route-userId=@User.Id() class="btn btn-danger">Премахни</a>
+
                     </li>
                 </ul>
                 </div>

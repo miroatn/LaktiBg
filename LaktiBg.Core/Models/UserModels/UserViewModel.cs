@@ -1,4 +1,5 @@
 ﻿using LaktiBg.Core.Models.ImageModels;
+using Microsoft.AspNetCore.Http;
 
 namespace LaktiBg.Core.Models.UserModels
 {
@@ -26,7 +27,11 @@ namespace LaktiBg.Core.Models.UserModels
 
         public string? Description { get; set; }
 
-        public ImageViewModel Avatar { get; set; } = null!;
+        public byte[] AvatarBytes { get; set; } = null!;
+
+        public string AvatarToShow { get; set; } = string.Empty;
+
+        public IFormFile? File { get; set; }
 
         public string UserName { get; set; } = string.Empty;
 

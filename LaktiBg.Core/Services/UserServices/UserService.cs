@@ -73,6 +73,7 @@ namespace LaktiBg.Core.Services.UserServices
                                                         Description = au.Description == null ? "No information" : au.Description,
                                                         UserName = au.UserName,
                                                         PhoneNumber = au.PhoneNumber == null ? "No information" : au.PhoneNumber,
+                                                        AvatarBytes = au.Avatar.Bytes
                                                     })
                                                     .FirstOrDefaultAsync();
 
@@ -82,6 +83,8 @@ namespace LaktiBg.Core.Services.UserServices
 
                 model.OngoingEvents = await GetUsersOnGoingEventsAsync(userId);
             }
+
+
 
 
             return model;
@@ -221,6 +224,30 @@ namespace LaktiBg.Core.Services.UserServices
             }
 
             return result.ToString();
+        }
+
+        public async Task RemoveFriendAsync(string userId, string friendId)
+        {
+            UserFriends? user = await repository.All<UserFriends>()
+                                        .Where(uf => uf.UserId == userId && uf.UserFriendId == friendId)
+                                        .FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                await repository.RemoveAsync(user);
+            }
+
+            UserFriends? friend = await repository.All<UserFriends>()
+                                        .Where(uf => uf.UserId == friendId
+                                                &&  uf.UserFriendId == userId)
+                                        .FirstOrDefaultAsync();
+
+            if (friend != null)
+            {
+                await repository.RemoveAsync(friend);
+            }
+
+            await repository.SaveChangesAsync();
         }
     }
 }

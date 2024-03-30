@@ -2,6 +2,7 @@
 using LaktiBg.Core.Contracts.ImageService;
 using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.ImageModels;
+using LaktiBg.Core.Models.UserModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LaktiBg.Controllers
@@ -78,6 +79,23 @@ namespace LaktiBg.Controllers
             }
 
             return RedirectToAction("AllEventImages", new { id });
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> AddProfileAvatar(UserViewModel model, string userId)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            if (model.File != null)
+            {
+                await imageService.AddNewUserAvatar(model, userId);
+            }
+
+            return RedirectToAction("ViewProfile", "User", new {id = userId});
         }
     }
 }
