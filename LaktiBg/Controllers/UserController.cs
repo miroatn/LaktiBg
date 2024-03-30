@@ -2,6 +2,7 @@
 using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Core.Services.ImageServices;
+using LaktiBg.Core.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LaktiBg.Controllers
@@ -80,5 +81,42 @@ namespace LaktiBg.Controllers
 
             return View(friends);
         }
+
+        public async Task<IActionResult> FriendRequests(string id)
+        {
+            if (await userService.ExistById(id) == false)
+            {
+                return BadRequest();
+            }
+
+            IList<UserFriendsViewModel> models = await userService.GetFriendRequestsAsync(id);
+
+            if (models == null)
+            {
+                RedirectToAction("ViewProfile", new { id = id });
+            }
+
+            return View(models);
+        }
+
+        public async Task<IActionResult> AcceptRequest(string userId, string friendId)
+        {
+            if (await userService.ExistById(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await userService.ExistById(friendId) == false)
+            {
+                return BadRequest();
+            }
+
+            await userService.AcceptFriendRequestAsync(userId, friendId);
+
+            return RedirectToAction("ShowFriends", new { userId = userId});
+
+        }
     }
+
+
 }

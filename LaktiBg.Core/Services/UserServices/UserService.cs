@@ -157,5 +157,55 @@ namespace LaktiBg.Core.Services.UserServices
                                    (uf.UserId == friendId && uf.UserFriendId == userId));
 
         }
+
+        public async Task<IList<UserFriendsViewModel>> GetFriendRequestsAsync(string userId)
+        {
+            return await repository.AllReadOnly<UserFriends>()
+                                    .Where(uf => uf.UserFriendId == userId && uf.IsAccepted == false)
+                                    .Select(uf => new UserFriendsViewModel
+                                    {
+                                        Id = uf.Id,
+                                        UserId = uf.UserId,
+                                        UserName = uf.User.FirstName + " " + uf.User.LastName,
+                                        UserFriendId = uf.UserFriendId,
+                                        IsAccepted = uf.IsAccepted,
+                                    }).ToListAsync();
+        }
+
+
+
+        public async Task AcceptFriendRequestAsync(string userId, string friendId)
+        {
+            UserFriends? friend = await repository.All<UserFriends>()
+                                  .Where(uf => uf.UserFriendId == userId 
+                                  && uf.UserId == friendId
+                                  && uf.IsAccepted == false)
+                                  .FirstOrDefaultAsync();
+
+            if (friend != null)
+            {
+                friend.IsAccepted = true;
+                await repository.SaveChangesAsync();
+            }
+
+
+            UserFriends userFriends = new UserFriends()
+            {
+                UserId = userId,
+                UserFriendId = friendId,
+                IsAccepted = true
+            };
+
+            ApplicationUser? currentUser = await repository.All<ApplicationUser>()
+                                                .Where(au => au.Id == userId)
+                                                .FirstOrDefaultAsync();
+
+            if (currentUser != null)
+            {
+                currentUser.Friends.Add(userFriends);
+            }
+
+            await repository.SaveChangesAsync();
+        }
     }
 }

@@ -25,5 +25,10 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<bool> CheckIfUserIsFriend(string userId, string friendId);
 
+        Task<IList<UserFriendsViewModel>> GetFriendRequestsAsync(string userId);
+
+
+        Task AcceptFriendRequestAsync(string userId, string friendId);
+
     }
 }

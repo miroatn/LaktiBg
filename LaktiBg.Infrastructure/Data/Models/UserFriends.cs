@@ -17,5 +17,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         [ForeignKey(nameof(UserFriend))]
         public string UserFriendId { get; set; } = string.Empty;
         public ApplicationUser UserFriend { get; set; } = null!;
+
+        public bool IsAccepted { get; set; } = false;
     }
 }
