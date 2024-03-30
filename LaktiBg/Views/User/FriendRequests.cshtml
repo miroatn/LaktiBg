@@ -1,0 +1,44 @@
+﻿@model IList<UserFriendsViewModel>
+
+    <section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
+                        <li class="breadcrumb-item"><a href="#">Покани за приятелство</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+                        @foreach (var item in Model)
+                        {
+                    <div class="row">
+                    <ul class="list-group list-group-light">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3">
+                            <p class="fw-bold mb-1">@item.UserName</p>
+                            </div>
+                        </div>
+                               <a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="AcceptRequest" asp-route-userId="@User.Id()" asp-route-friendId="@item.UserId" role="button">Приеми поканата</a>
+                        </li>
+                    </ul>
+                    </div>
+                        }
+            <hr>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -10,6 +10,8 @@ namespace LaktiBg.Infrastructure.Data.Models
         {
             Participants = new List<UsersEvents>();
             Comments = new List<Comment>();
+            Types = new List<EventTypeConnection>();
+            Images = new List<Image>();
         }
 
         [Key]
@@ -19,12 +21,9 @@ namespace LaktiBg.Infrastructure.Data.Models
         [MaxLength(NameMaxLenght)]
         public string Name { get; set; } = string.Empty;
 
-        [Required]
-        [ForeignKey(nameof(Type))]
-        public int TypeId { get; set; }
 
         [Required]
-        public EventType Type { get; set; } = null!;
+        public IList<EventTypeConnection> Types { get; set; }
 
         [Required]
         public DateTime CreationDate { get; set; }
@@ -64,9 +63,12 @@ namespace LaktiBg.Infrastructure.Data.Models
         [MaxLength(DescriptionMaxLenght)]
         public string Description { get; set; } = string.Empty;
 
-        public ICollection<UsersEvents> Participants { get; set; }
+        public IList<UsersEvents> Participants { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
+
+        public IEnumerable<Image> Images { get; set; }
+
 
     }
 }

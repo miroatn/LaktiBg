@@ -1,0 +1,35 @@
+﻿@model List<PlaceViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Места</title>
+</head>
+<body>
+    <h1>Места</h1>
+    <table>
+        <tbody>
+            @foreach (var item in Model.Where(x => x.IsPublic == true || x.OwnerId == User.Id()))
+            {
+               <div class="card border-success mb-3" style="max-width: 26rem;">
+              <div class="card-header bg-transparent border-success">Име на мястото: @item.Name</div>
+                @if (item.ImagesToShow.Count > 0)
+                {
+
+                    <div class = "row justify-content-center">
+                    <img src="@item.ImagesToShow.First()" alt="Image" width="200" height="auto"/>
+                    </div>
+                }
+                    <div class="card-body text-success">
+                    <h5 class="card-title">Контакт: @item.Contact</h5>
+                    <p class="card-text">Адрес: @item.Address </p>
+                </div>
+                    <div class="card-footer bg-transparent border-success">Рейтинг: @item.Rating</div> 
+                      <a asp-controller="Place" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success mb-2 w-100 p-3 fw-bold">Детайли</a>
+                      <a asp-controller="Place" asp-action="Participate" asp-route-id="@item.Id" class="btn btn-outline-success mb-2 w-100 p-3 fw-bold">Лактирай</a>
+                 </div>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

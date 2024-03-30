@@ -17,10 +17,325 @@ namespace LaktiBg.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.19")
+                .HasAnnotation("ProductVersion", "6.0.27")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Event", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(700)
+                        .HasColumnType("nvarchar(700)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVisible")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MinAgeRequired")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinRatingRequired")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OrganizerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParticipantsMaxCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlaceId");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.EventType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 4,
+                            Name = "Месо"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Филм"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "За пушачи"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Хижа"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Tуризъм"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Name = "Алкохол"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Къща за гости"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Парти"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Домашно парти"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Силна музика"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Веган"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Вегетарианско"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Ресторант"
+                        });
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.EventTypeConnection", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventId", "EventTypeId");
+
+                    b.HasIndex("EventTypeId");
+
+                    b.ToTable("EventTypeConnections");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<byte[]>("Bytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Size")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("PlaceId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Place", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Contact")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Rating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Places");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.UserFriends", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserFriendId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserFriendId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFriends");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.UsersEvents", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("EventId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersEvents");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -86,6 +401,10 @@ namespace LaktiBg.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -137,6 +456,8 @@ namespace LaktiBg.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -224,6 +545,148 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Rating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Comment", b =>
+                {
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Event", "Event")
+                        .WithMany("Comments")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Event", b =>
+                {
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Place", "Place")
+                        .WithMany()
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Place");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.EventTypeConnection", b =>
+                {
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Event", "Event")
+                        .WithMany("Types")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.EventType", "EventType")
+                        .WithMany()
+                        .HasForeignKey("EventTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("EventType");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Image", b =>
+                {
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Event", "Event")
+                        .WithMany("Images")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Place", "Place")
+                        .WithMany("Images")
+                        .HasForeignKey("PlaceId");
+
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "User")
+                        .WithOne("Avatar")
+                        .HasForeignKey("LaktiBg.Infrastructure.Data.Models.Image", "UserId");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Place");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.UserFriends", b =>
+                {
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "UserFriend")
+                        .WithMany()
+                        .HasForeignKey("UserFriendId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "User")
+                        .WithMany("Friends")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserFriend");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.UsersEvents", b =>
+                {
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.Event", "Event")
+                        .WithMany("Participants")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaktiBg.Infrastructure.Data.Models.ApplicationUser", "User")
+                        .WithMany("FinishedEvents")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -273,6 +736,31 @@ namespace LaktiBg.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Event", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("Participants");
+
+                    b.Navigation("Types");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Place", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Avatar");
+
+                    b.Navigation("FinishedEvents");
+
+                    b.Navigation("Friends");
                 });
 #pragma warning restore 612, 618
         }

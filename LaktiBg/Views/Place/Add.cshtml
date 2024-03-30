@@ -1,0 +1,38 @@
+﻿@model PlaceFormModel
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form enctype="multipart/form-data" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" placeholder="Наименование на мястото">
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contact"></label>
+                <input asp-for="Contact" class="form-control" placeholder="Телефон">
+                <span asp-validation-for="Contact" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <textarea asp-for="Address" rows="4" class="form-control" placeholder="Адрес"></textarea>
+                <span asp-validation-for="Address" class="small text-danger"></span>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input asp-for="IsPublic" type="checkbox" class="custom-control-input" id="customCheck1">
+              <label class="custom-control-label" asp-for="IsPublic">Мястото е публично</label>
+            </div>
+             <div class="form-group">
+                <label asp-for="Files">Изберете снимки</label>
+                <input asp-for="Files" type="file" class="form-control-file" id="exampleFormControlFile1" multiple>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Save" />
+            </div>
+      </form>
+    </div>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

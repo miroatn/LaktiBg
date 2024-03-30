@@ -1,0 +1,211 @@
+﻿@model UserViewModel
+@inject IUserService userService
+
+<section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+              @if (User.Id() == Model.Id)
+                {
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
+                       (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
+                }
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+             @if (Model.AvatarToShow != string.Empty)
+                {
+                        <img src="@Model.AvatarToShow" alt="avatar"
+                            class="rounded-circle img-fluid" style="width: 150px;">
+                }
+                else
+                {
+                        <img src="~/Images/user.png" alt="avatar"
+                        class="rounded-circle img-fluid" style="width: 150px;">   
+                }
+            <h5 class="my-3">@Model.FirstName @Model.LastName</h5>
+            <p class="text-muted mb-1">Рейтинг: @Model.Rating</p>
+
+            <div class="d-flex justify-content-center mb-2">
+                @if (User.Id() != Model.Id)
+                    {
+                        <p>
+                            <a asp-controller="User" asp-action="ChangeRating" asp-route-eventId="@ViewBag.EventId" asp-route-direction="up"
+                                asp-route-userId=@Model.Id class="btn btn-primary"
+                                method="post" style="background-color: transparent; border: 0; padding: 0;">
+                                <img src="~/Images/arrow-up.png" alt="Rating increase" width="30" 
+                            style="background-color: transparent; " /></a>
+
+                            <a asp-controller="User" asp-action="ChangeRating" asp-route-eventId="@ViewBag.EventId" asp-route-direction="down"
+                                asp-route-userId=@Model.Id class="btn btn-primary"
+                                method="post" style="background-color: transparent; border: 0; padding: 0;">
+                                <img src="~/Images/arrow-down.png" alt="Rating decrease" width="30" 
+                            style="background-color: transparent; " /></a>
+                       </p>
+                        if (await userService.CheckIfUserIsFriend(User.Id(), Model.Id) == false)
+                        {
+
+                                <a asp-controller="User" asp-action="AddFriend" asp-route-friendId="@Model.Id" asp-route-userId=@User.Id() class="btn btn-primary">Добави приятел</a>
+                        }
+                        else
+                        {
+                                <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Добави приятел</button>
+                        }
+            
+                        <button type="button" class="btn btn-outline-primary ms-1">Message</button>  
+                    }
+                    else
+                    {
+                        <form enctype="multipart/form-data" asp-controller="Image" asp-action="AddImagesToEvent" method="post">
+                        <div class="form-group">
+                            <label asp-for="File">Смени снимката</label>
+                            <input asp-for="File" type="file" class="form-control-file" id="exampleFormControlFile1">
+                        </div>
+                        <div class="text-center">
+                                <input asp-controller="Image" asp-action="AddProfileAvatar" asp-route-userId = "@User.Id()" class="btn btn-primary mt-3"  type="submit" value="Запази" />
+                        </div>
+                        </form>
+                    }
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush rounded-3">
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="fas fa-globe fa-lg text-warning"></i>
+                <p class="mb-0">https://mdbootstrap.com</p>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
+                <p class="mb-0">mdbootstrap</p>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
+                <p class="mb-0">mdbootstrap</p>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
+                <p class="mb-0">mdbootstrap</p>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
+                <p class="mb-0">mdbootstrap</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Име и фамилия</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@Model.FirstName @Model.LastName</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Имейл</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@Model.UserName</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Телефон</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@Model.PhoneNumber</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Адрес</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@Model.Address</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Описание</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@Model.Description</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                <p class="mb-4" style="text-align: center;"><strong>Предстоящи събития на потребителя</strong></p>
+                                @foreach (var item in Model.OngoingEvents.OrderBy(x => x.EventDate).Take(5))
+                                {
+                    <div class="row">
+                    <ul class="list-group list-group-light">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+
+                            <div class="ms-3">
+                            <p class="fw-bold mb-1">@item.EventName</p>
+                            <p class="text-muted mb-0">@item.EventDate</p>
+                            </div>
+                        </div>
+                                <a class="btn btn-link btn-rounded btn-sm" asp-controller="Event" asp-action="Details" asp-route-id="@item.EventId" role="button">Събитие</a>
+                        </li>
+                    </ul>
+                    </div>
+                                }
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                <p class="mb-4" style="text-align: center;"><strong>Отминали събития</strong></p>
+                                @foreach (var item in Model.FinishedEvents.OrderBy(x => x.EventDate).Take(5))
+                                {
+                        <div class="row">
+                        <ul class="list-group list-group-light">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+
+                                <div class="ms-3">
+                                <p class="fw-bold mb-1">@item.EventName</p>
+                                <p class="text-muted mb-0">@item.EventDate</p>
+                                </div>
+                            </div>
+                                    <a class="btn btn-link btn-rounded btn-sm" asp-controller="Event" asp-action="Details" asp-route-id="@item.EventId" role="button">Събитие</a>
+                            </li>
+                        </ul>
+                        </div>
+                                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,54 @@
+﻿@model EventViewModel
+@inject IEventService eventService
+
+
+
+<div class="card text-center">
+    <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+            <a asp-controller="Event" asp-action="Details" asp-route-id=@Model.Id class="nav-link">Събитие</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="true" href="#">Участници</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Comment" asp-action="All" asp-route-id=@Model.Id class="nav-link">Коментари</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Image" asp-action="AllEventImages" asp-route-id=@Model.Id class="nav-link">Снимки</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Place" asp-action="Details" asp-route-id=@Model.Place.Id class="nav-link">Място</a>
+        </li>
+    </ul>
+    </div>
+    <div class="card-body">
+    <h5 class="card-title">@Model.Name</h5>
+    <p class="card-text">
+        <div><strong>Участници:</strong></div>
+        <ul>
+            @foreach (var participant in Model.Participants)
+            {
+                    <div>@participant.Name</div>
+            }
+        </ul>
+    </p>
+        @if (await eventService.CheckIfUserIsAlreadyInEvent(Model.Id, User.Id()))
+        {
+             <a asp-controller="Event" asp-action="Leave" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Отпиши се</a>
+        }
+        else if (Model.Participants.Count >= Model.ParticipantsMaxCount || Model.UserAge < Model.MinAgeRequired || Model.UserRating < Model.MinRatingRequired)
+        {
+
+             <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
+        }
+        else
+        {
+            <a asp-controller="Event" asp-action="Participate" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
+        }
+        </div>
+    </div>
+
+
+

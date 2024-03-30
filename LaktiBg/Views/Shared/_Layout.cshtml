@@ -17,7 +17,28 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Лакти
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="@Url.Action("All", "Event")">Всички</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Add", "Event")">Добави</a></li>
+                  </ul>
+                </div>
+                </button>
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Места
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="@Url.Action("All", "Place")">Всички</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Add", "Place")">Добави</a></li>
+                  </ul>
+                </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    
                     @await Component.InvokeAsync(nameof(MainMenuComponent))
                     <partial name="_LoginPartial" />
                 </div>
@@ -35,7 +56,7 @@
             &copy; @DateTime.Today.Year - LaktiBg - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

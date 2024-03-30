@@ -1,0 +1,57 @@
+﻿@model PlaceViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Места</title>
+</head>
+<body>
+    <tbody>
+        <div class="card border-success mb-4" style="max-width: 54rem;">
+        <div class="card-header bg-transparent border-success">Име на мястото: @Model.Name</div>
+            <div class = "row justify-content-center">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                        @for (int i = 0; i < Model.ImagesToShow.Count; i++)
+                        {
+                              var image = Model.ImagesToShow[i];
+                            <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
+                                <img class="d-block w-100" style="height:500px"
+                                         src="@image" alt="@image">
+                            </div>
+
+                        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+            </div>
+        <div class="card-body text-success">
+        <h5 class="card-title">Контакт: @Model.Contact</h5>
+        <p class="card-text">Адрес: @Model.Address </p>
+        </div>
+        <div class="card-footer bg-transparent border-success">Рейтинг: @Model.Rating</div> 
+
+        </div>
+
+            @if (User.Id() == Model.OwnerId)
+            {
+                <div class="row">
+                <div class="col-md-4">
+                     <a asp-controller="Place" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mb-2 w-100 p-3 fw-bold">Редактиране</a>
+                </div>
+                <div class="col-md-4">
+                     <a asp-controller="Place" asp-action="DeletePlace" asp-route-id="@Model.Id" class="btn btn-outline-danger mb-2 w-100 p-3 fw-bold">Изтрий</a>
+                </div>
+                </div>
+                    <a asp-controller="Image" asp-action="DeleteImages" asp-route-id="@Model.Id" asp-route-entityType="Place" class="btn btn-outline-danger mb-2 w-75 p-3 fw-bold">Изтрий снимки</a>
+            }
+    </tbody>
+</body>
+</html>

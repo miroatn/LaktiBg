@@ -1,0 +1,63 @@
+﻿@model EventViewModel
+@inject IEventService eventService
+
+
+<div class="card text-center">
+    <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="true" href="#">Събитие</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Event" asp-action="Participants" asp-route-id=@Model.Id class="nav-link">Участници</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Comment" asp-action="All" asp-route-id=@Model.Id class="nav-link">Коментари</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Image" asp-action="AllEventImages" asp-route-id=@Model.Id class="nav-link">Снимки</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Place" asp-action="Details" asp-route-id=@Model.Place.Id class="nav-link">Място</a>
+        </li>
+    </ul>
+    </div>
+    <div class="card-body">
+    <h5 class="card-title">@Model.Name</h5>
+    <p class="card-text">
+            <p><strong>Старт:</strong> @Model.StartDate</p>
+            <p><strong>Място:</strong> @Model.Place.Name</p>
+            <p><strong>Тип на събитието:</strong> @Model.TypesToShow</p>
+            <p><strong>Организатор:</strong> @Model.Organizer</p>
+            <p><strong>Минимален необходим рейтинг:</strong> @Model.MinRatingToShow</p>
+            <p><strong>Брой на участниците:</strong> @Model.Participants.Count() / @Model.ParticipantsMaxCountToShow</p>
+            <p><strong>Минимална възраст на участниците:</strong> @Model.MinAgeRequiredToShow</p>
+            <p><strong>Описание:</strong> @Model.Description</p>
+    </p>
+
+
+        @if (await eventService.CheckIfUserIsAlreadyInEvent(Model.Id, User.Id()))
+        {
+            <a asp-controller="Event" asp-action="Leave" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Отпиши се</a>
+        }
+        else if(Model.Participants.Count >= Model.ParticipantsMaxCount || Model.UserAge < Model.MinAgeRequired || Model.UserRating < Model.MinRatingRequired)
+        {
+             <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
+        }
+        else
+        {
+            <a asp-controller="Event" asp-action="Participate" asp-route-id="@Model.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
+        }
+        </div>
+
+        @if (User.Id() == Model.OrganizerId)
+        {
+            <div><a asp-controller="Event" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редактирай събитието</a></div>
+
+            <div><a asp-controller="Event" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Изтрий събитието</a></div>
+        }
+
+    </div>
+
+
+
