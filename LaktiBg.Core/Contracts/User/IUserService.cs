@@ -34,5 +34,7 @@ namespace LaktiBg.Core.Contracts.User
 
         Task RemoveFriendAsync(string userId, string friendId);
 
+        Task UpdateUserRatingAsync(string userId, string direction);
+
     }
 }

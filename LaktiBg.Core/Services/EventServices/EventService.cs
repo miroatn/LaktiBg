@@ -127,7 +127,7 @@ namespace LaktiBg.Core.Services.EventServices
         {
 
             IEnumerable<EventViewModel> models =  await repository.AllReadOnly<Event>()
-                .Where(e => e.IsDeleted == false)
+                .Where(e => e.IsDeleted == false && e.IsFinished == false)
                 .Select(e => new EventViewModel()
                 {
                     Id = e.Id,
@@ -182,6 +182,8 @@ namespace LaktiBg.Core.Services.EventServices
                 model.UserAge = await userService.GetUsersAgeById(userId);
 
                 model.UserRating = await userService.GetUsersRatingById(userId);
+
+                model.IsFinished = await UpdateEventStatus(model);
             }
 
 
@@ -488,6 +490,28 @@ namespace LaktiBg.Core.Services.EventServices
             return await repository.All<Event>()
                                     .Where(e => e.Id == id)
                                     .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> UpdateEventStatus(EventViewModel model)
+        {
+            if (model != null)
+            {
+                Event? currentEvent = await repository.All<Event>()
+                                                .Where(e => e.Id == model.Id)
+                                                .FirstOrDefaultAsync();
+
+                if (currentEvent != null)
+                {
+                    if (currentEvent.StartDate < DateTime.Now)
+                    {
+                        currentEvent.IsFinished = true;
+                        await repository.SaveChangesAsync();
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

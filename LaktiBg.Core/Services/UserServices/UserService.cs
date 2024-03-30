@@ -99,6 +99,8 @@ namespace LaktiBg.Core.Services.UserServices
                                                     {
                                                         UserId = ue.UserId,
                                                         EventId = ue.Event.Id,
+                                                        EventName = ue.Event.Name,
+                                                        EventDate = ue.Event.StartDate
                                                     }).ToListAsync();
         }
 
@@ -112,6 +114,8 @@ namespace LaktiBg.Core.Services.UserServices
                                                     {
                                                         UserId = ue.UserId,
                                                         EventId = ue.Event.Id,
+                                                        EventName = ue.Event.Name,
+                                                        EventDate = ue.Event.StartDate
                                                     }).ToListAsync();
         }
 
@@ -245,6 +249,27 @@ namespace LaktiBg.Core.Services.UserServices
             if (friend != null)
             {
                 await repository.RemoveAsync(friend);
+            }
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserRatingAsync(string userId, string direction)
+        {
+            ApplicationUser? user = await repository.All<ApplicationUser>()
+                                        .Where(au => au.Id == userId)
+                                        .FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                if (direction == "up")
+                {
+                    user.Rating += 0.05M;
+                }
+                else if (direction == "down")
+                {
+                    user.Rating -= 0.05M;
+                }
             }
 
             await repository.SaveChangesAsync();

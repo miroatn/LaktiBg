@@ -39,6 +39,8 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task<Infrastructure.Data.Models.Event> GetEventByIdAsync(int id);
 
+        Task<bool> UpdateEventStatus(EventViewModel model);
+
 
     }
 }
