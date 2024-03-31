@@ -169,6 +169,18 @@ namespace LaktiBg.Controllers
             return View(models);
         }
 
+        public async Task<IActionResult> UserAllEvents(string userId)
+        {
+            if (await userService.ExistById(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            var models = await userService.GetUsersAllEventsAsync(userId);
+
+            return View(models);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Edit(string userId)
         {

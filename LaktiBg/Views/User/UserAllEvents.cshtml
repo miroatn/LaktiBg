@@ -1,4 +1,4 @@
-﻿@model IList<UserFriendsViewModel>
+﻿@model IList<UsersEventsViewModel>
 @inject IUserService userService
 
     <section style="background-color: #eee;">
@@ -7,7 +7,7 @@
       <div class="col">
         <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
           <ol class="breadcrumb mb-0">
-      <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
+    <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
     <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
         (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
     <li class="breadcrumb-item"><a asp-controller="User" asp-action="MyEvents" asp-route-userId="@User.Id()">Моите събития</a></li>
@@ -23,19 +23,24 @@
           <div class="card-body">
                         @foreach (var item in Model)
                         {
-                    <div class="row">
-                    <ul class="list-group list-group-light">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="ms-3">
-                            <p class="fw-bold mb-1">@item.UserName</p>
+                        <div class="row">
+                        <ul class="list-group list-group-light">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+
+                                <div class="ms-3">
+                                <p class="fw-bold mb-1">@item.EventName</p>
+                                    <p class="mb-1" style="text-decoration: underline; font-style: italic;">@item.Status</p>
+                                <p class="text-muted mb-0">@item.EventDate</p>
+                                </div>
                             </div>
+                                    <a class="btn btn-link btn-rounded btn-sm" asp-controller="Event" asp-action="Details" asp-route-id="@item.EventId" role="button">Събитие</a>
+                            </li>
+                        </ul>
                         </div>
-                               <a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="AcceptRequest" asp-route-userId="@User.Id()" asp-route-friendId="@item.UserId" role="button">Приеми поканата</a>
-                        </li>
-                    </ul>
-                    </div>
                         }
+
+
             <hr>
                 </div>
               </div>

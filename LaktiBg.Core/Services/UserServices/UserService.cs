@@ -105,6 +105,22 @@ namespace LaktiBg.Core.Services.UserServices
                                                     }).ToListAsync();
         }
 
+        public async Task<ICollection<UsersEventsViewModel>> GetUsersAllEventsAsync(string userId)
+        {
+            return await repository.AllReadOnly<UsersEvents>()
+                                        .Where(ue => ue.UserId == userId 
+                                        && ue.Event.IsDeleted == false)
+                                        .OrderByDescending(ue => ue.Event.StartDate)
+                                        .Select(ue => new UsersEventsViewModel
+                                        {
+                                            UserId = ue.UserId,
+                                            EventId = ue.Event.Id,
+                                            EventName = ue.Event.Name,
+                                            EventDate = ue.Event.StartDate
+                                        })
+                                        .ToListAsync();
+        }
+
 
         public async Task<ICollection<UsersEventsViewModel>> GetUsersOnGoingEventsAsync(string userId)
         {
