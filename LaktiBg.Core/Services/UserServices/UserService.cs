@@ -325,5 +325,42 @@ namespace LaktiBg.Core.Services.UserServices
                                          && e.IsFinished == true));
 
         }
+
+        public async Task EditUserAsync(UserEditModel model, string userId)
+        {
+            ApplicationUser? user = await repository.All<ApplicationUser>()
+                                                .Where(au => au.Id == userId)
+                                                .FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.BirthDate = model.BirthDate;
+                user.Address = model.Address;
+                user.Description = model.Description;
+                user.PhoneNumber = model.PhoneNumber;
+                await repository.SaveChangesAsync();
+            }
+        }
+
+
+        public async Task<UserEditModel> GetUserEditModelAsync(string userId)
+        {
+            UserEditModel? model = await repository.All<ApplicationUser>()
+                                    .Where(au => au.Id == userId)
+                                    .Select(au => new UserEditModel
+                                    {
+                                        FirstName = au.FirstName,
+                                        LastName = au.LastName,
+                                        BirthDate = au.BirthDate,
+                                        Address = au.Address,
+                                        Description = au.Description,
+                                        PhoneNumber = au.PhoneNumber
+                                    })
+                                    .FirstOrDefaultAsync();
+
+            return model;
+        }
     }
 }

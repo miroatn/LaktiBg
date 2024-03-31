@@ -3,6 +3,7 @@ using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Core.Services.ImageServices;
 using LaktiBg.Core.Services.UserServices;
+using LaktiBg.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LaktiBg.Controllers
@@ -166,6 +167,46 @@ namespace LaktiBg.Controllers
             var models = await userService.GetUserEventsAsync(userId);
 
             return View(models);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string userId)
+        {
+            if (await userService.ExistById(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (User.Id() != userId)
+            {
+                return Unauthorized();
+            }
+
+            UserEditModel model = await userService.GetUserEditModelAsync(userId);
+
+            return View(model);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Edit(UserEditModel model)
+        {
+            if (await userService.ExistById(User.Id()) == false)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            string userId = User.Id();
+
+            await userService.EditUserAsync(model, userId);
+
+            return RedirectToAction("ViewProfile", new {id = userId});
+
         }
 
 

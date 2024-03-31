@@ -42,5 +42,9 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<int> GetFriendsSameEventCounterAsync(string userId, string friendId);
 
+        Task EditUserAsync(UserEditModel model, string userId);
+
+        Task<UserEditModel> GetUserEditModelAsync(string userId);
+
     }
 }

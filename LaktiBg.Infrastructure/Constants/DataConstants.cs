@@ -41,6 +41,12 @@
 
             public const int DescriptionMaxLenght = 500;
             public const int DescriptionMinLenght = 5;
+
+            public const int AddressMaxLenght = 100;
+            public const int AddressMinLenght = 3;
+
+            public const int PhoneMaxLenght = 30;
+            public const int PhoneMinLenght = 3;
         } 
 
         public static class EventTypeConstants
