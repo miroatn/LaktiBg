@@ -94,7 +94,8 @@ namespace LaktiBg.Core.Services.UserServices
         {
             return await repository.AllReadOnly<UsersEvents>()
                                                     .Where(ue => ue.UserId == userId &&
-                                                    ue.Event.IsFinished == true)
+                                                    ue.Event.IsFinished == true
+                                                    && ue.Event.IsDeleted == false)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
                                                         UserId = ue.UserId,
@@ -109,7 +110,8 @@ namespace LaktiBg.Core.Services.UserServices
         {
             return await repository.AllReadOnly<UsersEvents>()
                                                     .Where(ue => ue.UserId == userId &&
-                                                    ue.Event.IsFinished == false)
+                                                    ue.Event.IsFinished == false
+                                                    && ue.Event.IsDeleted == false)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
                                                         UserId = ue.UserId,
@@ -122,7 +124,8 @@ namespace LaktiBg.Core.Services.UserServices
         public async Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId)
         {
             return await repository.AllReadOnly<UsersEvents>()
-                                                    .Where(ue => ue.Event.OrganizerId == userId)
+                                                    .Where(ue => ue.Event.OrganizerId == userId
+                                                         && ue.Event.IsDeleted == false)
                                                     .OrderByDescending(ue => ue.Event.StartDate)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
