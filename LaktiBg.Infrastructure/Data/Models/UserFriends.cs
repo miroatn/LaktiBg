@@ -19,5 +19,9 @@ namespace LaktiBg.Infrastructure.Data.Models
         public ApplicationUser UserFriend { get; set; } = null!;
 
         public bool IsAccepted { get; set; } = false;
+
+        public bool IsVoted { get; set; } = false;
+
+        public int VisitedEventCounter { get; set; }
     }
 }
