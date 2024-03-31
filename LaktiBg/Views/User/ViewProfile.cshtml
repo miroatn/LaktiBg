@@ -40,26 +40,29 @@
             <div class="d-flex justify-content-center mb-2">
                 @if (User.Id() != Model.Id)
                     {
-                        <p>
-                            <a asp-controller="User" asp-action="ChangeRating" asp-route-eventId="@ViewBag.EventId" asp-route-direction="up"
-                                asp-route-userId=@Model.Id class="btn btn-primary"
-                                method="post" style="background-color: transparent; border: 0; padding: 0;">
-                                <img src="~/Images/arrow-up.png" alt="Rating increase" width="30" 
-                            style="background-color: transparent; " /></a>
 
-                            <a asp-controller="User" asp-action="ChangeRating" asp-route-eventId="@ViewBag.EventId" asp-route-direction="down"
-                                asp-route-userId=@Model.Id class="btn btn-primary"
-                                method="post" style="background-color: transparent; border: 0; padding: 0;">
-                                <img src="~/Images/arrow-down.png" alt="Rating decrease" width="30" 
-                            style="background-color: transparent; " /></a>
-                       </p>
                         if (await userService.CheckIfUserIsFriend(User.Id(), Model.Id) == false)
                         {
+
 
                                 <a asp-controller="User" asp-action="AddFriend" asp-route-friendId="@Model.Id" asp-route-userId=@User.Id() class="btn btn-primary">Добави приятел</a>
                         }
                         else
                         {
+                                        <p>
+                                            <a asp-controller="User" asp-action="ChangeRating" asp-route-direction="up" asp-route-friendId ="@User.Id()"
+                                                asp-route-userId=@Model.Id class="btn btn-primary"
+                                                method="post" style="background-color: transparent; border: 0; padding: 0;">
+                                                <img src="~/Images/arrow-up.png" alt="Rating increase" width="30" 
+                                            style="background-color: transparent; " /></a>
+
+                                               <a asp-controller="User" asp-action="ChangeRating" asp-route-direction="down" asp-route-friendId ="@User.Id()"
+                                                asp-route-userId=@Model.Id class="btn btn-primary"
+                                                method="post" style="background-color: transparent; border: 0; padding: 0;">
+                                                <img src="~/Images/arrow-down.png" alt="Rating decrease" width="30" 
+                                            style="background-color: transparent; " /></a>
+                                       </p>
+
                                 <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Добави приятел</button>
                         }
             

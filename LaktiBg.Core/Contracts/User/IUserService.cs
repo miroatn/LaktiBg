@@ -38,5 +38,9 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId);
 
+        Task<bool> CheckIfUserCanVoteAsync(string userId, string friendId);
+
+        Task<int> GetFriendsSameEventCounterAsync(string userId, string friendId);
+
     }
 }

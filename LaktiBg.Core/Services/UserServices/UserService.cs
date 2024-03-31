@@ -279,17 +279,48 @@ namespace LaktiBg.Core.Services.UserServices
 
             if (user != null)
             {
-                if (direction == "up")
+                if (direction == "up" && user.Rating < 7)
                 {
                     user.Rating += 0.05M;
                 }
-                else if (direction == "down")
+                else if (direction == "down" && user.Rating > 1)
                 {
                     user.Rating -= 0.05M;
                 }
             }
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckIfUserCanVoteAsync(string userId, string friendId)
+        {
+            UserFriends? currentRelation = await repository.All<UserFriends>()
+                                                .Where(uf => uf.UserId == friendId &&  
+                                                uf.UserFriendId == userId)
+                                                .FirstOrDefaultAsync();
+
+            int sameEventCount = await GetFriendsSameEventCounterAsync(userId, friendId);
+
+            if (currentRelation != null)
+            {
+                if (currentRelation.VisitedEventCounter < sameEventCount)
+                {
+                    currentRelation.VisitedEventCounter = sameEventCount;
+                    await repository.SaveChangesAsync();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task<int> GetFriendsSameEventCounterAsync(string userId, string friendId)
+        {
+            return await repository.All<Event>()
+                           .CountAsync(e => e.Participants.Any(p => p.UserId == userId 
+                                         && e.IsFinished == true)
+                                         && e.Participants.Any(p => p.UserId == friendId
+                                         && e.IsFinished == true));
+
         }
     }
 }

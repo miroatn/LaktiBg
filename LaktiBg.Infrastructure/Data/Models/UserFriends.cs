@@ -20,8 +20,6 @@ namespace LaktiBg.Infrastructure.Data.Models
 
         public bool IsAccepted { get; set; } = false;
 
-        public bool IsVoted { get; set; } = false;
-
         public int VisitedEventCounter { get; set; }
     }
 }

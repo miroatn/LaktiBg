@@ -139,14 +139,19 @@ namespace LaktiBg.Controllers
             return RedirectToAction("ShowFriends", new { userId = userId });
         }
 
-        public async Task<IActionResult> ChangeRating(string userId, string direction)
+        public async Task<IActionResult> ChangeRating(string userId, string direction, string friendId)
         {
-            if (await userService.ExistById(userId) == false)
+            if (await userService.ExistById(userId) == false && await userService.ExistById(friendId) == false)
             {
                 return BadRequest();
             }
 
-            await userService.UpdateUserRatingAsync(userId, direction);
+            if (await userService.CheckIfUserCanVoteAsync(userId, friendId))
+            {
+                await userService.UpdateUserRatingAsync(userId, direction);
+
+            }
+
 
             return RedirectToAction("ViewProfile", new { id = userId });
         }
