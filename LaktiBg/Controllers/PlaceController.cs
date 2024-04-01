@@ -55,11 +55,19 @@ namespace LaktiBg.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]AllPlacesQueryModel model)
         {
-            var models = await placeService.AllAsync();
 
-            return View(models);
+            var places = await placeService.AllAsync(
+                User.Id(),
+                model.SearchTerm,
+                model.CurrentPage,
+                model.PlacesPerPage);
+
+            model.TotalPlacesCount = places.TotalPlacesCount;
+            model.Places = places.Places;
+
+            return View(model);
         }
 
         [HttpGet]
