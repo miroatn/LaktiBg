@@ -11,8 +11,10 @@
                 {
                     <li class="breadcrumb-item"><a asp-controller="User" asp-action="ShowFriends" asp-route-userId="@User.Id()">Приятели</a></li>
                     <li class="breadcrumb-item"><a asp-controller="User" asp-action="FriendRequests" asp-route-id="@User.Id()">Покани за приятелство
-                       (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">User Profile</li>      
+                    (@await userService.GetFriendRequestCountAsync(User.Id()))</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="MyEvents" asp-route-userId="@User.Id()">Моите събития</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="UserAllEvents" asp-route-userId="@User.Id()">Всички събития</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="ViewProfile" asp-route-id="@User.Id()">Профил</a></li>    
                 }
           </ol>
         </nav>
@@ -26,83 +28,62 @@
              @if (Model.AvatarToShow != string.Empty)
                 {
                         <img src="@Model.AvatarToShow" alt="avatar"
-                            class="rounded-circle img-fluid" style="width: 150px;">
+                            class="rounded-circle img-fluid" style="width: 170px;">
                 }
                 else
                 {
                         <img src="~/Images/user.png" alt="avatar"
-                        class="rounded-circle img-fluid" style="width: 150px;">   
+                        class="rounded-circle img-fluid" style="width: 170px;">   
                 }
             <h5 class="my-3">@Model.FirstName @Model.LastName</h5>
             <p class="text-muted mb-1">Рейтинг: @Model.Rating</p>
 
-            <div class="d-flex justify-content-center mb-2">
+
                 @if (User.Id() != Model.Id)
                     {
-                        <p>
-                            <a asp-controller="User" asp-action="ChangeRating" asp-route-eventId="@ViewBag.EventId" asp-route-direction="up"
-                                asp-route-userId=@Model.Id class="btn btn-primary"
-                                method="post" style="background-color: transparent; border: 0; padding: 0;">
-                                <img src="~/Images/arrow-up.png" alt="Rating increase" width="30" 
-                            style="background-color: transparent; " /></a>
 
-                            <a asp-controller="User" asp-action="ChangeRating" asp-route-eventId="@ViewBag.EventId" asp-route-direction="down"
-                                asp-route-userId=@Model.Id class="btn btn-primary"
-                                method="post" style="background-color: transparent; border: 0; padding: 0;">
-                                <img src="~/Images/arrow-down.png" alt="Rating decrease" width="30" 
-                            style="background-color: transparent; " /></a>
-                       </p>
                         if (await userService.CheckIfUserIsFriend(User.Id(), Model.Id) == false)
                         {
+
 
                                 <a asp-controller="User" asp-action="AddFriend" asp-route-friendId="@Model.Id" asp-route-userId=@User.Id() class="btn btn-primary">Добави приятел</a>
                         }
                         else
                         {
+                                        <p>
+                                            <a asp-controller="User" asp-action="ChangeRating" asp-route-direction="up" asp-route-friendId ="@User.Id()"
+                                                asp-route-userId=@Model.Id class="btn btn-primary"
+                                                method="post" style="background-color: transparent; border: 0; padding: 0;">
+                                                <img src="~/Images/arrow-up.png" alt="Rating increase" width="30" 
+                                            style="background-color: transparent; " /></a>
+
+                                               <a asp-controller="User" asp-action="ChangeRating" asp-route-direction="down" asp-route-friendId ="@User.Id()"
+                                                asp-route-userId=@Model.Id class="btn btn-primary"
+                                                method="post" style="background-color: transparent; border: 0; padding: 0;">
+                                                <img src="~/Images/arrow-down.png" alt="Rating decrease" width="30" 
+                                            style="background-color: transparent; " /></a>
+                                       </p>
+
                                 <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Добави приятел</button>
                         }
             
-                        <button type="button" class="btn btn-outline-primary ms-1">Message</button>  
+                        
                     }
                     else
                     {
-                        <form enctype="multipart/form-data" asp-controller="Image" asp-action="AddImagesToEvent" method="post">
-                        <div class="form-group">
-                            <label asp-for="File">Смени снимката</label>
-                            <input asp-for="File" type="file" class="form-control-file" id="exampleFormControlFile1">
-                        </div>
-                        <div class="text-center">
-                                <input asp-controller="Image" asp-action="AddProfileAvatar" asp-route-userId = "@User.Id()" class="btn btn-primary mt-3"  type="submit" value="Запази" />
-                        </div>
-                        </form>
-                    }
-            </div>
-          </div>
+    <form enctype="multipart/form-data" asp-controller="Image" asp-action="AddImagesToEvent" method="post">
+        <div class="form-group">
+            <label asp-for="File">Смени снимката</label>
+            <input asp-for="File" type="file" class="form-control-file" id="exampleFormControlFile1">
         </div>
-        <div class="card mb-4 mb-lg-0">
-          <div class="card-body p-0">
-            <ul class="list-group list-group-flush rounded-3">
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fas fa-globe fa-lg text-warning"></i>
-                <p class="mb-0">https://mdbootstrap.com</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
-                <p class="mb-0">mdbootstrap</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
-                <p class="mb-0">mdbootstrap</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                <p class="mb-0">mdbootstrap</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                <p class="mb-0">mdbootstrap</p>
-              </li>
-            </ul>
+        <div class="text-center">
+            <input asp-controller="Image" asp-action="AddProfileAvatar" asp-route-userId = "@Model.Id" class="btn btn-primary mt-3"  type="submit" value="Запази" />
+        </div>
+    </form>
+    <div class="mt-3 text-center">
+        <a asp-controller="User" asp-action="Edit" asp-route-userId="@Model.Id" class="btn btn-primary">Редактирай профила</a>
+    </div>
+                    }
           </div>
         </div>
       </div>
@@ -184,8 +165,8 @@
             <div class="card mb-4 mb-md-0">
               <div class="card-body">
                 <p class="mb-4" style="text-align: center;"><strong>Отминали събития</strong></p>
-                                @foreach (var item in Model.FinishedEvents.OrderBy(x => x.EventDate).Take(5))
-                                {
+                    @foreach (var item in Model.FinishedEvents.OrderBy(x => x.EventDate).Take(5))
+                    {
                         <div class="row">
                         <ul class="list-group list-group-light">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -200,7 +181,7 @@
                             </li>
                         </ul>
                         </div>
-                                }
+                    }
               </div>
             </div>
           </div>

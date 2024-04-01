@@ -94,7 +94,8 @@ namespace LaktiBg.Core.Services.UserServices
         {
             return await repository.AllReadOnly<UsersEvents>()
                                                     .Where(ue => ue.UserId == userId &&
-                                                    ue.Event.IsFinished == true)
+                                                    ue.Event.IsFinished == true
+                                                    && ue.Event.IsDeleted == false)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
                                                         UserId = ue.UserId,
@@ -104,12 +105,29 @@ namespace LaktiBg.Core.Services.UserServices
                                                     }).ToListAsync();
         }
 
+        public async Task<ICollection<UsersEventsViewModel>> GetUsersAllEventsAsync(string userId)
+        {
+            return await repository.AllReadOnly<UsersEvents>()
+                                        .Where(ue => ue.UserId == userId 
+                                        && ue.Event.IsDeleted == false)
+                                        .OrderByDescending(ue => ue.Event.StartDate)
+                                        .Select(ue => new UsersEventsViewModel
+                                        {
+                                            UserId = ue.UserId,
+                                            EventId = ue.Event.Id,
+                                            EventName = ue.Event.Name,
+                                            EventDate = ue.Event.StartDate
+                                        })
+                                        .ToListAsync();
+        }
+
 
         public async Task<ICollection<UsersEventsViewModel>> GetUsersOnGoingEventsAsync(string userId)
         {
             return await repository.AllReadOnly<UsersEvents>()
                                                     .Where(ue => ue.UserId == userId &&
-                                                    ue.Event.IsFinished == false)
+                                                    ue.Event.IsFinished == false
+                                                    && ue.Event.IsDeleted == false)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
                                                         UserId = ue.UserId,
@@ -117,6 +135,24 @@ namespace LaktiBg.Core.Services.UserServices
                                                         EventName = ue.Event.Name,
                                                         EventDate = ue.Event.StartDate
                                                     }).ToListAsync();
+        }
+
+        public async Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId)
+        {
+            return await repository.AllReadOnly<UsersEvents>()
+                                                    .Where(ue => ue.Event.OrganizerId == userId
+                                                         && ue.Event.IsDeleted == false)
+                                                    .OrderByDescending(ue => ue.Event.StartDate)
+                                                    .Select(ue => new UsersEventsViewModel
+                                                    {
+                                                        UserId = ue.UserId,
+                                                        EventId = ue.Event.Id,
+                                                        EventName = ue.Event.Name,
+                                                        EventDate = ue.Event.StartDate,
+                                                        Status = ue.Event.IsFinished == true ? "Приключил" : "Настоящ"
+                                                       
+                                                    })
+                                                    .ToListAsync();
         }
 
         public async Task AddFriendAsync(string userId, string friendId)
@@ -262,17 +298,85 @@ namespace LaktiBg.Core.Services.UserServices
 
             if (user != null)
             {
-                if (direction == "up")
+                if (direction == "up" && user.Rating < 7)
                 {
                     user.Rating += 0.05M;
                 }
-                else if (direction == "down")
+                else if (direction == "down" && user.Rating > 1)
                 {
                     user.Rating -= 0.05M;
                 }
             }
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckIfUserCanVoteAsync(string userId, string friendId)
+        {
+            UserFriends? currentRelation = await repository.All<UserFriends>()
+                                                .Where(uf => uf.UserId == friendId &&  
+                                                uf.UserFriendId == userId)
+                                                .FirstOrDefaultAsync();
+
+            int sameEventCount = await GetFriendsSameEventCounterAsync(userId, friendId);
+
+            if (currentRelation != null)
+            {
+                if (currentRelation.VisitedEventCounter < sameEventCount)
+                {
+                    currentRelation.VisitedEventCounter = sameEventCount;
+                    await repository.SaveChangesAsync();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task<int> GetFriendsSameEventCounterAsync(string userId, string friendId)
+        {
+            return await repository.All<Event>()
+                           .CountAsync(e => e.Participants.Any(p => p.UserId == userId 
+                                         && e.IsFinished == true)
+                                         && e.Participants.Any(p => p.UserId == friendId
+                                         && e.IsFinished == true));
+
+        }
+
+        public async Task EditUserAsync(UserEditModel model, string userId)
+        {
+            ApplicationUser? user = await repository.All<ApplicationUser>()
+                                                .Where(au => au.Id == userId)
+                                                .FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.BirthDate = model.BirthDate;
+                user.Address = model.Address;
+                user.Description = model.Description;
+                user.PhoneNumber = model.PhoneNumber;
+                await repository.SaveChangesAsync();
+            }
+        }
+
+
+        public async Task<UserEditModel> GetUserEditModelAsync(string userId)
+        {
+            UserEditModel? model = await repository.All<ApplicationUser>()
+                                    .Where(au => au.Id == userId)
+                                    .Select(au => new UserEditModel
+                                    {
+                                        FirstName = au.FirstName,
+                                        LastName = au.LastName,
+                                        BirthDate = au.BirthDate,
+                                        Address = au.Address,
+                                        Description = au.Description,
+                                        PhoneNumber = au.PhoneNumber
+                                    })
+                                    .FirstOrDefaultAsync();
+
+            return model;
         }
     }
 }

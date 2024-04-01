@@ -3,6 +3,7 @@ using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Core.Services.ImageServices;
 using LaktiBg.Core.Services.UserServices;
+using LaktiBg.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LaktiBg.Controllers
@@ -139,16 +140,85 @@ namespace LaktiBg.Controllers
             return RedirectToAction("ShowFriends", new { userId = userId });
         }
 
-        public async Task<IActionResult> ChangeRating(string userId, string direction)
+        public async Task<IActionResult> ChangeRating(string userId, string direction, string friendId)
+        {
+            if (await userService.ExistById(userId) == false && await userService.ExistById(friendId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await userService.CheckIfUserCanVoteAsync(userId, friendId))
+            {
+                await userService.UpdateUserRatingAsync(userId, direction);
+
+            }
+
+
+            return RedirectToAction("ViewProfile", new { id = userId });
+        }
+
+        public async Task<IActionResult> MyEvents(string userId)
         {
             if (await userService.ExistById(userId) == false)
             {
                 return BadRequest();
             }
 
-            await userService.UpdateUserRatingAsync(userId, direction);
+            var models = await userService.GetUserEventsAsync(userId);
 
-            return RedirectToAction("ViewProfile", new { id = userId });
+            return View(models);
+        }
+
+        public async Task<IActionResult> UserAllEvents(string userId)
+        {
+            if (await userService.ExistById(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            var models = await userService.GetUsersAllEventsAsync(userId);
+
+            return View(models);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string userId)
+        {
+            if (await userService.ExistById(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (User.Id() != userId)
+            {
+                return Unauthorized();
+            }
+
+            UserEditModel model = await userService.GetUserEditModelAsync(userId);
+
+            return View(model);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Edit(UserEditModel model)
+        {
+            if (await userService.ExistById(User.Id()) == false)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            string userId = User.Id();
+
+            await userService.EditUserAsync(model, userId);
+
+            return RedirectToAction("ViewProfile", new {id = userId});
+
         }
 
 
