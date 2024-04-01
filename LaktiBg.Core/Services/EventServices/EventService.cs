@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using static LaktiBg.Infrastructure.Constants.DataConstants;
 using static LaktiBg.Core.Constants.MessageConstants;
 using LaktiBg.Core.Contracts.User;
+using LaktiBg.Core.Enums;
 
 namespace LaktiBg.Core.Services.EventServices
 {
@@ -123,10 +124,59 @@ namespace LaktiBg.Core.Services.EventServices
 
 
 
-        public async Task<IEnumerable<EventViewModel>> AllAsync(string userId)
+        public async Task<EventQueryServiceModel> AllAsync(
+            string userId,
+            string? category = null,
+            string? searchTerm = null,
+            EventSorting sorting = EventSorting.Newest,
+            int currentPage = 1,
+            int eventsPerPage = 1)
         {
 
-            IEnumerable<EventViewModel> models =  await repository.AllReadOnly<Event>()
+            var eventsToShow = repository.AllReadOnly<Event>()
+                                  .Where(e => 
+                                     e.IsVisible == true
+                                  && e.IsDeleted == false
+                                  && e.IsPublic == true
+                                  && e.IsFinished == false);
+
+            if (category != null)
+            {
+                eventsToShow = eventsToShow
+                                  .Where(e => e.Types.Where(t => t.EventType.Name == category).Any());
+            }
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                eventsToShow = eventsToShow
+                                .Where(e => (e.Name.ToLower().Contains(normalizedSearchTerm) ||
+                                            e.Place.Name.ToLower().Contains(normalizedSearchTerm) ||
+                                            e.Description.ToLower().Contains(normalizedSearchTerm)));
+
+            }
+
+            eventsToShow = sorting switch
+            {
+                EventSorting.LowestRating => eventsToShow
+                                .OrderBy(e => e.MinRatingRequired),
+                EventSorting.HighestRating => eventsToShow
+                                .OrderByDescending(e => e.MinRatingRequired),
+                EventSorting.Oldest => eventsToShow
+                                .OrderBy(e => e.CreationDate),
+                EventSorting.MostFilled => eventsToShow
+                                .OrderByDescending(e => e.Participants.Count()),
+                EventSorting.LeastFilled => eventsToShow
+                                .OrderBy(e => e.Participants.Count()),
+                _ => eventsToShow
+                        .OrderByDescending(e => e.CreationDate)
+            };
+
+
+            IEnumerable<EventViewModel> events =  await eventsToShow
+                .Skip((currentPage -1) * eventsPerPage)
+                .Take(eventsPerPage)
                 .Where(e => e.IsDeleted == false && e.IsFinished == false)
                 .Select(e => new EventViewModel()
                 {
@@ -173,7 +223,7 @@ namespace LaktiBg.Core.Services.EventServices
                 })
                 .ToListAsync();
 
-            foreach (var model in models)
+            foreach (var model in events)
             {
                 model.Organizer = await GetUsersNameByIdAsync(model.OrganizerId);
 
@@ -189,7 +239,7 @@ namespace LaktiBg.Core.Services.EventServices
 
             List<byte[]> imageBytesList = new List<byte[]>();
 
-            foreach (var model in models)
+            foreach (var model in events)
             {
                 foreach (var image in model.Images)
                 {
@@ -199,7 +249,13 @@ namespace LaktiBg.Core.Services.EventServices
                 }
             }
 
-            return models;
+            int totalEvents = await eventsToShow.CountAsync();
+
+            return new EventQueryServiceModel()
+            {
+                Events = events,
+                TotalEventsCount = totalEvents
+            };
         }
 
         private async Task<string> GetUsersNameByIdAsync(string userId)
@@ -512,6 +568,22 @@ namespace LaktiBg.Core.Services.EventServices
             }
 
             return false;
+        }
+
+        public async Task<IEnumerable<string>> AllCategoriesNamesAsync()
+        {
+            return await repository.AllReadOnly<EventType>()
+                                .Select(et => et.Name).ToListAsync();
+        }
+
+        public async Task<IEnumerable<EventTypeViewModel>> AllCategoriesAsync()
+        {
+            return await repository.AllReadOnly<EventType>()
+                                .Select(et => new EventTypeViewModel()
+                                {
+                                    Id = et.Id,
+                                    Name = et.Name,
+                                }).ToListAsync();
         }
     }
 }
