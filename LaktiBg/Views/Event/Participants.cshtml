@@ -30,7 +30,7 @@
         <ul>
             @foreach (var participant in Model.Participants)
             {
-                    <div>@participant.Name</div>
+                  <div><a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@participant.Id" role="button" style="font-size: 16px;">@participant.Name</a></div>
             }
         </ul>
     </p>

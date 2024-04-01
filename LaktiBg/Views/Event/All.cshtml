@@ -21,7 +21,7 @@
             <p><strong>Старт:</strong> @mdl.StartDate</p>
             <p><strong>Място:</strong> @mdl.Place.Name</p>
             <p><strong>Тип на събитието:</strong> @mdl.TypesToShow</p>
-            <p><strong>Организатор:</strong> @mdl.Organizer</p>
+            <p><strong>Организатор:</strong><a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@mdl.OrganizerId" role="button" style="font-size: 16px;">@mdl.Organizer</a></p>
             <p><strong>Минимален необходим рейтинг:</strong> @mdl.MinRatingToShow</p>
             <p><strong>Брой на участниците:</strong> @mdl.Participants.Count() / @mdl.ParticipantsMaxCountToShow</p>
             <p><strong>Минимална възраст на участниците:</strong> @mdl.MinAgeRequiredToShow</p>

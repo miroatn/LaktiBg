@@ -28,7 +28,7 @@
             <p><strong>Старт:</strong> @Model.StartDate</p>
             <p><strong>Място:</strong> @Model.Place.Name</p>
             <p><strong>Тип на събитието:</strong> @Model.TypesToShow</p>
-            <p><strong>Организатор:</strong> @Model.Organizer</p>
+            <p><strong>Организатор:</strong><a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@Model.OrganizerId" role="button" style="font-size: 16px;">@Model.Organizer</a></p>
             <p><strong>Минимален необходим рейтинг:</strong> @Model.MinRatingToShow</p>
             <p><strong>Брой на участниците:</strong> @Model.Participants.Count() / @Model.ParticipantsMaxCountToShow</p>
             <p><strong>Минимална възраст на участниците:</strong> @Model.MinAgeRequiredToShow</p>
