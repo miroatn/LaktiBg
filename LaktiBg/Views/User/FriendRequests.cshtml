@@ -31,6 +31,8 @@
                             <p class="fw-bold mb-1">@item.UserName</p>
                             </div>
                         </div>
+                               <a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@item.UserId" role="button">Профил</a>
+
                                <a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="AcceptRequest" asp-route-userId="@User.Id()" asp-route-friendId="@item.UserId" role="button">Приеми поканата</a>
                         </li>
                     </ul>
