@@ -57,13 +57,21 @@ namespace LaktiBg.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> All(int id)
+        public async Task<IActionResult> All([FromQuery]AllCommentsQueryModel model, int id)
         {
-            IEnumerable<CommentViewModel> models = await commentService.GetCommentsByEventIdAsync(id);
+
+            var comments = await commentService.GetCommentsByEventIdAsync(id,
+                model.SearchTerm,
+                model.CurrentPage,
+                model.CommentsPerPage);
+
+            model.TotalCommentsCount = comments.TotalCommentsCount;
+            model.Comments = comments.Comments;
+
             ViewBag.EventId = id;
             ViewBag.EventName = await eventService.GetEventNameByIdAsync(id);
 
-            return View(models);
+            return View(model);
         }
 
         [HttpGet]

@@ -5,7 +5,11 @@ namespace LaktiBg.Core.Contracts
 {
     public interface ICommentService
     {
-        Task<IEnumerable<CommentViewModel>> GetCommentsByEventIdAsync(int eventId);
+        Task<CommentQueryServiceModel> GetCommentsByEventIdAsync(
+            int eventId,
+            string? searchTerm,
+            int currentPage,
+            int commentsPerPage);
 
         Task AddCommentAsync(CommentFormModel commentViewModel, int id);
 
