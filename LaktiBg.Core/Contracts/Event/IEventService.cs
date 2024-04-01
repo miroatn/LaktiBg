@@ -9,6 +9,7 @@ namespace LaktiBg.Core.Contracts.Event
     public interface IEventService
     {
         Task<EventQueryServiceModel> AllAsync(string userId,
+            string? category,
             string? searchTerm,
             EventSorting sorting,
             int currentPage,
@@ -45,6 +46,10 @@ namespace LaktiBg.Core.Contracts.Event
         Task<Infrastructure.Data.Models.Event> GetEventByIdAsync(int id);
 
         Task<bool> UpdateEventStatus(EventViewModel model);
+
+        Task<IEnumerable<string>> AllCategoriesNamesAsync();
+
+        Task<IEnumerable<EventTypeViewModel>> AllCategoriesAsync();
 
 
     }

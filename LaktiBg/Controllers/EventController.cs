@@ -25,6 +25,7 @@ namespace LaktiBg.Controllers
             string userId = User.Id();
 
             var events = await eventService.AllAsync(userId,
+                model.Category,
                 model.SearchTerm,
                 model.Sorting,
                 model.CurrentPage,
@@ -32,6 +33,7 @@ namespace LaktiBg.Controllers
 
             model.TotalEventsCount = events.TotalEventsCount;
             model.Events = events.Events;
+            model.Categories = await eventService.AllCategoriesNamesAsync();
            
             return View(model);
         }

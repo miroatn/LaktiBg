@@ -11,6 +11,8 @@ namespace LaktiBg.Core.Models.EventModels
     {
         public int EventsPerPage { get; } = 3;
 
+        public string Category { get; set; } = null!;
+
         public string SearchTerm { get; set; } = null!;
 
         public EventSorting Sorting { get; set; }
@@ -18,6 +20,8 @@ namespace LaktiBg.Core.Models.EventModels
         public int CurrentPage { get; set; } = 1;
 
         public int TotalEventsCount { get; set; }
+
+        public IEnumerable<string> Categories { get; set; } = null!;
 
         public IEnumerable<EventViewModel> Events { get; set; } = new List<EventViewModel>();
     }

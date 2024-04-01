@@ -126,6 +126,7 @@ namespace LaktiBg.Core.Services.EventServices
 
         public async Task<EventQueryServiceModel> AllAsync(
             string userId,
+            string? category = null,
             string? searchTerm = null,
             EventSorting sorting = EventSorting.Newest,
             int currentPage = 1,
@@ -139,6 +140,11 @@ namespace LaktiBg.Core.Services.EventServices
                                   && e.IsPublic == true
                                   && e.IsFinished == false);
 
+            if (category != null)
+            {
+                eventsToShow = eventsToShow
+                                  .Where(e => e.Types.Where(t => t.EventType.Name == category).Any());
+            }
 
             if (searchTerm != null)
             {
@@ -148,6 +154,7 @@ namespace LaktiBg.Core.Services.EventServices
                                 .Where(e => (e.Name.ToLower().Contains(normalizedSearchTerm) ||
                                             e.Place.Name.ToLower().Contains(normalizedSearchTerm) ||
                                             e.Description.ToLower().Contains(normalizedSearchTerm)));
+
             }
 
             eventsToShow = sorting switch
@@ -561,6 +568,22 @@ namespace LaktiBg.Core.Services.EventServices
             }
 
             return false;
+        }
+
+        public async Task<IEnumerable<string>> AllCategoriesNamesAsync()
+        {
+            return await repository.AllReadOnly<EventType>()
+                                .Select(et => et.Name).ToListAsync();
+        }
+
+        public async Task<IEnumerable<EventTypeViewModel>> AllCategoriesAsync()
+        {
+            return await repository.AllReadOnly<EventType>()
+                                .Select(et => new EventTypeViewModel()
+                                {
+                                    Id = et.Id,
+                                    Name = et.Name,
+                                }).ToListAsync();
         }
     }
 }
