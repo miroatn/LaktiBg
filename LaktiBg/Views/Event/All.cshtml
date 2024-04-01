@@ -1,58 +1,123 @@
-﻿@model IEnumerable<EventViewModel>
+﻿@model AllEventsQueryModel
 @inject IEventService eventService
 
 @{
-    ViewBag.Title = "Event Details";
+    ViewBag.Title = "Всички събития";
 }
 
-@foreach (var mdl in Model.Where(m => m.IsVisible == true && m.IsFinished == false && m.IsDeleted == false))
-{
-    <div class="card text-center">
-    <div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs">
-        <li class="nav-item">
-        <a class="nav-link active" aria-current="true" href="#">Събитие</a>
-        </li>
-    </ul>
-    </div>
-    <div class="card-body">
-    <h5 class="card-title">@mdl.Name</h5>
-    <p class="card-text">
-            <p><strong>Старт:</strong> @mdl.StartDate</p>
-            <p><strong>Място:</strong> @mdl.Place.Name</p>
-            <p><strong>Тип на събитието:</strong> @mdl.TypesToShow</p>
-            <p><strong>Организатор:</strong><a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@mdl.OrganizerId" role="button" style="font-size: 16px;">@mdl.Organizer</a></p>
-            <p><strong>Минимален необходим рейтинг:</strong> @mdl.MinRatingToShow</p>
-            <p><strong>Брой на участниците:</strong> @mdl.Participants.Count() / @mdl.ParticipantsMaxCountToShow</p>
-            <p><strong>Минимална възраст на участниците:</strong> @mdl.MinAgeRequiredToShow</p>
-            <p><strong>Описание:</strong> @mdl.Description</p>
-    </p>
-     <a asp-controller="Event" asp-action="Details" asp-route-id="@mdl.Id" class="btn btn-primary">Детайли</a>
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
 
+<form method="get">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label asp-for="SearchTerm">Търси</label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="...">
+        </div>
 
-        @if(await eventService.CheckIfUserIsAlreadyInEvent(mdl.Id, User.Id()))
-        {
-           <a asp-controller="Event" asp-action="Leave" asp-route-id="@mdl.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Отпиши се</a>
-        }
-        else if (mdl.Participants.Count >= mdl.ParticipantsMaxCount || mdl.UserAge < mdl.MinAgeRequired || mdl.UserRating < mdl.MinRatingRequired)
-        {
+        <div class="form-group col-md-3">
+            <div class="form-group">
+                <label asp-for="Sorting">Сортиране</label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0">Най-нови</option>
+                    <option value="1">Най-стари</option>
+                    <option value="2">Най-запълнени</option>
+                    <option value="3">Най-свободни</option>
+                    <option value="4">Изискващи най-нисък рейтинг</option>
+                    <option value="5">Изискващи най-висок рейтинг</option>
+                </select>
+            </div>
+        </div>
 
-           <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
-        }
-        else
-        {
-            <a asp-controller="Event" asp-action="Participate" asp-route-id="@mdl.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
-        }
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
         </div>
     </div>
+</form>
 
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalEventsCount /
+        Model.EventsPerPage);
 }
 
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+<div class="row mb-5">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="Event"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
+    </div>
+
+    @{
+        var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
+        !Model.Events.Any();
+    }
+
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary
+           @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="Event"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
+    </div>
+</div>
+
+@if (!Model.Events.Any())
+{
+        <h2 class="text-center">Няма намерени събития по дадения критерий</h2>
 }
 
+@{
+    var events = Model.Events.Where(m => m.IsVisible == true && m.IsFinished == false && m.IsDeleted == false).ToList();
+}
+
+
+<div class="row justify-content-around">
+    @foreach (var mdl in events)
+    {
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">@mdl.Name</h5>
+                        <p class="card-text">
+                            <p><strong>Старт:</strong> @mdl.StartDate</p>
+                            <p><strong>Място:</strong> @mdl.Place.Name</p>
+                            <p><strong>Тип на събитието:</strong> @mdl.TypesToShow</p>
+                            <p><strong>Организатор:</strong><a class="btn btn-link btn-rounded btn-sm" asp-controller="User" asp-action="ViewProfile" asp-route-id="@mdl.OrganizerId" role="button" style="font-size: 16px;">@mdl.Organizer</a></p>
+                            <p><strong>Минимален необходим рейтинг:</strong> @mdl.MinRatingToShow</p>
+                            <p><strong>Брой на участниците:</strong> @mdl.Participants.Count() / @mdl.ParticipantsMaxCountToShow</p>
+                            <p><strong>Минимална възраст на участниците:</strong> @mdl.MinAgeRequiredToShow</p>
+                            <p><strong>Описание:</strong> @mdl.Description</p>
+                        </p>
+                        <a asp-controller="Event" asp-action="Details" asp-route-id="@mdl.Id" class="btn btn-primary">Детайли</a>
+
+                    @if (await eventService.CheckIfUserIsAlreadyInEvent(mdl.Id, User.Id()))
+                    {
+                               <a asp-controller="Event" asp-action="Leave" asp-route-id="@mdl.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Отпиши се</a>
+                    }
+                    else if (mdl.Participants.Count >= mdl.ParticipantsMaxCount || mdl.UserAge < mdl.MinAgeRequired || mdl.UserRating < mdl.MinRatingRequired)
+                    {
+                               <button class="btn btn-secondary" disabled data-toggle="tooltip" data-placement="top" title="Participation is closed">Лактирай</button>
+                    }
+                    else
+                    {
+                                <a asp-controller="Event" asp-action="Participate" asp-route-id="@mdl.Id" asp-route-userId = "@User.Id()" class="btn btn-primary" method="post">Лактирай</a>
+                    }
+                    </div>
+                </div>
+            </div>
+    }
+</div>

@@ -1,4 +1,5 @@
-﻿using LaktiBg.Core.Models.EventModels;
+﻿using LaktiBg.Core.Enums;
+using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Core.Models.UserModels;
 using LaktiBg.Infrastructure.Data.Models;
@@ -7,7 +8,11 @@ namespace LaktiBg.Core.Contracts.Event
 {
     public interface IEventService
     {
-        Task<IEnumerable<EventViewModel>> AllAsync(string userId);
+        Task<EventQueryServiceModel> AllAsync(string userId,
+            string? searchTerm,
+            EventSorting sorting,
+            int currentPage,
+            int eventsPerPage);
 
         Task<IEnumerable<EventTypeViewModel>> GetEventTypeViewsAsync();
 

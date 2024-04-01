@@ -20,11 +20,19 @@ namespace LaktiBg.Controllers
             userService = _userService;
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]AllEventsQueryModel model)
         {
             string userId = User.Id();
-            var model = await eventService.AllAsync(userId);
 
+            var events = await eventService.AllAsync(userId,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.EventsPerPage);
+
+            model.TotalEventsCount = events.TotalEventsCount;
+            model.Events = events.Events;
+           
             return View(model);
         }
 
