@@ -49,8 +49,5 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task<IEnumerable<string>> AllCategoriesNamesAsync();
 
-        Task<IEnumerable<EventTypeViewModel>> AllCategoriesAsync();
-
-
     }
 }

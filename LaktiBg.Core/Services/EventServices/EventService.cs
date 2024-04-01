@@ -151,9 +151,9 @@ namespace LaktiBg.Core.Services.EventServices
                 string normalizedSearchTerm = searchTerm.ToLower();
 
                 eventsToShow = eventsToShow
-                                .Where(e => (e.Name.ToLower().Contains(normalizedSearchTerm) ||
+                                .Where(e => e.Name.ToLower().Contains(normalizedSearchTerm) ||
                                             e.Place.Name.ToLower().Contains(normalizedSearchTerm) ||
-                                            e.Description.ToLower().Contains(normalizedSearchTerm)));
+                                            e.Description.ToLower().Contains(normalizedSearchTerm));
 
             }
 
@@ -576,14 +576,5 @@ namespace LaktiBg.Core.Services.EventServices
                                 .Select(et => et.Name).ToListAsync();
         }
 
-        public async Task<IEnumerable<EventTypeViewModel>> AllCategoriesAsync()
-        {
-            return await repository.AllReadOnly<EventType>()
-                                .Select(et => new EventTypeViewModel()
-                                {
-                                    Id = et.Id,
-                                    Name = et.Name,
-                                }).ToListAsync();
-        }
     }
 }
