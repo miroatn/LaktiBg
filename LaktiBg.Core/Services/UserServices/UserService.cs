@@ -105,20 +105,35 @@ namespace LaktiBg.Core.Services.UserServices
                                                     }).ToListAsync();
         }
 
-        public async Task<ICollection<UsersEventsViewModel>> GetUsersAllEventsAsync(string userId)
+        public async Task<UserEventQueryServiceModel> GetUsersAllEventsAsync(string userId,
+                                                                                int currentPage = 1,
+                                                                                int eventsPerPage = 1)
         {
-            return await repository.AllReadOnly<UsersEvents>()
-                                        .Where(ue => ue.UserId == userId 
-                                        && ue.Event.IsDeleted == false)
-                                        .OrderByDescending(ue => ue.Event.StartDate)
-                                        .Select(ue => new UsersEventsViewModel
-                                        {
-                                            UserId = ue.UserId,
-                                            EventId = ue.Event.Id,
-                                            EventName = ue.Event.Name,
-                                            EventDate = ue.Event.StartDate
-                                        })
-                                        .ToListAsync();
+            var eventsToShow = repository.AllReadOnly<UsersEvents>()
+                                                    .Where(ue => ue.UserId == userId
+                                                    && ue.Event.IsDeleted == false)
+                                                    .OrderByDescending(ue => ue.Event.StartDate);
+
+
+            IEnumerable<UsersEventsViewModel> events = await eventsToShow
+                                                            .Skip((currentPage - 1) * eventsPerPage)
+                                                            .Take(eventsPerPage)
+                                                            .Select(ue => new UsersEventsViewModel
+                                                            {
+                                                            UserId = ue.UserId,
+                                                            EventId = ue.Event.Id,
+                                                            EventName = ue.Event.Name,
+                                                            EventDate = ue.Event.StartDate
+                                                            })
+                                                            .ToListAsync();
+
+            int totalEventsToShow = await eventsToShow.CountAsync();
+
+            return new UserEventQueryServiceModel
+            {
+                Events = events,
+                TotalEventsCount = totalEventsToShow
+            };
         }
 
 

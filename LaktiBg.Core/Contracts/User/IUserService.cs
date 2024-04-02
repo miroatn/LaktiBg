@@ -19,7 +19,9 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<ICollection<UsersEventsViewModel>> GetUsersOnGoingEventsAsync(string userId);
 
-        Task<ICollection<UsersEventsViewModel>> GetUsersAllEventsAsync(string userId);
+        Task<UserEventQueryServiceModel> GetUsersAllEventsAsync(string userId,
+                                                                   int currentPage,
+                                                                   int eventsPerPage);
 
         Task AddFriendAsync(string userId, string friendId);
 
