@@ -83,14 +83,19 @@ namespace LaktiBg.Controllers
                 return BadRequest();
             }
 
-            if (await commentService.IsUserOwnerOfCommentAsync(id,eventId, User.Id()) == false)
+            if (User.IsAdmin() == false)
             {
-                return Unauthorized();
+                if (await commentService.IsUserOwnerOfCommentAsync(id, eventId, User.Id()) == false)
+                {
+                    return Unauthorized();
+                }
+
             }
+
 
             await commentService.DeleteAsync(id);
 
-            ViewBag.EventId = id;
+            ViewBag.EventId = eventId;
             ViewBag.EventName = await eventService.GetEventNameByIdAsync(id);
 
             return RedirectToAction("All", new {id = eventId});

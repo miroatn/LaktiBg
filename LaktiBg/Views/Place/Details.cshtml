@@ -40,7 +40,7 @@
 
         </div>
 
-            @if (User.Id() == Model.OwnerId)
+            @if (User.Id() == Model.OwnerId || User.IsAdmin())
             {
                 <div class="row">
                 <div class="col-md-4">
