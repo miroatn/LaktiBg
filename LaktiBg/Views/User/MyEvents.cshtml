@@ -1,5 +1,8 @@
-﻿@model IList<UsersEventsViewModel>
+﻿@model AllUserEventsQueryModel
 @inject IUserService userService
+
+
+
 
     <section style="background-color: #eee;">
   <div class="container py-5">
@@ -17,11 +20,46 @@
         </nav>
       </div>
     </div>
-    <div class="row">
+        @{
+            var previousPage = Model.CurrentPage - 1;
+            if (previousPage < 1)
+            {
+                previousPage = 1;
+            }
+
+            var maxPage = Math.Ceiling((double)Model.TotalEventsCount /
+                Model.EventsPerPage);
+        }
+
+<div class="row mb-5">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="User"
+           asp-action="MyEvents"
+           asp-route-userId="@User.Id()"
+           asp-route-currentPage="@previousPage"><<</a>
+    </div>
+
+            @{
+                var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
+                !Model.Events.Any();
+            }
+
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary
+           @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="User"
+           asp-action="MyEvents"
+           asp-route-userId="@User.Id()"
+           asp-route-currentPage="@(Model.CurrentPage + 1)">>></a>
+    </div>
+</div>
+
+    <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="card mb-4">
           <div class="card-body">
-                @foreach (var item in Model)
+                @foreach (var item in Model.Events)
                 {
                     <div class="row">
                     <ul class="list-group list-group-light">

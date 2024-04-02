@@ -38,7 +38,10 @@ namespace LaktiBg.Core.Contracts.User
 
         Task UpdateUserRatingAsync(string userId, string direction);
 
-        Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId);
+        Task<UserEventQueryServiceModel> GetUserEventsAsync(
+                                        string userId,
+                                        int currentPage,
+                                        int eventsPerPage);
 
         Task<bool> CheckIfUserCanVoteAsync(string userId, string friendId);
 

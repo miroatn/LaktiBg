@@ -137,12 +137,20 @@ namespace LaktiBg.Core.Services.UserServices
                                                     }).ToListAsync();
         }
 
-        public async Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId)
+        public async Task<UserEventQueryServiceModel> GetUserEventsAsync(
+                                                        string userId,
+                                                        int currentPage = 1,
+                                                        int eventsPerPage = 1)
         {
-            return await repository.AllReadOnly<UsersEvents>()
+
+            var eventsToShow = repository.AllReadOnly<UsersEvents>()
                                                     .Where(ue => ue.Event.OrganizerId == userId
                                                          && ue.Event.IsDeleted == false)
-                                                    .OrderByDescending(ue => ue.Event.StartDate)
+                                                    .OrderByDescending(ue => ue.Event.StartDate);
+
+             IEnumerable<UsersEventsViewModel> events = await eventsToShow
+                                                    .Skip((currentPage - 1) * eventsPerPage)
+                                                    .Take(eventsPerPage)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
                                                         UserId = ue.UserId,
@@ -153,6 +161,14 @@ namespace LaktiBg.Core.Services.UserServices
                                                        
                                                     })
                                                     .ToListAsync();
+
+            int totalEventsToShow = await eventsToShow.CountAsync();
+
+            return new UserEventQueryServiceModel 
+            {
+                Events = events,
+                TotalEventsCount = totalEventsToShow
+            };
         }
 
         public async Task AddFriendAsync(string userId, string friendId)
