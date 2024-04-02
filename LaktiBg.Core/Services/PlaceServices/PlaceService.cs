@@ -20,9 +20,30 @@ namespace LaktiBg.Core.Services.PlaceServices
 
         }
 
-        public async Task<IEnumerable<PlaceViewModel>> AllAsync()
+        public async Task<PlaceQueryServiceModel> AllAsync(
+            string userId,
+            string? searchTerm = null,
+            int currentPage = 1,
+            int placesPerPage = 1)
         {
-            List<PlaceViewModel> models = await repository.All<Place>().Select(p => new PlaceViewModel
+            var placesToShow = repository.AllReadOnly<Place>()
+                                    .Where(p => p.IsPublic == true || p.OwnerId == userId);
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+                placesToShow = placesToShow
+                                    .Where(p => p.Name.ToLower().Contains(normalizedSearchTerm) ||
+                                                p.Address.ToLower().Contains(normalizedSearchTerm) ||
+                                                p.Contact.ToLower().Contains(normalizedSearchTerm));
+            }
+
+
+            IEnumerable<PlaceViewModel> places = await placesToShow
+                .Skip((currentPage - 1) * placesPerPage)
+                .Take(placesPerPage)
+                .Where(p => p.IsPublic == true)
+                .Select(p => new PlaceViewModel
             {
                 Id = p.Id,
                 IsPublic = p.IsPublic,
@@ -44,7 +65,7 @@ namespace LaktiBg.Core.Services.PlaceServices
 
             List<byte[]> imageBytesList = new List<byte[]>();
 
-            foreach (PlaceViewModel model in models)
+            foreach (PlaceViewModel model in places)
             {
                 foreach (var image in model.Images)
                 {
@@ -54,7 +75,13 @@ namespace LaktiBg.Core.Services.PlaceServices
                 }
             }
 
-            return models;
+            int totalPlaces = await placesToShow.CountAsync();
+
+            return new PlaceQueryServiceModel()
+            {
+                TotalPlacesCount = totalPlaces,
+                Places = places
+            };
         }
 
         public async Task<int> CreateAsync(PlaceFormModel model, string ownerId)

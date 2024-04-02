@@ -3,13 +3,28 @@
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form asp-page-handler="Create" method="post">
+
+            <h3>Място на събитието</h3>
+
             <div class="form-group">
-                <label asp-for="Name"></label>
+                <select asp-for="SelectedPlaceId" id="placeSelect">
+                    <option value="">Изберете място</option>
+                    @foreach (var location in Model.Places)
+                    {
+                        <option value="@location.Id">@location.Name</option>
+                    }
+                    <option value="newPlace">Добавете ново място</option>
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name">Заглавие</label>
                 <input asp-for="Name" class="form-control" placeholder="Наименование на събитието">
                 <span asp-validation-for="Name" class="small text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate"></label>
+                <label asp-for="StartDate">Начална дата</label>
                 <input asp-for="StartDate" class="form-control" placeholder="Дата и час на събитието">
                 <span asp-validation-for="StartDate" class="small text-danger"></span>
             </div>
@@ -25,18 +40,18 @@
                 <input asp-for="MinRatingRequired" type="range" class="form-range" min="0" max="7" id="customRange2">
                  <div class="form-group">
             <div class="form-group">
-                <label asp-for="ParticipantsMaxCount"></label>
-                <input asp-for="ParticipantsMaxCount" class="form-control" placeholder="Максимален брой на участниците">
+                <label asp-for="ParticipantsMaxCount">Максимален брой на участниците</label>
+                <input asp-for="ParticipantsMaxCount" class="form-control" placeholder="Въведете брой">
                 <span asp-validation-for="ParticipantsMaxCount" class="small text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MinAgeRequired"></label>
-                <input asp-for="MinAgeRequired" class="form-control" placeholder="Минимална възраст на участниците">
+                <label asp-for="MinAgeRequired">Минимална възраст на участниците</label>
+                <input asp-for="MinAgeRequired" class="form-control" placeholder="Въведете години">
                 <span asp-validation-for="MinAgeRequired" class="small text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description"></label>
-                <textarea asp-for="Description" rows="4" class="form-control" placeholder="Описание на събитието"></textarea>
+                <label asp-for="Description">Описание на събитието</label>
+                <textarea asp-for="Description" rows="4" class="form-control" placeholder="Въведете текст"></textarea>
                 <span asp-validation-for="Description" class="small text-danger"></span>
             </div>
                     <label>Типове на събитие:</label>
@@ -45,20 +60,12 @@
                     {
                          <input type="checkbox" name="SelectedTypes" value="@eventType.Id" /> @eventType.Name <br />
                     }
-                <h1>Choose Place</h1>
 
-                <div class="form-group">
-                <label>Място на събитието:</label>
-                 <select asp-for="SelectedPlaceId">
-                    <option value="">Изберете място</option>
-                        @foreach (var location in Model.Places)
-                        {
-                            <option value="@location.Id">@location.Name</option>
-                        }
-                 </select>
-                 <br />
-                <input class="btn btn-primary mt-3" type="submit" value="Save" />
-            </div>
+
+                <br />
+                <input class="btn btn-primary mt-3" type="submit" value="Запази" />
+
+
       </form>
     </div>
 </div>
@@ -66,3 +73,13 @@
 @section Scripts {
             <partial name="_ValidationScriptsPartial" />
 }
+
+
+    <script>
+        document.getElementById('placeSelect').addEventListener('change', function () {
+            var selectedValue = this.value;
+            if (selectedValue === 'newPlace') {
+                window.location.href = '@Url.Action("Add", "Place")';
+            }
+        });
+    </script>

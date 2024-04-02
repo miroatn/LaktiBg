@@ -55,10 +55,31 @@ namespace LaktiBg.Core.Services.CommentServices
             }
         }
 
-        public async Task<IEnumerable<CommentViewModel>> GetCommentsByEventIdAsync(int eventId)
+        public async Task<CommentQueryServiceModel> GetCommentsByEventIdAsync(
+                        int eventId,
+                        string? searchTerm = null,
+                        int currentPage = 1,
+                        int commentsPerPage = 1)
         {
 
-            IEnumerable<CommentViewModel> comments = await repository.AllReadOnly<Comment>()
+            var commentsToShow = repository.AllReadOnly<Comment>()
+                                            .Where(c => c.EventId == eventId);
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                commentsToShow = commentsToShow
+                                    .Where(c => c.Author.FirstName.ToLower().Contains(normalizedSearchTerm) ||
+                                                c.Author.LastName.ToLower().Contains(normalizedSearchTerm) ||
+                                                c.Text.ToLower().Contains(normalizedSearchTerm));
+            }
+
+
+
+            IEnumerable<CommentViewModel> comments = await commentsToShow
+                                    .Skip((currentPage - 1) * commentsPerPage)
+                                    .Take(commentsPerPage)
                                     .Where(c => c.EventId == eventId)
                                     .Select(c => new CommentViewModel
                                     { 
@@ -76,7 +97,13 @@ namespace LaktiBg.Core.Services.CommentServices
                 comment.EventTitle = await eventService.GetEventNameByIdAsync(comment.EventId);
             }
 
-            return comments;
+            int totalComments = await commentsToShow.CountAsync();
+
+            return new CommentQueryServiceModel
+            {
+                Comments = comments,
+                TotalCommentsCount = totalComments
+            };
         }
 
         public async Task<bool> IsUserOwnerOfCommentAsync(int id,int eventId, string userId)

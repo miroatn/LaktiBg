@@ -6,7 +6,11 @@ namespace LaktiBg.Core.Contracts.PlaceServices
     {
         Task<int> CreateAsync(PlaceFormModel model, string ownerId);
 
-        Task<IEnumerable<PlaceViewModel>> AllAsync();
+        Task<PlaceQueryServiceModel> AllAsync(
+            string userId,
+            string? searchTerm,
+            int currentPage,
+            int placesPerPage);
 
         Task<PlaceViewModel> Details(int id);
 
