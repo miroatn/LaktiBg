@@ -194,11 +194,13 @@ namespace LaktiBg.Core.Services.UserServices
 
         public async Task AddFriendAsync(string userId, string friendId)
         {
+
             UserFriends userFriends = new UserFriends() 
             { 
                 UserId = userId,
                 UserFriendId = friendId
             };
+
 
             ApplicationUser? currentUser = await repository.All<ApplicationUser>()
                                                 .Where(au => au.Id == userId)
@@ -414,6 +416,14 @@ namespace LaktiBg.Core.Services.UserServices
                                     .FirstOrDefaultAsync();
 
             return model;
+        }
+
+        public async Task<bool> CheckIfUsersAreAlreadyFriendsAsync(string userId, string friendId)
+        {
+            return await repository.AllReadOnly<UserFriends>()
+                                    .Where(uf => uf.UserId == userId
+                                                && uf.UserFriendId == friendId)
+                                    .AnyAsync();
         }
     }
 }

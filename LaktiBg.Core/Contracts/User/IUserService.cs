@@ -53,5 +53,7 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<UserEditModel> GetUserEditModelAsync(string userId);
 
+        Task<bool> CheckIfUsersAreAlreadyFriendsAsync(string userId, string friendId);
+
     }
 }
