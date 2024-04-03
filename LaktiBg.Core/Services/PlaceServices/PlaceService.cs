@@ -5,6 +5,8 @@ using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using static LaktiBg.Core.Constants.ErrorMessageConstants;
+
 
 namespace LaktiBg.Core.Services.PlaceServices
 {
@@ -135,6 +137,11 @@ namespace LaktiBg.Core.Services.PlaceServices
         public async Task<PlaceViewModel> Details(int id)
         {
             Place? place = await repository.GetByIdAsync<Place>(id);
+
+            if (place == null)
+            {
+                throw new NullReferenceException(PlaceNotFoundError);
+            }
 
             PlaceViewModel model = new();
             model.Images = await repository.All<Image>().Where(x => x.PlaceId == id).Select(i => new ImageViewModel
