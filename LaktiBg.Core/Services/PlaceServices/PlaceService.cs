@@ -42,7 +42,7 @@ namespace LaktiBg.Core.Services.PlaceServices
             IEnumerable<PlaceViewModel> places = await placesToShow
                 .Skip((currentPage - 1) * placesPerPage)
                 .Take(placesPerPage)
-                .Where(p => p.IsPublic == true)
+                .Where(p => p.IsPublic == true || p.OwnerId == userId)
                 .Select(p => new PlaceViewModel
             {
                 Id = p.Id,
