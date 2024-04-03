@@ -11,6 +11,8 @@ using static LaktiBg.Infrastructure.Constants.DataConstants;
 using static LaktiBg.Core.Constants.MessageConstants;
 using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Enums;
+using static LaktiBg.Core.Constants.ErrorMessageConstants;
+
 
 namespace LaktiBg.Core.Services.EventServices
 {
@@ -34,7 +36,7 @@ namespace LaktiBg.Core.Services.EventServices
 
             if (types == null)
             {
-                //TODO
+                throw new ArgumentNullException(EventTypeNotFoundError);
             }
 
 
@@ -42,7 +44,7 @@ namespace LaktiBg.Core.Services.EventServices
 
             if (place == null)
             {
-                //TODO
+                throw new ArgumentNullException(PlaceNotFoundError);
             }
 
             if (place != null && types != null) 
@@ -156,6 +158,7 @@ namespace LaktiBg.Core.Services.EventServices
                                             e.Description.ToLower().Contains(normalizedSearchTerm));
 
             }
+
 
             eventsToShow = sorting switch
             {
@@ -371,11 +374,16 @@ namespace LaktiBg.Core.Services.EventServices
             return null;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, string userId)
         {
             Event? currentEvent = await repository.All<Event>()
                                     .Where(e => e.Id == id)
                                     .FirstOrDefaultAsync();
+
+            if (currentEvent.OrganizerId != userId)
+            {
+                throw new UnauthorizedAccessException(UnauthorizedAccesError);
+            }
 
             List<Comment> comments = await repository.All<Comment>()
                                         .Where(c => c.EventId == id)
@@ -456,7 +464,7 @@ namespace LaktiBg.Core.Services.EventServices
             return currentEvent;
         }
 
-        public async Task EditAsync(EventFormModel model)
+        public async Task EditAsync(EventFormModel model, string userId)
         {
             Event? currentEvent = await repository.All<Event>()
                                             .Where(x => x.Id == model.Id)
@@ -465,6 +473,11 @@ namespace LaktiBg.Core.Services.EventServices
             if (currentEvent != null)
             {
                 Place place = await GetPlaceByIdAsync(model.SelectedPlaceId);
+
+                if (place.OwnerId != userId)
+                {
+                    throw new UnauthorizedAccessException(AccessDeniedError);
+                }
 
                 IList<EventTypeConnection> eventTypesToDelete = await repository.All<EventTypeConnection>()
                                                                         .Where(etc => etc.EventId == currentEvent.Id)
@@ -483,7 +496,7 @@ namespace LaktiBg.Core.Services.EventServices
                    
                 if (types == null)
                 {
-                    //TODO
+                    throw new NullReferenceException(EventTypeNotFoundError);
                 }
                 else
                 {
@@ -497,7 +510,7 @@ namespace LaktiBg.Core.Services.EventServices
 
                 if (place == null)
                 {
-                    //TODO
+                    throw new NullReferenceException(PlaceNotFoundError);
                 }
                 else
                 {

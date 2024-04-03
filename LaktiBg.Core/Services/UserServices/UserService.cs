@@ -6,6 +6,7 @@ using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp.Formats;
+using static LaktiBg.Core.Constants.ErrorMessageConstants;
 
 namespace LaktiBg.Core.Services.UserServices
 {
@@ -37,6 +38,11 @@ namespace LaktiBg.Core.Services.UserServices
         {
             ApplicationUser? user = await repository.AllReadOnly<ApplicationUser>()
                         .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException(UnauthorizedAccesError);
+            }
 
             int Years = new DateTime(DateTime.Now.Subtract(user.BirthDate).Ticks).Year - 1;
 
