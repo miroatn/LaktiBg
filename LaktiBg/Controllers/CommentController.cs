@@ -13,6 +13,7 @@ namespace LaktiBg.Controllers
         private readonly ICommentService commentService;
         private readonly IUserService userService;
 
+
         public CommentController(IEventService _eventService, ICommentService _commentservice, IUserService _userService)
         {
             eventService = _eventService;
@@ -59,6 +60,10 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> All([FromQuery]AllCommentsQueryModel model, int id)
         {
+            if (await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
 
             var comments = await commentService.GetCommentsByEventIdAsync(id,
                 model.SearchTerm,
