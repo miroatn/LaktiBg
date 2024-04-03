@@ -14,10 +14,15 @@ namespace LaktiBg.Controllers
 
         private readonly IUserService userService;
 
-        public EventController(IEventService _eventService, IUserService _userService)
+        private readonly ILogger logger;
+
+        public EventController(IEventService _eventService, 
+            IUserService _userService,
+            ILogger<EventController> logger)
         {
             eventService = _eventService;
             userService = _userService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> All([FromQuery]AllEventsQueryModel model)
@@ -110,7 +115,17 @@ namespace LaktiBg.Controllers
                 return View(model);
             }
 
-            await eventService.AddAsync(model);
+            try
+            {
+                await eventService.AddAsync(model);
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                logger.LogError(ex, "EventController/Add");
+                return BadRequest();
+            }
+
 
             return RedirectToAction("All", "Event");
         }
