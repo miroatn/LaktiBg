@@ -136,7 +136,7 @@ namespace LaktiBg.Controllers
                 return Forbid();
             }
 
-            await placeService.Edit(model);
+            await placeService.Edit(model, userId);
 
             return RedirectToAction("All", "Place");
         }

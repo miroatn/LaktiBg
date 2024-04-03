@@ -36,7 +36,7 @@ namespace LaktiBg.Core.Services.ImageServices
 
         }
 
-        public async Task<IList<Infrastructure.Data.Models.Image>> GetImagesFromViewModelAsync(IFormFileCollection files)
+        public async Task<IList<Infrastructure.Data.Models.Image>> GetImagesFromViewModelAsync(IFormFileCollection files, string userId)
         {
             List<ImageViewModel> imageModels = new List<ImageViewModel>();
 
@@ -93,6 +93,7 @@ namespace LaktiBg.Core.Services.ImageServices
                     FileExtension = item.FileExtension,
                     Size = item.Size,
                     PlaceId = item.PlaceId,
+                    AuthorId = userId
                 };
 
                 imagesToReturn.Add(image);
@@ -149,7 +150,7 @@ namespace LaktiBg.Core.Services.ImageServices
         {
 
             Infrastructure.Data.Models.Image? image = await repository.All<Infrastructure.Data.Models.Image>()
-                .Where(x => x.Id == imageId).FirstOrDefaultAsync();
+                .Where(x => x.Id == imageId ).FirstOrDefaultAsync();
 
             if (image != null)
             {
@@ -169,11 +170,11 @@ namespace LaktiBg.Core.Services.ImageServices
                 || fileExtention == ".bmp";
         }
 
-        public async Task SaveImagesToEventAsync(IFormFileCollection files, int eventId)
+        public async Task SaveImagesToEventAsync(IFormFileCollection files, int eventId, string userId)
         {
             Event currentEvent = await eventService.GetEventByIdAsync(eventId);
 
-            IList<Infrastructure.Data.Models.Image> images = await GetImagesFromViewModelAsync(files);
+            IList<Infrastructure.Data.Models.Image> images = await GetImagesFromViewModelAsync(files, userId);
 
             if (currentEvent != null)
             {
@@ -268,6 +269,14 @@ namespace LaktiBg.Core.Services.ImageServices
             string imageDataURL = $"data:image/png;base64,{base64String}";
 
             return imageDataURL;
+        }
+
+        public async Task<bool> CheckIfUserIsTheImageAuthor(string userId, int imageId)
+        {
+            return await repository.AllReadOnly<Infrastructure.Data.Models.Image>()
+                                    .Where(i => i.Id == imageId
+                                    && i.AuthorId == userId)
+                                    .AnyAsync();
         }
     }
 }

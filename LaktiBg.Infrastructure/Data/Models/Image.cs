@@ -13,6 +13,8 @@ namespace LaktiBg.Infrastructure.Data.Models
         public byte[] Bytes { get; set; } = null!;
         public string Description { get; set; } = string.Empty;
         public string FileExtension { get; set; } = string.Empty;
+
+        public string AuthorId { get; set; } = string.Empty;
         
         public decimal Size { get; set; }
 

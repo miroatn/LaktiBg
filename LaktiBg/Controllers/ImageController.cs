@@ -1,9 +1,12 @@
 ﻿using LaktiBg.Core.Contracts.Event;
 using LaktiBg.Core.Contracts.ImageService;
+using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Models.ImageModels;
 using LaktiBg.Core.Models.UserModels;
+using LaktiBg.Extensions;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace LaktiBg.Controllers
 {
@@ -13,11 +16,13 @@ namespace LaktiBg.Controllers
 
         private readonly IEventService eventService;
 
-        public ImageController(IImageService _imageService, IEventService _eventService)
+        private readonly IUserService userService;
+
+        public ImageController(IImageService _imageService, IEventService _eventService, IUserService _userService)
         {
             imageService = _imageService;
             eventService = _eventService;
-
+            userService = _userService;
         }
 
         [HttpGet]
@@ -44,6 +49,12 @@ namespace LaktiBg.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteImage(int id, int entityId, string entityType)
         {
+            string userId = User.Id();
+
+            if (await imageService.CheckIfUserIsTheImageAuthor(userId, id) == false)
+            {
+                return Forbid();
+            }
 
             await imageService.DeleteImage(id);
 
@@ -54,6 +65,11 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> AllEventImages(int id)
         {
+            if (await eventService.CheckEventById(id) == false)
+            {
+                return BadRequest();
+            }
+
             EventViewModel currentEvent = await eventService.GetEventViewModelByIdAsync(id);
 
             return View(currentEvent);
@@ -63,6 +79,7 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> AddImagesToEvent(EventViewModel model, int id)
         {
+
             if (model == null)
             {
                 return BadRequest();
@@ -73,9 +90,16 @@ namespace LaktiBg.Controllers
                 return BadRequest();
             }
 
+            string userId = User.Id();
+
+            if (await userService.ExistById(userId) == false)
+            {
+                return Unauthorized();
+            }
+
             if (model.Files != null)
             {
-                await imageService.SaveImagesToEventAsync(model.Files, id);
+                await imageService.SaveImagesToEventAsync(model.Files, id, userId);
             }
 
             return RedirectToAction("AllEventImages", new { id });
@@ -88,6 +112,16 @@ namespace LaktiBg.Controllers
             if (model == null)
             {
                 return BadRequest();
+            }
+
+            if (await userService.ExistById(userId) == false)
+            {
+                return Unauthorized();
+            }
+
+            if (userId != User.Id())
+            {
+                return Forbid();
             }
 
             if (model.File != null)

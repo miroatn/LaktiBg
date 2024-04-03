@@ -15,6 +15,7 @@ namespace LaktiBg.Core.Services.PlaceServices
         private readonly IRepository repository;
         private readonly IImageService imageService;
 
+
         public PlaceService(IRepository _repository, IImageService _imageService)
         {
             repository = _repository;
@@ -90,9 +91,10 @@ namespace LaktiBg.Core.Services.PlaceServices
         {
             IList<Image> images = new List<Image>();
 
+
             if (model.Files != null)
             {
-                images = await imageService.GetImagesFromViewModelAsync(model.Files);
+                images = await imageService.GetImagesFromViewModelAsync(model.Files, ownerId);
 
             }
 
@@ -176,7 +178,7 @@ namespace LaktiBg.Core.Services.PlaceServices
             return model;
         }
 
-        public async Task Edit(PlaceFormModel model)
+        public async Task Edit(PlaceFormModel model, string userId)
         {
             Place? place = await repository.GetByIdAsync<Place>(model.Id);
 
@@ -184,7 +186,7 @@ namespace LaktiBg.Core.Services.PlaceServices
 
             if (model.Files != null)
             {
-                images = await imageService.GetImagesFromViewModelAsync(model.Files);
+                images = await imageService.GetImagesFromViewModelAsync(model.Files, userId);
 
             }
 
