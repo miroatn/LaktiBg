@@ -24,7 +24,9 @@ namespace LaktiBg.Core.Contracts.PlaceServices
 
         Task<bool> IsUserOwner(string userId, int placeId);
 
+        Task<IEnumerable<PlaceViewModel>> GetAllUnaprovedAsync();
 
+        Task Approve(int id);
 
     }
 }

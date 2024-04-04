@@ -30,7 +30,7 @@ namespace LaktiBg.Core.Services.PlaceServices
             int placesPerPage = 1)
         {
             var placesToShow = repository.AllReadOnly<Place>()
-                                    .Where(p => p.IsPublic == true || p.OwnerId == userId);
+                                    .Where(p => (p.IsPublic == true || p.OwnerId == userId) && p.IsApproved == true);
 
             if (searchTerm != null)
             {
@@ -85,6 +85,21 @@ namespace LaktiBg.Core.Services.PlaceServices
                 TotalPlacesCount = totalPlaces,
                 Places = places
             };
+        }
+
+        public async Task Approve(int id)
+        {
+            Place? place = await repository.All<Place>()
+                                 .Where(p => p.Id == id)
+                                 .FirstOrDefaultAsync(); 
+
+            if (place == null)
+            {
+                throw new NullReferenceException(PlaceNotFoundError);
+            }
+
+            place.IsApproved = true;
+            await repository.SaveChangesAsync();
         }
 
         public async Task<int> CreateAsync(PlaceFormModel model, string ownerId)
@@ -203,6 +218,44 @@ namespace LaktiBg.Core.Services.PlaceServices
 
         }
 
+        public async Task<IEnumerable<PlaceViewModel>> GetAllUnaprovedAsync()
+        {
+            IEnumerable<PlaceViewModel> places = await repository.All<Place>()
+               .Where(p => p.IsApproved == false)
+               .Select(p => new PlaceViewModel
+               {
+                   Id = p.Id,
+                   IsPublic = p.IsPublic,
+                   Name = p.Name,
+                   OwnerId = p.OwnerId,
+                   Contact = p.Contact,
+                   Address = p.Address,
+                   Images = p.Images.Select(i => new ImageViewModel
+                   {
+                       Id = i.Id,
+                       Bytes = i.Bytes,
+                       Description = i.Description,
+                       FileExtension = i.FileExtension,
+                       Size = i.Size,
+                       PlaceId = i.PlaceId,
+                   }).ToList(),
+                   Rating = p.Rating,
+               }).ToListAsync();
+
+            List<byte[]> imageBytesList = new List<byte[]>();
+
+            foreach (PlaceViewModel model in places)
+            {
+                foreach (var image in model.Images)
+                {
+                    string base64String = Convert.ToBase64String(image.Bytes);
+                    string imageDataURL = $"data:image/png;base64,{base64String}";
+                    model.ImagesToShow.Add(imageDataURL);
+                }
+            }
+
+            return places;
+        }
 
         public async Task<PlaceFormModel> GetPlaceFormModelByPlaceId(int id)
         {

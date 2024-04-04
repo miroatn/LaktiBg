@@ -24,5 +24,7 @@ namespace LaktiBg.Core.Models.PlaceModels
         public decimal Rating { get; set; }
 
         public IFormFileCollection? Files { get; set; }
+
+        public bool IsApproved { get; set; }
     }
 }
