@@ -7,6 +7,7 @@
       <th>Наименование</th>
       <th>Контакт</th>
       <th>Статус</th>
+      <th>Снимки</th>
       <th>Одобрение</th>
     </tr>
   </thead>
@@ -47,6 +48,15 @@
                    <p class="fw-normal mb-1">Скрит</p>
 
                 }
+          </td>
+          <td>
+                <form asp-area="Admin" asp-controller="Image" asp-action="AllPlaceImages" method="post">
+                    @foreach (var image in place.ImagesToShow)
+                    {
+                <input type="hidden" name="imagesToShow" value="@image" />
+                    }
+                <button type="submit" class="btn btn-primary">Снимки</button>
+                </form>
           </td>
           <td>
              <a asp-area="Admin" asp-controller="Place" asp-action="Approve" asp-route-id="@place.Id" class="btn btn-primary" method="post">Одобри</a>
