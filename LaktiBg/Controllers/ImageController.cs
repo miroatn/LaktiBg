@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LaktiBg.Controllers
 {
-    public class ImageController : Controller
+    public class ImageController : BaseController
     {
         private readonly IImageService imageService;
 
