@@ -50,7 +50,7 @@
         }
         </div>
 
-        @if (User.Id() == Model.OrganizerId)
+        @if (User.Id() == Model.OrganizerId || User.IsAdmin())
         {
             <div><a asp-controller="Event" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редактирай събитието</a></div>
 

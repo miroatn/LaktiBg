@@ -5,6 +5,7 @@ using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Core.Services.UserServices;
 using LaktiBg.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using static LaktiBg.Core.Constants.ErrorMessageConstants;
 
 namespace LaktiBg.Controllers
 {
@@ -14,14 +15,20 @@ namespace LaktiBg.Controllers
 
         private readonly IUserService userService;
 
-        public EventController(IEventService _eventService, IUserService _userService)
+        private readonly ILogger logger;
+
+        public EventController(IEventService _eventService, 
+            IUserService _userService,
+            ILogger<EventController> logger)
         {
             eventService = _eventService;
             userService = _userService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> All([FromQuery]AllEventsQueryModel model)
         {
+
             string userId = User.Id();
 
             var events = await eventService.AllAsync(userId,
@@ -34,8 +41,9 @@ namespace LaktiBg.Controllers
             model.TotalEventsCount = events.TotalEventsCount;
             model.Events = events.Events;
             model.Categories = await eventService.AllCategoriesNamesAsync();
-           
+
             return View(model);
+
         }
 
         [HttpGet]
@@ -56,6 +64,7 @@ namespace LaktiBg.Controllers
                 model.Types = eventTypes;
             }
 
+
             IEnumerable<PlaceEventModel> places = await eventService.GetPlacesViewsAsync();
 
             if (places != null)
@@ -68,10 +77,11 @@ namespace LaktiBg.Controllers
 
             if (organizerid == null)
             {
-                return BadRequest();
+                return Forbid();
             }
 
             return View(model);
+
         }
 
         [HttpPost]
@@ -79,14 +89,14 @@ namespace LaktiBg.Controllers
         {
             if (await userService.ExistById(User.Id()) == false)
             {
-                return BadRequest();
+                return Forbid();
             }
 
             string organizerid = User.Id();
 
             if (organizerid == null)
             {
-                return BadRequest();
+                return Forbid();
             }
 
             model.OrganizerId = organizerid;
@@ -110,9 +120,20 @@ namespace LaktiBg.Controllers
                 return View(model);
             }
 
-            await eventService.AddAsync(model);
+            try
+            {
+                await eventService.AddAsync(model);
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                logger.LogError(ex, "EventController/Add");
+                return BadRequest();
+            }
+
 
             return RedirectToAction("All", "Event");
+
         }
 
         [HttpGet]
@@ -121,7 +142,7 @@ namespace LaktiBg.Controllers
         {
             if (await userService.ExistById(User.Id()) == false)
             {
-                return BadRequest();
+                return Forbid();
             }
 
             if (await eventService.CheckEventById(id) == false)
@@ -132,13 +153,13 @@ namespace LaktiBg.Controllers
             var model = await eventService.GetEventFormModelByIdAsync(id);
 
 
-
             if (model == null)
             {
                 return BadRequest();
             }
 
             return View(model);
+
         }
 
         [HttpPost]
@@ -147,7 +168,7 @@ namespace LaktiBg.Controllers
         {
             if (await userService.ExistById(User.Id()) == false)
             {
-                return BadRequest();
+                return Forbid();
             }
 
             if (await eventService.CheckEventById(model.Id) == false)
@@ -155,9 +176,20 @@ namespace LaktiBg.Controllers
                 return BadRequest();
             }
 
-            await eventService.EditAsync(model);
+            try
+            {
+                await eventService.EditAsync(model, User.Id());
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "EventController/Edit");
+                return BadRequest();
+            }
+
+            
 
             return RedirectToAction("Details", "Event", new {id = model.Id});
+
         }
 
 
@@ -167,7 +199,7 @@ namespace LaktiBg.Controllers
         {
             if (User.Id() != userId)
             {
-                return BadRequest();
+                return Forbid();
             }
 
             if (await eventService.CheckEventById(id) == false)
@@ -178,6 +210,7 @@ namespace LaktiBg.Controllers
             await eventService.ParticipateInEvent(id, userId);
 
             return RedirectToAction("Details", new {id = id});
+
         }
 
         [HttpGet]
@@ -191,10 +224,21 @@ namespace LaktiBg.Controllers
 
             string userId = User.Id();
             var model = await eventService.GetEventViewModelByIdAsync(id);
-            model.UserAge = await userService.GetUsersAgeById(userId);
+
+            try
+            {
+                model.UserAge = await userService.GetUsersAgeById(userId);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                logger.LogError(ex, "EventController/Details");
+                return Unauthorized();
+            }
+
             model.UserRating = await userService.GetUsersRatingById(userId);
 
             return View(model);
+
         }
 
         [HttpGet]
@@ -207,21 +251,48 @@ namespace LaktiBg.Controllers
             }
 
             string userId = User.Id();
+
+            if (await userService.ExistById(userId) == false)
+            {
+                return Unauthorized();
+            }
+
             var model = await eventService.GetEventViewModelByIdAsync(id);
-            model.UserAge = await userService.GetUsersAgeById(userId);
+
+            try
+            {
+                model.UserAge = await userService.GetUsersAgeById(userId);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                logger.LogError(ex, "EventController/Details");
+                return Unauthorized();
+            }
+
             model.UserRating = await userService.GetUsersRatingById(userId);
 
             return View(model);
+
         }
 
         [HttpGet]
 
         public async Task<IActionResult> Delete(int id)
         {
-           
-            await eventService.DeleteAsync(id);
+            string userId = User.Id();
+            try
+            {
+                await eventService.DeleteAsync(id, userId);
+
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                logger.LogError(ex, "EventController/Delete");
+                return Unauthorized();
+            }
 
             return RedirectToAction("All", "Event");
+
         }
 
         [HttpGet]

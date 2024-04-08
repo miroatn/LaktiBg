@@ -1,0 +1,68 @@
+﻿@model IEnumerable<PlaceViewModel>
+
+<body>
+<table class="table align-middle mb-0 bg-white">
+  <thead class="bg-light">
+    <tr>
+      <th>Наименование</th>
+      <th>Контакт</th>
+      <th>Статус</th>
+      <th>Снимки</th>
+      <th>Одобрение</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      @foreach (var place in Model)
+        {
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+                @if (place.ImagesToShow.Any())
+                    {
+                                                <img
+                        src="@place.ImagesToShow.First()"
+                        alt=""
+                        style="width: 45px; height: 45px"
+                        class="rounded-circle"
+                        />
+                    }
+              <div class="ms-3">
+                <p class="fw-bold mb-1">@place.Name</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">Адрес: @place.Address</p>
+            <p class="fw-normal mb-1">Телефон: @place.Contact</p>
+          </td>
+          <td>
+
+              @if (place.IsPublic == true)
+                {
+                    <p class="fw-normal mb-1">Публичен</p>
+
+                }
+                else
+                {
+                   <p class="fw-normal mb-1">Скрит</p>
+
+                }
+          </td>
+          <td>
+                <form asp-area="Admin" asp-controller="Image" asp-action="AllPlaceImages" method="post">
+                    @foreach (var image in place.ImagesToShow)
+                    {
+                <input type="hidden" name="imagesToShow" value="@image" />
+                    }
+                <button type="submit" class="btn btn-primary">Снимки</button>
+                </form>
+          </td>
+          <td>
+             <a asp-area="Admin" asp-controller="Place" asp-action="Approve" asp-route-id="@place.Id" class="btn btn-primary" method="post">Одобри</a>
+          </td>
+        </tr>
+        }
+  </tbody>
+</table>
+</body>

@@ -1,4 +1,5 @@
 ﻿using LaktiBg.Core.Contracts.PlaceServices;
+using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Models.ImageModels;
 using LaktiBg.Core.Models.PlaceModels;
 using LaktiBg.Extensions;
@@ -12,10 +13,14 @@ namespace LaktiBg.Controllers
     public class PlaceController : BaseController
     {
         private readonly IPlaceService placeService;
+        private readonly IUserService userService;
+        private readonly ILogger logger;
 
-        public PlaceController(IPlaceService _placeService)
+        public PlaceController(IPlaceService _placeService, IUserService _userService, ILogger<PlaceController> _logger)
         {
             placeService = _placeService;
+            userService = _userService;
+            logger = _logger;
         }
 
         [HttpGet]
@@ -33,6 +38,11 @@ namespace LaktiBg.Controllers
 
             string userId = User.Id();
 
+            if (await userService.ExistById(userId) == false)
+            {
+                return Unauthorized();
+            }
+
             int newPlaceId = await placeService.CreateAsync(model, userId);
 
             if (!ModelState.IsValid)
@@ -48,9 +58,17 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var model = await placeService.Details(id);
+            try
+            {
+                var model = await placeService.Details(id);
+                return View(model);
+            }
+            catch (NullReferenceException ex)
+            {
+                logger.LogError(ex, "PlaceController/Details");
+                return NotFound();
+            }
 
-            return View(model);
         }
 
         [HttpGet]
@@ -81,9 +99,14 @@ namespace LaktiBg.Controllers
 
             string userId = User.Id();
 
+            if (await userService.ExistById(userId) == false)
+            {
+                return Unauthorized();
+            }
+
             if (await placeService.IsUserOwner(userId, id) == false)
             {
-                return BadRequest();
+                return Forbid();
             }
 
             var formModel = await placeService.GetPlaceFormModelByPlaceId(id);
@@ -102,12 +125,18 @@ namespace LaktiBg.Controllers
 
             string userId = User.Id();
 
-            if (await placeService.IsUserOwner(userId, model.Id) == false)
+            if (await userService.ExistById(userId) == false)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
-            await placeService.Edit(model);
+
+            if (await placeService.IsUserOwner(userId, model.Id) == false)
+            {
+                return Forbid();
+            }
+
+            await placeService.Edit(model, userId);
 
             return RedirectToAction("All", "Place");
         }
@@ -120,6 +149,13 @@ namespace LaktiBg.Controllers
             if (await placeService.PlaceExistById(id) == false)
             {
                 return BadRequest();
+            }
+
+            string userId = User.Id();
+
+            if (await userService.ExistById(userId) == false)
+            {
+                return Unauthorized();
             }
 
             await placeService.DeletePlace(id);

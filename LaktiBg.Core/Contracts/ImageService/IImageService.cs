@@ -15,16 +15,18 @@ namespace LaktiBg.Core.Contracts.ImageService
 
         Task DeleteImage(int imageId);
 
-        Task<IList<Image>> GetImagesFromViewModelAsync(IFormFileCollection files);
+        Task<IList<Image>> GetImagesFromViewModelAsync(IFormFileCollection files, string userId);
 
         Task<string> ConvertImageToStringAsync(Image image);
 
-        Task SaveImagesToEventAsync(IFormFileCollection files, int eventId);
+        Task SaveImagesToEventAsync(IFormFileCollection files, int eventId, string userId);
 
         Task<Image> ConvertFileToImageAsync(IFormFile file);
 
         Task AddNewUserAvatar(UserViewModel model, string userId);
 
         Task<string> ConvertBytesToStringAsync(byte[] bytes);
+
+        Task<bool> CheckIfUserIsTheImageAuthor(string userId, int imageId);
     }
 }

@@ -52,7 +52,7 @@
 
 <br />
 
-@if (await eventService.CheckIfUserIsAlreadyInEvent(Model.Id, User.Id()))
+@if (await eventService.CheckIfUserIsAlreadyInEvent(Model.Id, User.Id()) || User.IsAdmin())
 {
         <form enctype="multipart/form-data" asp-controller="Image" asp-action="AddImagesToEvent" method="post">
     <div class="form-group">

@@ -1,0 +1,16 @@
+﻿@model List<string>
+
+<div style="text-align: center;">
+<h2>Снимки</h2>
+
+
+<div class="row">
+        @foreach (var image in Model)
+        {
+                <img class="d-block w-50" style="height:500px"
+                src="@image" alt="@image">
+                <div style="margin: 10px auto 0 auto;">
+                </div>
+        }
+</div>
+</div>

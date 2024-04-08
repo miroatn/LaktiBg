@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LaktiBg.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -60,6 +60,7 @@ namespace LaktiBg.Infrastructure.Data
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
             builder.ApplyConfiguration(new EventTypeConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
 
             base.OnModelCreating(builder);
 

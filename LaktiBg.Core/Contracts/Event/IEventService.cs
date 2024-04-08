@@ -33,11 +33,11 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task<EventViewModel> GetEventViewModelByIdAsync(int id);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int id, string userId);
 
         Task<EventFormModel> GetEventFormModelByIdAsync(int id);
 
-        Task EditAsync(EventFormModel model);
+        Task EditAsync(EventFormModel model, string userId);
 
         Task LeaveEvent(int id, string userId);
 
@@ -48,6 +48,10 @@ namespace LaktiBg.Core.Contracts.Event
         Task<bool> UpdateEventStatus(EventViewModel model);
 
         Task<IEnumerable<string>> AllCategoriesNamesAsync();
+
+        Task AddNewEventType(string name);
+
+        
 
     }
 }

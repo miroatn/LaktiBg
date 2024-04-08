@@ -65,7 +65,7 @@
            asp-controller="Comment"
            asp-action="All"
            asp-route-currentPage="@previousPage"
-           asp-route-searchTerm="@Model.SearchTerm">>></a>
+           asp-route-searchTerm="@Model.SearchTerm"><<</a>
     </div>
 
                 @{
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                                <div class="d-flex flex-row align-items-center" >
-                                   @if (User.Id() == comment.AuthorId)
+                                   @if (User.Id() == comment.AuthorId || User.IsAdmin())
                                         {
                                          <a asp-controller="Comment" asp-action="Delete" asp-route-eventId="@ViewBag.EventId" asp-route-id=@comment.Id
                                           asp-route-userId=@User.Id() class="btn btn-primary"

@@ -44,12 +44,17 @@ namespace LaktiBg.Controllers
         [HttpGet]
         public async Task<IActionResult> AddFriend(string userId, string friendId)
         {
-            if(await userService.ExistById(userId) == false || userId == null)
+            if(await userService.ExistById(userId) == false)
             {
                 return BadRequest();
             }
 
-            if (await userService.ExistById(friendId) == false|| friendId == null)
+            if (await userService.ExistById(friendId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (await userService.CheckIfUsersAreAlreadyFriendsAsync(userId,friendId) == true)
             {
                 return BadRequest();
             }
@@ -97,9 +102,9 @@ namespace LaktiBg.Controllers
 
             IList<UserFriendsViewModel> models = await userService.GetFriendRequestsAsync(id);
 
-            if (models == null)
+            if (models.Count == 0)
             {
-                RedirectToAction("ViewProfile", new { id = id });
+               return RedirectToAction("ViewProfile", new { id = id });
             }
 
             return View(models);
@@ -142,7 +147,7 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> ChangeRating(string userId, string direction, string friendId)
         {
-            if (await userService.ExistById(userId) == false && await userService.ExistById(friendId) == false)
+            if (await userService.ExistById(userId) == false || await userService.ExistById(friendId) == false)
             {
                 return BadRequest();
             }
@@ -157,28 +162,46 @@ namespace LaktiBg.Controllers
             return RedirectToAction("ViewProfile", new { id = userId });
         }
 
-        public async Task<IActionResult> MyEvents(string userId)
+        public async Task<IActionResult> MyEvents(string userId, [FromQuery]AllUserEventsQueryModel model)
         {
             if (await userService.ExistById(userId) == false)
             {
                 return BadRequest();
             }
 
-            var models = await userService.GetUserEventsAsync(userId);
+            UserEventQueryServiceModel events = await userService.GetUserEventsAsync(
+                userId,
+                model.CurrentPage,
+                model.EventsPerPage);
 
-            return View(models);
+            model.TotalEventsCount = events.TotalEventsCount;
+            model.Events = events.Events;
+
+            return View(model);
         }
 
-        public async Task<IActionResult> UserAllEvents(string userId)
+        public async Task<IActionResult> UserAllEvents(string userId, [FromQuery]AllUserEventsQueryModel model)
         {
             if (await userService.ExistById(userId) == false)
             {
                 return BadRequest();
             }
 
-            var models = await userService.GetUsersAllEventsAsync(userId);
+            if (User.Id() != userId)
+            {
+                return Unauthorized();
+            }
 
-            return View(models);
+            UserEventQueryServiceModel events = await userService.GetUsersAllEventsAsync(
+                userId,
+                model.CurrentPage,
+                model.EventsPerPage);
+
+            model.TotalEventsCount = events.TotalEventsCount;
+            model.Events = events.Events;
+
+            return View(model);
+
         }
 
         [HttpGet]
@@ -203,7 +226,9 @@ namespace LaktiBg.Controllers
 
         public async Task<IActionResult> Edit(UserEditModel model)
         {
-            if (await userService.ExistById(User.Id()) == false)
+            string userId = User.Id();
+
+            if (await userService.ExistById(userId) == false)
             {
                 return BadRequest();
             }
@@ -213,7 +238,6 @@ namespace LaktiBg.Controllers
                 return View(model);
             }
 
-            string userId = User.Id();
 
             await userService.EditUserAsync(model, userId);
 

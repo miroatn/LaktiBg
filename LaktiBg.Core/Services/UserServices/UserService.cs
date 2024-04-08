@@ -6,6 +6,7 @@ using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp.Formats;
+using static LaktiBg.Core.Constants.ErrorMessageConstants;
 
 namespace LaktiBg.Core.Services.UserServices
 {
@@ -37,6 +38,11 @@ namespace LaktiBg.Core.Services.UserServices
         {
             ApplicationUser? user = await repository.AllReadOnly<ApplicationUser>()
                         .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException(UnauthorizedAccesError);
+            }
 
             int Years = new DateTime(DateTime.Now.Subtract(user.BirthDate).Ticks).Year - 1;
 
@@ -105,20 +111,35 @@ namespace LaktiBg.Core.Services.UserServices
                                                     }).ToListAsync();
         }
 
-        public async Task<ICollection<UsersEventsViewModel>> GetUsersAllEventsAsync(string userId)
+        public async Task<UserEventQueryServiceModel> GetUsersAllEventsAsync(string userId,
+                                                                                int currentPage = 1,
+                                                                                int eventsPerPage = 1)
         {
-            return await repository.AllReadOnly<UsersEvents>()
-                                        .Where(ue => ue.UserId == userId 
-                                        && ue.Event.IsDeleted == false)
-                                        .OrderByDescending(ue => ue.Event.StartDate)
-                                        .Select(ue => new UsersEventsViewModel
-                                        {
-                                            UserId = ue.UserId,
-                                            EventId = ue.Event.Id,
-                                            EventName = ue.Event.Name,
-                                            EventDate = ue.Event.StartDate
-                                        })
-                                        .ToListAsync();
+            var eventsToShow = repository.AllReadOnly<UsersEvents>()
+                                                    .Where(ue => ue.UserId == userId
+                                                    && ue.Event.IsDeleted == false)
+                                                    .OrderByDescending(ue => ue.Event.StartDate);
+
+
+            IEnumerable<UsersEventsViewModel> events = await eventsToShow
+                                                            .Skip((currentPage - 1) * eventsPerPage)
+                                                            .Take(eventsPerPage)
+                                                            .Select(ue => new UsersEventsViewModel
+                                                            {
+                                                            UserId = ue.UserId,
+                                                            EventId = ue.Event.Id,
+                                                            EventName = ue.Event.Name,
+                                                            EventDate = ue.Event.StartDate
+                                                            })
+                                                            .ToListAsync();
+
+            int totalEventsToShow = await eventsToShow.CountAsync();
+
+            return new UserEventQueryServiceModel
+            {
+                Events = events,
+                TotalEventsCount = totalEventsToShow
+            };
         }
 
 
@@ -137,12 +158,20 @@ namespace LaktiBg.Core.Services.UserServices
                                                     }).ToListAsync();
         }
 
-        public async Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId)
+        public async Task<UserEventQueryServiceModel> GetUserEventsAsync(
+                                                        string userId,
+                                                        int currentPage = 1,
+                                                        int eventsPerPage = 1)
         {
-            return await repository.AllReadOnly<UsersEvents>()
+
+            var eventsToShow = repository.AllReadOnly<UsersEvents>()
                                                     .Where(ue => ue.Event.OrganizerId == userId
                                                          && ue.Event.IsDeleted == false)
-                                                    .OrderByDescending(ue => ue.Event.StartDate)
+                                                    .OrderByDescending(ue => ue.Event.StartDate);
+
+             IEnumerable<UsersEventsViewModel> events = await eventsToShow
+                                                    .Skip((currentPage - 1) * eventsPerPage)
+                                                    .Take(eventsPerPage)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
                                                         UserId = ue.UserId,
@@ -153,15 +182,25 @@ namespace LaktiBg.Core.Services.UserServices
                                                        
                                                     })
                                                     .ToListAsync();
+
+            int totalEventsToShow = await eventsToShow.CountAsync();
+
+            return new UserEventQueryServiceModel 
+            {
+                Events = events,
+                TotalEventsCount = totalEventsToShow
+            };
         }
 
         public async Task AddFriendAsync(string userId, string friendId)
         {
+
             UserFriends userFriends = new UserFriends() 
             { 
                 UserId = userId,
                 UserFriendId = friendId
             };
+
 
             ApplicationUser? currentUser = await repository.All<ApplicationUser>()
                                                 .Where(au => au.Id == userId)
@@ -377,6 +416,14 @@ namespace LaktiBg.Core.Services.UserServices
                                     .FirstOrDefaultAsync();
 
             return model;
+        }
+
+        public async Task<bool> CheckIfUsersAreAlreadyFriendsAsync(string userId, string friendId)
+        {
+            return await repository.AllReadOnly<UserFriends>()
+                                    .Where(uf => uf.UserId == userId
+                                                && uf.UserFriendId == friendId)
+                                    .AnyAsync();
         }
     }
 }

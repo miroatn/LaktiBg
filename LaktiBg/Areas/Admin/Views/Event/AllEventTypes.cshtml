@@ -1,0 +1,34 @@
+﻿@model EventTypeAddModel
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">№</th>
+      <th scope="col">Наименование</th>
+    </tr>
+  </thead>
+  <tbody>
+        @{
+            int counter = 1;
+        }
+
+        @foreach (var item in Model.Models)
+        {
+            <tr>
+                <th scope="row">@counter</th>
+                <td>@item.Name</td>
+            </tr>
+            {
+                counter += 1;
+            }
+        }
+        <form asp-page-handler="Create" method="post">
+        <div class="form-group">
+            <label asp-for="EventName">Заглавие</label>
+            <input asp-for="EventName" class="form-control" placeholder="Наименование на новия тип">
+            <span asp-validation-for="EventName" class="small text-danger"></span>
+        </div>
+        <button type="submit" asp-area="Admin" asp-action="AddEventType" asp-controller="Event" class="btn btn-primary">Създай</button>
+        <input type="hidden" asp-for="EventName" />
+        </form>
+  </tbody>
+</table>

@@ -12,6 +12,7 @@ using LaktiBg.Core.Contracts;
 using LaktiBg.Core.Services.CommentServices;
 using LaktiBg.Core.Contracts.ImageService;
 using LaktiBg.Core.Services.ImageServices;
+using LaktiBg.Infrastructure.Data.Models;
 
 namespace LaktiBg.Extensions
 {
@@ -40,7 +41,8 @@ namespace LaktiBg.Extensions
         }
         public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)
         {
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
             return services;
         }

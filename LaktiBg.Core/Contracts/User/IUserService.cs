@@ -19,7 +19,9 @@ namespace LaktiBg.Core.Contracts.User
 
         Task<ICollection<UsersEventsViewModel>> GetUsersOnGoingEventsAsync(string userId);
 
-        Task<ICollection<UsersEventsViewModel>> GetUsersAllEventsAsync(string userId);
+        Task<UserEventQueryServiceModel> GetUsersAllEventsAsync(string userId,
+                                                                   int currentPage,
+                                                                   int eventsPerPage);
 
         Task AddFriendAsync(string userId, string friendId);
 
@@ -38,7 +40,10 @@ namespace LaktiBg.Core.Contracts.User
 
         Task UpdateUserRatingAsync(string userId, string direction);
 
-        Task<ICollection<UsersEventsViewModel>> GetUserEventsAsync(string userId);
+        Task<UserEventQueryServiceModel> GetUserEventsAsync(
+                                        string userId,
+                                        int currentPage,
+                                        int eventsPerPage);
 
         Task<bool> CheckIfUserCanVoteAsync(string userId, string friendId);
 
@@ -47,6 +52,8 @@ namespace LaktiBg.Core.Contracts.User
         Task EditUserAsync(UserEditModel model, string userId);
 
         Task<UserEditModel> GetUserEditModelAsync(string userId);
+
+        Task<bool> CheckIfUsersAreAlreadyFriendsAsync(string userId, string friendId);
 
     }
 }

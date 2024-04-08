@@ -35,5 +35,7 @@ namespace LaktiBg.Infrastructure.Data.Models
         [Range(RatingMinValue, RatingMaxValue)]
         [Precision(18,2)]
         public decimal Rating { get; set; }
+
+        public bool IsApproved { get; set; } = false;
     }
 }

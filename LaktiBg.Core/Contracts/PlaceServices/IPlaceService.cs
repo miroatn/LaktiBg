@@ -14,7 +14,7 @@ namespace LaktiBg.Core.Contracts.PlaceServices
 
         Task<PlaceViewModel> Details(int id);
 
-        Task Edit(PlaceFormModel model);
+        Task Edit(PlaceFormModel model, string userId);
 
         Task DeletePlace(int placeId);
 
@@ -24,7 +24,9 @@ namespace LaktiBg.Core.Contracts.PlaceServices
 
         Task<bool> IsUserOwner(string userId, int placeId);
 
+        Task<IEnumerable<PlaceViewModel>> GetAllUnaprovedAsync();
 
+        Task Approve(int id);
 
     }
 }

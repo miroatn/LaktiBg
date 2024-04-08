@@ -16,4 +16,8 @@
     <ProjectReference Include="..\LaktiBg.Infrastructure\LaktiBg.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Admin\" />
+  </ItemGroup>
+
 </Project>
