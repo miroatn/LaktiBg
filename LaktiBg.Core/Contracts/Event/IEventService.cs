@@ -49,5 +49,9 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task<IEnumerable<string>> AllCategoriesNamesAsync();
 
+        Task AddNewEventType(string name);
+
+        
+
     }
 }

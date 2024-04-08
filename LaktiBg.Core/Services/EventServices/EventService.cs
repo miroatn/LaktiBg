@@ -589,5 +589,16 @@ namespace LaktiBg.Core.Services.EventServices
                                 .Select(et => et.Name).ToListAsync();
         }
 
+        public async Task AddNewEventType(string name)
+        {
+            EventType newType = new EventType()
+            {
+                Name = name,
+            };
+
+            await repository.AddAsync(newType);
+            await repository.SaveChangesAsync();
+        }
+
     }
 }
