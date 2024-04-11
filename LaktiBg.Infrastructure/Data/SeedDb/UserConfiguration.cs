@@ -15,7 +15,7 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
         {
             var data = new SeedData();
 
-            builder.HasData(new ApplicationUser[] { data.AdminUser });
+            builder.HasData(new ApplicationUser[] { data.AdminUser, data.NormalUser });
         }
     }
 }
