@@ -4,6 +4,7 @@ using LaktiBg.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaktiBg.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411141455_NormalUserAdded")]
+    partial class NormalUserAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,7 @@ namespace LaktiBg.Infrastructure.Migrations
                             Id = "539e62e9-7926-446b-8d9c-92cd370dfde8",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "b6518a98-95ad-44d4-8ac0-22b68cc2bae8",
+                            ConcurrencyStamp = "4a78ed9c-a649-4b91-ac24-451e7aedd2b2",
                             Description = "Admin account",
                             Email = "admin@abv.bg",
                             EmailConfirmed = false,
@@ -128,11 +130,11 @@ namespace LaktiBg.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ABV.BG",
                             NormalizedUserName = "ADMIN@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOjxkEzj7RMv5VxvoWhyhYXCYo8NdT10SfDyT3+Veqy3mBkVKe7VnJ6ITcMeTqmo2g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIQ4UKG0oWihsCFpkY70fQ6dVdvk6jhoM74nphAoSRBtOc/osr2HX3I511+pcGpnIQ==",
                             PhoneNumberConfirmed = false,
                             Rating = 7m,
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "30758010-ae5b-455f-afd4-4dd6951cc4c8",
+                            SecurityStamp = "fa04520e-0955-4291-8d38-6536b265d2e4",
                             TwoFactorEnabled = false,
                             UserName = "admin@abv.bg"
                         },
@@ -141,7 +143,7 @@ namespace LaktiBg.Infrastructure.Migrations
                             Id = "71368c9b-91fa-4338-bfce-e0921b5324ef",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "b43e57cb-1558-4651-85a0-4e2d78ee7687",
+                            ConcurrencyStamp = "d7456a3d-4a16-4134-9747-dec2bb1a5cf8",
                             Description = "Hi! I am an normal user account!",
                             Email = "normaluser@abv.bg",
                             EmailConfirmed = false,
@@ -150,12 +152,12 @@ namespace LaktiBg.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "NORMALUSER@ABV.BG",
                             NormalizedUserName = "NORMALUSER@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN/y02jE0Lio/J2ayOK3idwWd97mQhQVi6N3r85kCz2unYsgOZrB74NcuXKR3hY6Bw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMJ+gCn3KsbqJGs/giqw3220+lR5SqzAmnxa6H4HVk81AmQlwf9bzaYp5XdG78OJTQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
                             Rating = 5m,
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "7e915324-9bc6-4528-93de-643d8fc2ef7f",
+                            SecurityStamp = "fbb491b2-879f-40ba-b72c-88ce79902bb0",
                             TwoFactorEnabled = false,
                             UserName = "normaluser@abv.bg"
                         });
@@ -438,41 +440,6 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Places");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 44,
-                            Address = "Западна промишлена зонаЗападен, ул. „Перущица“ 8, 4002 Пловдив",
-                            Contact = "032 273 000",
-                            IsApproved = true,
-                            IsPublic = true,
-                            Name = "Cinema City Пловдив",
-                            OwnerId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
-                            Rating = 5m
-                        },
-                        new
-                        {
-                            Id = 42,
-                            Address = "ул. „Златю Бояджиев“ 2, 4000 Пловдив",
-                            Contact = "0700 20 888",
-                            IsApproved = true,
-                            IsPublic = true,
-                            Name = "Happy Bar & Grill",
-                            OwnerId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
-                            Rating = 5m
-                        },
-                        new
-                        {
-                            Id = 43,
-                            Address = "Свинова поляна, 5641, град Априлци",
-                            Contact = "+359878655666",
-                            IsApproved = true,
-                            IsPublic = true,
-                            Name = "Вила Петра",
-                            OwnerId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
-                            Rating = 5m
-                        });
                 });
 
             modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.UserFriends", b =>
