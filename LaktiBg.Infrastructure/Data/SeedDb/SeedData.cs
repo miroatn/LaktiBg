@@ -29,10 +29,18 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
         public Place CinemaCity { get; set; } = null!;
 
         public Event HappyEvent { get; set; } = null!;
-
         public Event VilaPetraEvent { get; set; } = null!;
         public Event CinemaCityEvent { get; set; } = null!;
 
+        public EventTypeConnection HappyEventFirstConnection { get; set; } = null!;
+        public EventTypeConnection HappyEventSecondConnection { get; set; } = null!;
+        public EventTypeConnection HappyEventThirdConnection { get; set; } = null!;
+
+        public EventTypeConnection VilaPetraEventFirstConnection { get; set; } = null!;
+        public EventTypeConnection VilaPetraSecondConnection { get; set; } = null!;
+        public EventTypeConnection VilaPetraThirdConnection { get; set; } = null!;
+
+        public EventTypeConnection CinemaCityEventFirstConnection { get; set; } = null!;
 
 
         public SeedData()
@@ -41,6 +49,52 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
             SeedUsers();
             SeedPlaces();
             SeedEvents();
+            SeedEventTypeConnections();
+        }
+
+        private void SeedEventTypeConnections()
+        {
+            HappyEventFirstConnection = new EventTypeConnection
+            {
+                EventId = 50,
+                EventTypeId = 1
+            };
+
+            HappyEventSecondConnection = new EventTypeConnection
+            {
+                EventId = 50,
+                EventTypeId = 3,
+            };
+
+            HappyEventThirdConnection = new EventTypeConnection
+            {
+                EventId = 50,
+                EventTypeId = 12
+            };
+
+            VilaPetraEventFirstConnection = new EventTypeConnection
+            {
+                EventId = 51,
+                EventTypeId = 1,
+            };
+
+            VilaPetraSecondConnection = new EventTypeConnection
+            {
+                EventId = 51,
+                EventTypeId = 3,
+            };
+
+            VilaPetraThirdConnection = new EventTypeConnection
+            {
+                EventId = 51,
+                EventTypeId = 10,
+            };
+
+            CinemaCityEventFirstConnection = new EventTypeConnection
+            {
+                EventId = 52,
+                EventTypeId = 8,
+            };
         }
 
         private void SeedEvents()
