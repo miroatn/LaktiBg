@@ -42,6 +42,12 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
 
         public EventTypeConnection CinemaCityEventFirstConnection { get; set; } = null!;
 
+        public UsersEvents HappyEventFirstUser { get; set; } = null!;
+        public UsersEvents HappyEventSecondUser { get; set; } = null!;
+
+        public UsersEvents VilaPetraFirstUser { get; set; } = null!;
+        public UsersEvents CinemaCityFirstUser { get; set; } = null!;
+
 
         public SeedData()
         {
@@ -50,6 +56,35 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
             SeedPlaces();
             SeedEvents();
             SeedEventTypeConnections();
+            SeedUsersEvents();
+        }
+
+        private void SeedUsersEvents()
+        {
+            HappyEventFirstUser = new UsersEvents
+            {
+                UserId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
+                EventId = 50
+            };
+
+            HappyEventSecondUser = new UsersEvents
+            {
+                UserId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
+                EventId = 50
+            };
+
+            VilaPetraFirstUser = new UsersEvents
+            {
+                UserId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
+                EventId = 51
+            };
+
+            CinemaCityFirstUser = new UsersEvents
+            {
+                UserId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
+                EventId = 52
+            };
+
         }
 
         private void SeedEventTypeConnections()

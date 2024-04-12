@@ -64,6 +64,7 @@ namespace LaktiBg.Infrastructure.Data
             builder.ApplyConfiguration(new PlaceConfiguration());
             builder.ApplyConfiguration(new EventConfiguration());
             builder.ApplyConfiguration(new EventConnectionConfiguration());
+            builder.ApplyConfiguration(new UsersEventsConfiguration());
 
             base.OnModelCreating(builder);
 
