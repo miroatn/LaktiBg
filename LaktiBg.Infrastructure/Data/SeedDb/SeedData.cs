@@ -46,7 +46,17 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
         public UsersEvents HappyEventSecondUser { get; set; } = null!;
 
         public UsersEvents VilaPetraFirstUser { get; set; } = null!;
+
         public UsersEvents CinemaCityFirstUser { get; set; } = null!;
+
+        public Comment HappyEventFirstComment { get; set; } = null!;
+        public Comment HappyEventSecondComment { get; set; } = null!;
+        public Comment HappyEventThirdComment { get; set; } = null!;
+
+        public Comment VilaPetraEventFirstComment { get; set; } = null!;
+        public Comment VilaPetraEventSecondComment { get; set; } = null!;
+
+        public Comment CinemaCityEventFirstComment { get; set; } = null!;
 
 
         public SeedData()
@@ -57,6 +67,67 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
             SeedEvents();
             SeedEventTypeConnections();
             SeedUsersEvents();
+            SeedComments();
+        }
+
+        private void SeedComments()
+        {
+            HappyEventFirstComment = new Comment
+            {
+                Id = 42,
+                Text = "Излезе ли новото меню?",
+                AuthorId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
+                EventId = 50,
+                DateTime = DateTime.Parse("2024-04-11 14:22:00", CultureInfo.InvariantCulture),
+
+            };
+
+            HappyEventSecondComment = new Comment
+            {
+                Id = 43,
+                Text = "Да, много е добро!",
+                AuthorId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
+                EventId = 50,
+                DateTime = DateTime.Parse("2024-04-11 17:45:00", CultureInfo.InvariantCulture),
+
+            };
+
+            HappyEventThirdComment = new Comment
+            {
+                Id = 44,
+                Text = "Супер! Ще се видим там",
+                AuthorId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
+                EventId = 50,
+                DateTime = DateTime.Parse("2024-04-11 20:01:00", CultureInfo.InvariantCulture),
+
+            };
+
+            VilaPetraEventFirstComment = new Comment
+            {
+                Id = 45,
+                Text = "Къщата има ли басейн?",
+                AuthorId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
+                EventId = 51,
+                DateTime = DateTime.Parse("2024-04-12 20:22:00", CultureInfo.InvariantCulture),
+            };
+
+            VilaPetraEventSecondComment = new Comment
+            {
+                Id = 46,
+                Text = "Не, в съседната къща има и може да се ползва, тъй като е на същите собственици.",
+                AuthorId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
+                EventId = 51,
+                DateTime = DateTime.Parse("2024-04-12 22:10:24", CultureInfo.InvariantCulture),
+            };
+
+            CinemaCityEventFirstComment = new Comment
+            {
+                Id = 47,
+                Text = "Ще закъснея малко.",
+                AuthorId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
+                EventId = 52,
+                DateTime = DateTime.Parse("2024-04-12 10:10:24", CultureInfo.InvariantCulture),
+            };
         }
 
         private void SeedUsersEvents()
