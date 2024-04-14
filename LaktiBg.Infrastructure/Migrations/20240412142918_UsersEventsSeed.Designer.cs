@@ -4,6 +4,7 @@ using LaktiBg.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaktiBg.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240412142918_UsersEventsSeed")]
+    partial class UsersEventsSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,7 @@ namespace LaktiBg.Infrastructure.Migrations
                             Id = "539e62e9-7926-446b-8d9c-92cd370dfde8",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "6eafaf13-1106-47da-a0d2-fe4a3f973778",
+                            ConcurrencyStamp = "35e8efc2-abef-4c2e-985c-f4ff68b2b769",
                             Description = "Admin account",
                             Email = "admin@abv.bg",
                             EmailConfirmed = false,
@@ -128,11 +130,11 @@ namespace LaktiBg.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ABV.BG",
                             NormalizedUserName = "ADMIN@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHEfKYrrdGJcqHfYiBs5HqN3zdXWTr4kNvL6FkJc/xdXZaWMrUAnoH4QNBcUm0+d0g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEF0f1glRNOSCYwcQA3n6zbciM7dU+qyAPzxuAPLgYaG3yCKOUwwOFyejFgSyEc5WTw==",
                             PhoneNumberConfirmed = false,
                             Rating = 7m,
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "4efdff15-57ac-4fa0-b34e-a30a4db6c1d4",
+                            SecurityStamp = "5ccf3382-faa7-42eb-8b29-14b970ac064d",
                             TwoFactorEnabled = false,
                             UserName = "admin@abv.bg"
                         },
@@ -141,7 +143,7 @@ namespace LaktiBg.Infrastructure.Migrations
                             Id = "71368c9b-91fa-4338-bfce-e0921b5324ef",
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "a055362f-41ad-4991-90ba-39039c3abd79",
+                            ConcurrencyStamp = "c5287ef3-e636-4648-aa78-c2cc61cfff34",
                             Description = "Hi! I am an normal user account!",
                             Email = "normaluser@abv.bg",
                             EmailConfirmed = false,
@@ -150,12 +152,12 @@ namespace LaktiBg.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "NORMALUSER@ABV.BG",
                             NormalizedUserName = "NORMALUSER@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDtV25ZW+wK8VXIjTEsnLe5VHuFbRa4Um8xrmyS9DnN0Tfh+9PUrCg2D8r43fb8g6Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENtlnZR20qgO0fvI4BKzI4yzdKapblrTiva2CB5alYW6umelmaAvjjkleHT575uTmQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
                             Rating = 5m,
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "23c35a8b-ad3b-4b9e-8b4f-a68bacd1c1cf",
+                            SecurityStamp = "477e57f5-f49e-49d7-a80f-528f7841af99",
                             TwoFactorEnabled = false,
                             UserName = "normaluser@abv.bg"
                         });
@@ -191,56 +193,6 @@ namespace LaktiBg.Infrastructure.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("Comments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 42,
-                            AuthorId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
-                            DateTime = new DateTime(2024, 4, 11, 14, 22, 0, 0, DateTimeKind.Unspecified),
-                            EventId = 50,
-                            Text = "Излезе ли новото меню?"
-                        },
-                        new
-                        {
-                            Id = 43,
-                            AuthorId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
-                            DateTime = new DateTime(2024, 4, 11, 17, 45, 0, 0, DateTimeKind.Unspecified),
-                            EventId = 50,
-                            Text = "Да, много е добро!"
-                        },
-                        new
-                        {
-                            Id = 44,
-                            AuthorId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
-                            DateTime = new DateTime(2024, 4, 11, 20, 1, 0, 0, DateTimeKind.Unspecified),
-                            EventId = 50,
-                            Text = "Супер! Ще се видим там"
-                        },
-                        new
-                        {
-                            Id = 45,
-                            AuthorId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
-                            DateTime = new DateTime(2024, 4, 12, 20, 22, 0, 0, DateTimeKind.Unspecified),
-                            EventId = 51,
-                            Text = "Къщата има ли басейн?"
-                        },
-                        new
-                        {
-                            Id = 46,
-                            AuthorId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
-                            DateTime = new DateTime(2024, 4, 12, 22, 10, 24, 0, DateTimeKind.Unspecified),
-                            EventId = 51,
-                            Text = "Не, в съседната къща има и може да се ползва, тъй като е на същите собственици."
-                        },
-                        new
-                        {
-                            Id = 47,
-                            AuthorId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
-                            DateTime = new DateTime(2024, 4, 12, 10, 10, 24, 0, DateTimeKind.Unspecified),
-                            EventId = 52,
-                            Text = "Ще закъснея малко."
-                        });
                 });
 
             modelBuilder.Entity("LaktiBg.Infrastructure.Data.Models.Event", b =>
@@ -305,7 +257,7 @@ namespace LaktiBg.Infrastructure.Migrations
                         new
                         {
                             Id = 52,
-                            CreationDate = new DateTime(2024, 4, 12, 17, 46, 0, 589, DateTimeKind.Local).AddTicks(4213),
+                            CreationDate = new DateTime(2024, 4, 12, 17, 29, 17, 921, DateTimeKind.Local).AddTicks(7418),
                             Description = "Ще ходим до Пловдив да гледаме Дюн 2 в Cinema city с моята кола.",
                             IsDeleted = false,
                             IsFinished = true,
@@ -321,7 +273,7 @@ namespace LaktiBg.Infrastructure.Migrations
                         new
                         {
                             Id = 50,
-                            CreationDate = new DateTime(2024, 4, 12, 17, 46, 0, 589, DateTimeKind.Local).AddTicks(4197),
+                            CreationDate = new DateTime(2024, 4, 12, 17, 29, 17, 921, DateTimeKind.Local).AddTicks(7402),
                             Description = "Смятам да почерпя по случай взетия изпит, не приемам не за отговор!",
                             IsDeleted = false,
                             IsFinished = false,
@@ -337,7 +289,7 @@ namespace LaktiBg.Infrastructure.Migrations
                         new
                         {
                             Id = 51,
-                            CreationDate = new DateTime(2024, 4, 12, 17, 46, 0, 589, DateTimeKind.Local).AddTicks(4207),
+                            CreationDate = new DateTime(2024, 4, 12, 17, 29, 17, 921, DateTimeKind.Local).AddTicks(7412),
                             Description = "Пет рожденника ще почерпим за рожденните дни, партито започва в 2 на обяд в петък и приключва в неделя. Нощувките се поемат от рождениците",
                             IsDeleted = false,
                             IsFinished = false,

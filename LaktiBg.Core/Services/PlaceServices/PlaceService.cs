@@ -54,6 +54,7 @@ namespace LaktiBg.Core.Services.PlaceServices
                 OwnerId = p.OwnerId,
                 Contact = p.Contact,
                 Address = p.Address,
+                IsApproved = p.IsApproved,
                 Images = p.Images.Select(i => new ImageViewModel 
                 {
                     Id = i.Id,
@@ -180,6 +181,7 @@ namespace LaktiBg.Core.Services.PlaceServices
                 model.IsPublic = place.IsPublic;
                 model.Rating = 5;
                 model.OwnerId = place.OwnerId;
+                model.IsApproved = place.IsApproved;
 
                 foreach (var image in model.Images)
                 {

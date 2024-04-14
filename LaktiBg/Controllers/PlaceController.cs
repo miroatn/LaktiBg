@@ -106,7 +106,10 @@ namespace LaktiBg.Controllers
 
             if (await placeService.IsUserOwner(userId, id) == false)
             {
-                return Forbid();
+                if (User.IsAdmin() == false)
+                {
+                    return Forbid();
+                }
             }
 
             var formModel = await placeService.GetPlaceFormModelByPlaceId(id);
@@ -133,7 +136,10 @@ namespace LaktiBg.Controllers
 
             if (await placeService.IsUserOwner(userId, model.Id) == false)
             {
-                return Forbid();
+                if (User.IsAdmin() == false)
+                {
+                    return Forbid();
+                }
             }
 
             await placeService.Edit(model, userId);

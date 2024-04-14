@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace LaktiBg.Infrastructure.Data.SeedDb
 {
-    internal class UserConfiguration : IEntityTypeConfiguration<ApplicationUser> 
+    internal class PlaceConfiguration : IEntityTypeConfiguration<Place>
     {
-        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
+        public void Configure(EntityTypeBuilder<Place> builder)
         {
             var data = new SeedData();
 
-            builder.HasData(new ApplicationUser[] { data.AdminUser, data.NormalUser });
+            builder.HasData(new Place[] { data.CinemaCity, data.Happy, data.VilaPetra });
         }
     }
+    
+    
 }
