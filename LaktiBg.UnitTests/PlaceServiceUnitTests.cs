@@ -6,13 +6,7 @@ using LaktiBg.Infrastructure.Data;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace LaktiBg.UnitTests
 {
