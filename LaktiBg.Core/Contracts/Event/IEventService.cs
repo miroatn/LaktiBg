@@ -51,7 +51,10 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task AddNewEventType(string name);
 
-        
+        Task<string> GetUsersNameByIdAsync(string userId);
+
+
+
 
     }
 }

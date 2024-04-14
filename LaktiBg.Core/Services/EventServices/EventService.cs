@@ -261,7 +261,7 @@ namespace LaktiBg.Core.Services.EventServices
             };
         }
 
-        private async Task<string> GetUsersNameByIdAsync(string userId)
+        public async Task<string> GetUsersNameByIdAsync(string userId)
         {
             var user = await repository.AllReadOnly<ApplicationUser>()
                  .FirstOrDefaultAsync(u => u.Id == userId);
@@ -474,7 +474,7 @@ namespace LaktiBg.Core.Services.EventServices
             {
                 Place place = await GetPlaceByIdAsync(model.SelectedPlaceId);
 
-                if (place.OwnerId != userId)
+                if (currentEvent.OrganizerId != userId)
                 {
                     throw new UnauthorizedAccessException(AccessDeniedError);
                 }
@@ -494,7 +494,7 @@ namespace LaktiBg.Core.Services.EventServices
                 IList<EventTypeConnection> types = await GetEventTypeConnections(model.SelectedTypes);
 
                    
-                if (types == null)
+                if (types.Count == 0)
                 {
                     throw new NullReferenceException(EventTypeNotFoundError);
                 }
@@ -523,7 +523,7 @@ namespace LaktiBg.Core.Services.EventServices
                 currentEvent.IsVisible = model.IsVisible;
                 currentEvent.MinRatingRequired = model.MinRatingRequired;
                 currentEvent.ParticipantsMaxCount = model.ParticipantsMaxCount;
-                currentEvent.MinAgeRequired = model.MinRatingRequired;
+                currentEvent.MinAgeRequired = model.MinAgeRequired;
                 currentEvent.Description = model.Description;
 
                 await repository.SaveChangesAsync();
