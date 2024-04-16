@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LaktiBg.Core\LaktiBg.Core.csproj" />
     <ProjectReference Include="..\LaktiBg.Infrastructure\LaktiBg.Infrastructure.csproj" />
+    <ProjectReference Include="..\LaktiBg\LaktiBg.csproj" />
   </ItemGroup>
 
 </Project>
