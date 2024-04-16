@@ -136,6 +136,7 @@ namespace LaktiBg.Core.Services.ImageServices
             }
 
             return imagesToShow;
+
         }
 
         public async Task<string> ConvertImageToStringAsync(Infrastructure.Data.Models.Image image)

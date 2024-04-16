@@ -236,6 +236,8 @@ namespace LaktiBg.UnitTests
         public async Task Test_Approve_ThrowMsgWhenPlaceIsNotFound()
         {
 
+            string exMsg = string.Empty;
+
             try
             {
                 await placeService.Approve(6);
@@ -243,9 +245,12 @@ namespace LaktiBg.UnitTests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual("The place is not found", ex.Message);
+                exMsg = ex.Message;
                
             }
+
+            Assert.AreEqual("The place is not found", exMsg);
+
 
         }
 
@@ -335,6 +340,8 @@ namespace LaktiBg.UnitTests
         [Test]
         public async Task Test_Details_ThrowExceptionWithNonExistendId()
         {
+            string exMsg = string.Empty;
+
             try
             {
                 var model = await placeService.Details(101);
@@ -342,8 +349,11 @@ namespace LaktiBg.UnitTests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual("The place is not found", ex.Message);
+                exMsg = ex.Message;
             }
+
+            Assert.AreEqual("The place is not found", exMsg);
+
         }
 
         [Test]

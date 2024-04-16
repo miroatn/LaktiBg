@@ -3,21 +3,15 @@ using LaktiBg.Core.Contracts.User;
 using LaktiBg.Core.Enums;
 using LaktiBg.Core.Models.EventModels;
 using LaktiBg.Core.Services.EventServices;
-using LaktiBg.Core.Services.UserServices;
 using LaktiBg.Infrastructure.Data;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace LaktiBg.UnitTests
 {
@@ -78,7 +72,6 @@ namespace LaktiBg.UnitTests
 
         public async Task SetUp()
         {
-
             //EventTypes
 
             Alchohol = new EventType()
@@ -541,15 +534,20 @@ namespace LaktiBg.UnitTests
                 Description = "With this model im testing the AddAsync method of Event entity."
             };
 
+            string exMsg = string.Empty;
+
+
             try
             {
                 await service.AddAsync(model);
             }
             catch (Exception ex)
             {
-
-                Assert.AreEqual("Value cannot be null. (Parameter 'The place is not found')", ex.Message);
+                exMsg = ex.Message;
             }
+
+            Assert.AreEqual("Value cannot be null. (Parameter 'The place is not found')", exMsg);
+
         }
 
         [Test]
@@ -598,6 +596,7 @@ namespace LaktiBg.UnitTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(5, result.Count());
+
 
         }
 
@@ -887,15 +886,19 @@ namespace LaktiBg.UnitTests
 
         public async Task Test_DeleteAsync_ShouldThrowExceptionWhenUserIsNotTheOrganizer()
         {
+            string exMsg = string.Empty;
+
             try
             {
                 await service.DeleteAsync(1, "d9d6b4a5-f3f8-47bd-ad2b-f362632f83be");
             }
             catch (Exception ex) 
             {
-
-                Assert.AreEqual("You dont have permitions for this action", ex.Message);
+                exMsg = ex.Message;
             }
+
+            Assert.AreEqual("You dont have permitions for this action", exMsg);
+
         }
 
         [Test]
@@ -975,6 +978,7 @@ namespace LaktiBg.UnitTests
                 Description = "Edit!!!!",
             };
 
+
             try
             {
                 await service.EditAsync(model, "d9d6b4a5-f3f8-47bd-ad2b-f362632f83be");
@@ -1027,6 +1031,138 @@ namespace LaktiBg.UnitTests
 
         }
 
+        [Test]
+
+        public async Task Test_LeaveEvent_ShouldWorkCorrectly()
+        {
+            await service.ParticipateInEvent(1, "bf6468c5-f4eb-46a2-8fd7-1ab0d5f8d386");
+
+            var model = await service.GetEventViewModelByIdAsync(1);
+
+            Assert.IsNotNull(model);
+            Assert.AreEqual(1, model.Participants.Count);
+
+            await service.LeaveEvent(1, "bf6468c5-f4eb-46a2-8fd7-1ab0d5f8d386");
+
+            var editedModel = await service.GetEventViewModelByIdAsync(1);
+
+            Assert.IsNotNull(editedModel);
+            Assert.AreEqual(0, editedModel.Participants.Count);
+        }
+
+        [Test]
+
+        public async Task Test_GetEventNameByIdAsync_GivesEventNameById()
+        {
+            string result = await service.GetEventNameByIdAsync(1);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Хапване в Хепи", result);
+        }
+
+        [Test]
+
+        public async Task Test_GetEventByIdAsync_ShouldReturnEventByGivenId()
+        {
+            Event model = await service.GetEventByIdAsync(5);
+            Assert.IsNotNull(model);
+            Assert.AreEqual(5, model.Id);
+            Assert.AreEqual("Дюн 4", model.Name);
+            Assert.AreEqual("25.5.2024 г. 0:00:00", model.StartDate.ToString());
+            Assert.AreEqual(4, model.Place.Id);
+            Assert.IsTrue(model.IsPublic);
+            Assert.IsFalse(model.IsDeleted);
+            Assert.IsTrue(model.IsVisible);
+            Assert.IsFalse(model.IsFinished);
+            Assert.AreEqual("bf6468c5-f4eb-46a2-8fd7-1ab0d5f8d386", model.OrganizerId);
+            Assert.AreEqual(2, model.MinRatingRequired);
+            Assert.AreEqual(8, model.ParticipantsMaxCount);
+            Assert.AreEqual(4, model.MinAgeRequired);
+            Assert.AreEqual("Да гледаме Дюн 4 тази седмица!", model.Description);
+        }
+
+        [Test]
+
+        public async Task Test_UpdateEventStatus_ShouldUpdateStatusToFinishedIfStartingDateIsPassed()
+        {
+            Event currentEvent = new Event() 
+            {
+                Id = 10,
+                Name = "Finished event",
+                StartDate = DateTime.Now,
+                PlaceId = 1,
+                IsPublic = true,
+                IsDeleted = false,
+                IsFinished = false,
+                IsVisible = true,
+                OrganizerId = "bf6468c5-f4eb-46a2-8fd7-1ab0d5f8d386",
+                MinRatingRequired = 0,
+                ParticipantsMaxCount = 1,
+                MinAgeRequired = 0,
+                Description = "description for the test"
+
+            };
+
+            await repository.AddAsync(currentEvent);
+            await repository.SaveChangesAsync();
+
+            Event model = await service.GetEventByIdAsync(10);
+            Assert.IsFalse(model.IsFinished);
+
+            EventViewModel viewModel = new EventViewModel() 
+            {
+                Id= model.Id,
+                Name= model.Name,
+                StartDate = model.StartDate.ToString(),
+                IsPublic = model.IsPublic,
+                IsFinished= model.IsFinished,
+                IsVisible = model.IsVisible,
+                OrganizerId = model.OrganizerId,
+                MinRatingRequired = model.MinRatingRequired,
+                ParticipantsMaxCount = model.ParticipantsMaxCount,
+                MinAgeRequired = model.MinAgeRequired,
+                Description = model.Description
+            };
+
+            await service.UpdateEventStatus(viewModel);
+
+            Event updatedModel = await service.GetEventByIdAsync(10);
+            Assert.IsTrue(updatedModel.IsFinished);
+
+        }
+
+        [Test]
+
+        public async Task Test_AllCategoriesNamesAsync_ShouldReturnAllCategoriesNames()
+        {
+            var result = await service.AllCategoriesNamesAsync();
+
+            List<string> rs = result.ToList();
+
+            Assert.Contains("Алкохол", rs);
+            Assert.Contains("Веган", rs);
+            Assert.Contains("Парти", rs);
+
+        }
+
+        [Test]
+
+        public async Task Test_AddNewEventType_ShouldAddEventTypeToDB()
+        {
+            string newEventTypeName = "Кино";
+
+            var result = await service.AllCategoriesNamesAsync();
+            List<string> rs = result.ToList();
+            bool isContained = rs.Contains(newEventTypeName);
+            Assert.IsFalse(isContained);
+
+            await service.AddNewEventType(newEventTypeName);
+
+            var resultUpdated = await service.AllCategoriesNamesAsync();
+            List<string> rsUpdated = resultUpdated.ToList();
+            bool isContainedUpdate = rsUpdated.Contains(newEventTypeName);
+            Assert.IsTrue(isContainedUpdate);
+        }
 
     }
 }
