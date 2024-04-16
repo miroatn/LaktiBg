@@ -6,6 +6,8 @@ using LaktiBg.Core.Services.EventServices;
 using LaktiBg.Infrastructure.Data;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -70,7 +72,6 @@ namespace LaktiBg.UnitTests
 
         public async Task SetUp()
         {
-
             //EventTypes
 
             Alchohol = new EventType()
@@ -595,6 +596,7 @@ namespace LaktiBg.UnitTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(5, result.Count());
+
 
         }
 
