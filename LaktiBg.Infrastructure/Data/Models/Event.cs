@@ -67,7 +67,7 @@ namespace LaktiBg.Infrastructure.Data.Models
 
         public IEnumerable<Comment> Comments { get; set; }
 
-        public IEnumerable<Image> Images { get; set; }
+        public ICollection<Image> Images { get; set; }
 
 
     }
