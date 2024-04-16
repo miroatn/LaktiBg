@@ -1,6 +1,4 @@
 ﻿using LaktiBg.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
