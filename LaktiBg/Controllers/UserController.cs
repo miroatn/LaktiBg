@@ -223,6 +223,8 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
+
 
         public async Task<IActionResult> Edit(UserEditModel model)
         {

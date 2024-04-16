@@ -85,6 +85,7 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Add(EventFormModel model)
         {
             if (await userService.ExistById(User.Id()) == false)
@@ -163,7 +164,7 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
-
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Edit(EventFormModel model)
         {
             if (await userService.ExistById(User.Id()) == false)

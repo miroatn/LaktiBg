@@ -76,6 +76,7 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
 
         public async Task<IActionResult> AddImagesToEvent(EventViewModel model, int id)
         {
@@ -106,7 +107,7 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
-
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AddProfileAvatar(UserViewModel model, string userId)
         {
             if (model == null)
