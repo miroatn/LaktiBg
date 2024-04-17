@@ -16,13 +16,16 @@ namespace LaktiBg.Core.Models.PlaceModels
         [StringLength(NameMaxLenght,
             MinimumLength = NameMinlenght,
             ErrorMessage = LenghtMessage)]
+        [Display(Name = "Име")]
         public string Name { get; set; } = string.Empty;
 
         [StringLength(ContactMaxLenght, 
             MinimumLength = ContactMinLenght)]
+        [Display(Name = "Телефон")]
         public string? Contact { get; set; }
 
         [StringLength(AddressMaxLenght, MinimumLength = AddressMinLenght)]
+        [Display(Name = "Адрес")]
         public string? Address { get; set; }
 
         public bool IsPublic { get; set; }
