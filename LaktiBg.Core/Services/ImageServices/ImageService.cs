@@ -68,10 +68,6 @@ namespace LaktiBg.Core.Services.ImageServices
 
                             imageModels.Add(newphoto);
                         }
-                        else
-                        {
-                            //ModelState.AddModelError("File", "The file is too large.");
-                        }
 
                         File.Delete(outputPath);
 
@@ -224,10 +220,6 @@ namespace LaktiBg.Core.Services.ImageServices
 
                         File.Delete(outputPath);
                         return image;
-                    }
-                    else
-                    {
-                        //ModelState.AddModelError("File", "The file is too large.");
                     }
 
                 }
