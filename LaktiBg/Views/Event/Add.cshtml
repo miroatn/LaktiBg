@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-page-handler="Create" method="post">
+        <form id="eventForm" asp-page-handler="Create" method="post">
 
             <h3>Място на събитието</h3>
 
@@ -36,9 +36,11 @@
               <input asp-for="IsVisible" type="checkbox" class="custom-control-input" id="customCheck1">
               <label class="custom-control-label" asp-for="IsVisible">Мястото е видимо</label>
             </div>
-                <label for="customRange2" class="form-label">Минимален рейтинг на потребителя</label>
-                <input asp-for="MinRatingRequired" type="range" class="form-range" min="0" max="7" id="customRange2">
-                 <div class="form-group">
+
+            <label for="customRange2" class="form-label">Минимален рейтинг на потребителя:   <span id="ratingValue" style="margin-left: 5px;">1</span></label>
+            <input asp-for="MinRatingRequired" type="range" class="form-range" min="1" max="7" id="customRange2">
+
+
             <div class="form-group">
                 <label asp-for="ParticipantsMaxCount">Максимален брой на участниците</label>
                 <input asp-for="ParticipantsMaxCount" class="form-control" placeholder="Въведете брой">
@@ -56,14 +58,12 @@
             </div>
                     <label>Типове на събитие:</label>
                     <br />
-                    @foreach (var eventType in Model.Types)
-                    {
-                         <input type="checkbox" name="SelectedTypes" value="@eventType.Id" /> @eventType.Name <br />
-                    }
-
-
-                <br />
-                <input class="btn btn-primary mt-3" type="submit" value="Запази" />
+                        @foreach (var eventType in Model.Types)
+                        {
+                        <input type="checkbox" name="SelectedTypes" value="@eventType.Id" /> @eventType.Name <br />
+                        }
+                    <span id="typesError" class="small text-danger" style="display: none;">Изберете поне един тип на събитие.</span>
+                    <input class="btn btn-primary mt-3" type="submit" value="Запази" />
 
 
       </form>
@@ -83,3 +83,33 @@
             }
         });
     </script>
+
+<script>
+    document.getElementById('eventForm').addEventListener('submit', function (event) {
+        var checkboxes = document.getElementsByName('SelectedTypes');
+        var isChecked = false;
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                isChecked = true;
+                break;
+            }
+        }
+        if (!isChecked) {
+            event.preventDefault(); 
+            document.getElementById('typesError').style.display = 'block'; 
+        }
+    });
+</script>
+
+<script>
+    var rangeInput = document.getElementById('customRange2');
+    var ratingValue = document.getElementById('ratingValue');
+
+    function updateValue() {
+        ratingValue.innerText = rangeInput.value;
+    }
+
+    updateValue();
+
+    rangeInput.addEventListener('input', updateValue);
+</script>
