@@ -1,5 +1,19 @@
-﻿<ul class="navbar-nav flex-grow-1">
-	<li class="nav-item">
-	     <a asp-area="Admin" asp-controller="Home" asp-action="ForReview" class="nav-link text-dark">Снимки</a>
-	</li>
-</ul>
+﻿<div style="display: flex;">
+    <div class="dropdown" style="margin-right: 10px;">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Събития
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="@Url.Action("AllEventTypes", "Event", new {area = "Admin"})">Типове събития</a></li>
+        </ul>
+    </div>
+
+    <div class="dropdown" style="margin-right: 10px;">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Места
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="@Url.Action("ApproveList", "Place", new {area = "Admin"})">Одобри</a></li>
+        </ul>
+    </div>
+</div>
