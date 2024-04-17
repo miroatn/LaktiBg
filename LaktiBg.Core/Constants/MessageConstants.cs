@@ -15,5 +15,7 @@ namespace LaktiBg.Core.Constants
         public const string RatingRange = "Рейтинга трябва да бъде между {0} и {1}";
 
         public const string NoRestrictionAdded = "Няма зададено ограничение";
+
+        public const string PasswordNotMatch = "Въведената парола не съвпада";
     }
 }
