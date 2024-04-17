@@ -6,7 +6,6 @@ using LaktiBg.Infrastructure.Data;
 using LaktiBg.Infrastructure.Data.Common;
 using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -21,16 +20,14 @@ namespace LaktiBg.UnitTests
 
         private IRepository repository;
         private IImageService service;
-        private IEventService eventService;
 
         private ApplicationUser FirstUser;
         private ApplicationUser SecondUser;
         private Event FirstEvent;
         private Place Happy;
 
-        //Should be changed when used on another computer
-        private string imagePath = "C:\\Users\\MiroPC\\source\\repos\\LaktiBg\\LaktiBg\\wwwroot\\Images\\UnitTests\\test.jpg";
-        private string compressedImagePath = "C:\\Users\\MiroPC\\source\\repos\\LaktiBg\\LaktiBg\\wwwroot\\Images\\UnitTests\\testImageCompresed.jpg";
+        string imagePath = @"..\..\..\..\LaktiBg\wwwroot\Images\UnitTests\test.jpg";
+        private string compressedImagePath = @"..\..\..\..\LaktiBg\wwwroot\Images\UnitTests\CompressedTest.jpg";
 
 
         [SetUp]

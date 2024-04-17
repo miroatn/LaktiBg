@@ -1,12 +1,12 @@
 ﻿using LaktiBg.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 
 namespace LaktiBg.Infrastructure.Data.SeedDb
 {
     internal class SeedData
     {
-
         public EventType AlcoholType { get; set; } = null!;
         public EventType VeganType { get; set; } = null!;
         public EventType PartyType { get; set; } = null!;
@@ -55,9 +55,10 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
 
         public Comment VilaPetraEventFirstComment { get; set; } = null!;
         public Comment VilaPetraEventSecondComment { get; set; } = null!;
-
         public Comment CinemaCityEventFirstComment { get; set; } = null!;
 
+        public UserFriends UserFriends { get; set; } = null!;
+        public UserFriends FriendUserFriends { get; set; } = null!;
 
         public SeedData()
         {
@@ -68,6 +69,26 @@ namespace LaktiBg.Infrastructure.Data.SeedDb
             SeedEventTypeConnections();
             SeedUsersEvents();
             SeedComments();
+            SeedUserFriends();
+        }
+
+        private void SeedUserFriends()
+        {
+            UserFriends = new UserFriends()
+            {
+                Id = 1,
+                UserId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
+                UserFriendId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
+                IsAccepted = true,
+            };
+
+            FriendUserFriends = new UserFriends()
+            {
+                Id = 2,
+                UserId = "71368c9b-91fa-4338-bfce-e0921b5324ef",
+                UserFriendId = "539e62e9-7926-446b-8d9c-92cd370dfde8",
+                IsAccepted = true,
+            };
         }
 
         private void SeedComments()

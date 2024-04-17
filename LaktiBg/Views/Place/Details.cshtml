@@ -32,26 +32,30 @@
     </button>
 </div>
             </div>
-        <div class="card-body text-success">
-        <h5 class="card-title">Контакт: @Model.Contact</h5>
-        <p class="card-text">Адрес: @Model.Address </p>
-        </div>
-        <div class="card-footer bg-transparent border-success">Рейтинг: @Model.Rating</div> 
-
-        </div>
-
-            @if (User.Id() == Model.OwnerId || User.IsAdmin())
-            {
-                <div class="row">
-                <div class="col-md-4">
-                     <a asp-controller="Place" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mb-2 w-100 p-3 fw-bold">Редактиране</a>
+            <div class="card border-success mb-4" style="max-width: 54rem;">
+                <div class="card-header bg-transparent border-success">Име на мястото: @Model.Name</div>
+                <div class="card-body text-success">
+                    <div class="row justify-content-between">
+                        <div class="col">
+                            <h5 class="card-title">Контакт: @Model.Contact</h5>
+                            <p class="card-text">Адрес: @Model.Address</p>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex justify-content-end">
+                                @if (User.Id() == Model.OwnerId || User.IsAdmin())
+                                {
+                                    <div class="btn-group">
+                                        <a asp-controller="Place" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mb-2 fw-bold mr-2">Редактиране</a>
+                                        <a asp-controller="Place" asp-action="DeletePlace" asp-route-id="@Model.Id" class="btn btn-outline-danger mb-2 fw-bold mr-2">Изтрий</a>
+                                        <a asp-controller="Image" asp-action="DeleteImages" asp-route-id="@Model.Id" asp-route-entityType="Place" class="btn btn-outline-danger mb-2 fw-bold">Изтрий снимки</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                     <a asp-controller="Place" asp-action="DeletePlace" asp-route-id="@Model.Id" class="btn btn-outline-danger mb-2 w-100 p-3 fw-bold">Изтрий</a>
-                </div>
-                </div>
-                    <a asp-controller="Image" asp-action="DeleteImages" asp-route-id="@Model.Id" asp-route-entityType="Place" class="btn btn-outline-danger mb-2 w-75 p-3 fw-bold">Изтрий снимки</a>
-            }
+                <div class="card-footer bg-transparent border-success">Рейтинг: @Model.Rating</div>
+            </div>
     </tbody>
 </body>
 </html>

@@ -1,22 +1,22 @@
 ﻿@model ImagesViewModel
 @inject IImageService imageService
+
 <div style="text-align: center;">
-<h2>Снимки</h2>
+    <h2>Снимки</h2>
 
-
-<div class="row">
-    @foreach (var kvp in Model.imagesToShow)
-    {
-        var image = kvp.Value;
-            <img class="d-block w-50" style="height:500px"
-            src="@image" alt="@image">
-            int id = kvp.Key;
-            <div style="margin: 10px auto 0 auto;">
-                @if (await imageService.CheckIfUserIsTheImageAuthor(User.Id(), kvp.Key))
+    <div class="row">
+        @foreach (var kvp in Model.imagesToShow)
+        {
+            var image = kvp.Value;
+            <div class="col-md-6">
+                <img class="d-block w-100" style="height:500px" src="@image" alt="@image">
+                @if (await imageService.CheckIfUserIsTheImageAuthor(User.Id(), kvp.Key) || User.IsAdmin())
                 {
-                    <a asp-controller="Image" asp-action="DeleteImage" asp-route-id=@id asp-route-entityId=@Model.EntityId  asp-route-entityType="@Model.EntityType" style="text-align: center;" class="btn btn-outline-danger mb-2 w-40 p-3 fw-bold">Изтрий снимката</a>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <a asp-controller="Image" asp-action="DeleteImage" asp-route-id="@kvp.Key" asp-route-entityId="@Model.EntityId" asp-route-entityType="@Model.EntityType" class="btn btn-outline-danger mb-2 p-3 fw-bold">Изтрий снимката</a>
+                    </div>
                 }
-               </div>
-    }
-</div>
+            </div>
+        }
+    </div>
 </div>

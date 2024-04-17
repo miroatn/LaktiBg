@@ -30,6 +30,7 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
 
         public async Task<IActionResult> Add(CommentFormModel model, int id)
         {

@@ -32,6 +32,7 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
 
         public async Task<IActionResult> Add(PlaceFormModel model)
         {
@@ -118,6 +119,7 @@ namespace LaktiBg.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
 
         public async Task<IActionResult> Edit(PlaceFormModel model)
         {
