@@ -14,19 +14,28 @@ namespace LaktiBg.Core.Models.EventModels
             MinimumLength = NameMinLenght, 
             ErrorMessage = LenghtMessage)]
         [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Име")]
+
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Типове")]
         public IEnumerable<EventTypeViewModel> Types { get; set; } = new List<EventTypeViewModel>();
-
+        
+        [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Място")]
         public IEnumerable<int> SelectedTypes { get; set; } = new List<int>();
 
         [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Начална дата")]
         public DateTime StartDate { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Място")]
         public IEnumerable<PlaceEventModel> Places { get; set; } = new List<PlaceEventModel>();
 
+        [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Място")]
         public int SelectedPlaceId { get; set; }
 
         [Required(ErrorMessage = RequiredMessage)]
@@ -47,6 +56,7 @@ namespace LaktiBg.Core.Models.EventModels
             MinimumLength = DescriptionMinLenght, 
             ErrorMessage = LenghtMessage)]
         [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Описание")]
 
         public string Description { get; set; } = string.Empty;
 
