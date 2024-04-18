@@ -174,7 +174,7 @@
             <div class="card mb-4 mb-md-0">
               <div class="card-body">
                 <p class="mb-4" style="text-align: center;"><strong>Отминали събития</strong></p>
-                    @foreach (var item in Model.FinishedEvents.OrderBy(x => x.EventDate).Take(5))
+                    @foreach (var item in Model.FinishedEvents.OrderByDescending(x => x.EventDate).Take(5))
                     {
                         <div class="row">
                         <ul class="list-group list-group-light">
