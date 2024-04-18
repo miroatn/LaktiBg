@@ -164,21 +164,21 @@ namespace LaktiBg.Core.Services.UserServices
                                                         int eventsPerPage = 1)
         {
 
-            var eventsToShow = repository.AllReadOnly<UsersEvents>()
-                                                    .Where(ue => ue.Event.OrganizerId == userId
-                                                         && ue.Event.IsDeleted == false)
-                                                    .OrderByDescending(ue => ue.Event.StartDate);
+            var eventsToShow = repository.AllReadOnly<Event>()
+                                                    .Where(ue => ue.OrganizerId == userId
+                                                         && ue.IsDeleted == false)
+                                                    .OrderByDescending(ue => ue.StartDate);
 
              IEnumerable<UsersEventsViewModel> events = await eventsToShow
                                                     .Skip((currentPage - 1) * eventsPerPage)
                                                     .Take(eventsPerPage)
                                                     .Select(ue => new UsersEventsViewModel
                                                     {
-                                                        UserId = ue.UserId,
-                                                        EventId = ue.Event.Id,
-                                                        EventName = ue.Event.Name,
-                                                        EventDate = ue.Event.StartDate,
-                                                        Status = ue.Event.IsFinished == true ? "Приключил" : "Настоящ"
+                                                        UserId = ue.OrganizerId,
+                                                        EventId = ue.Id,
+                                                        EventName = ue.Name,
+                                                        EventDate = ue.StartDate,
+                                                        Status = ue.IsFinished == true ? "Приключил" : "Настоящ"
                                                        
                                                     })
                                                     .ToListAsync();
