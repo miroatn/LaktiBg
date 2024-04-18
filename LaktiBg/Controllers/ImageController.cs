@@ -51,7 +51,7 @@ namespace LaktiBg.Controllers
         {
             string userId = User.Id();
 
-            if (await imageService.CheckIfUserIsTheImageAuthor(userId, id) == false)
+            if (await imageService.CheckIfUserIsTheImageAuthor(userId, id) == false && User.IsAdmin() == false)
             {
                 return Forbid();
             }
