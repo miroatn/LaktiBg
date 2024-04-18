@@ -33,7 +33,7 @@ namespace LaktiBg.Core.Contracts.Event
 
         Task<EventViewModel> GetEventViewModelByIdAsync(int id);
 
-        Task DeleteAsync(int id, string userId);
+        Task DeleteAsync(int id, string userId, bool isAdmin);
 
         Task<EventFormModel> GetEventFormModelByIdAsync(int id);
 
