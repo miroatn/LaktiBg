@@ -283,7 +283,8 @@ namespace LaktiBg.Controllers
             string userId = User.Id();
             try
             {
-                await eventService.DeleteAsync(id, userId);
+                bool isAdmin = User.IsAdmin();
+                await eventService.DeleteAsync(id, userId, isAdmin);
 
             }
             catch (UnauthorizedAccessException ex)

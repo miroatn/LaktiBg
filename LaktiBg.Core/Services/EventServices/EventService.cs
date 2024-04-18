@@ -374,13 +374,13 @@ namespace LaktiBg.Core.Services.EventServices
             return null;
         }
 
-        public async Task DeleteAsync(int id, string userId)
+        public async Task DeleteAsync(int id, string userId, bool isAdmin)
         {
             Event? currentEvent = await repository.All<Event>()
                                     .Where(e => e.Id == id)
                                     .FirstOrDefaultAsync();
 
-            if (currentEvent.OrganizerId != userId)
+            if (currentEvent.OrganizerId != userId && isAdmin == false)
             {
                 throw new UnauthorizedAccessException(UnauthorizedAccesError);
             }
