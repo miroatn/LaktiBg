@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-page-handler="Create" method="post">
+        <form id="eventForm" asp-page-handler="Create" method="post">
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" placeholder="Наименование на събитието">
@@ -21,16 +21,17 @@
               <input asp-for="IsVisible" type="checkbox" class="custom-control-input" id="customCheck1">
               <label class="custom-control-label" asp-for="IsVisible">Мястото е видимо</label>
             </div>
-                <label for="customRange2" class="form-label">Минимален рейтинг на потребителя</label>
-                <input asp-for="MinRatingRequired" type="range" class="form-range" min="0" max="7" id="customRange2">
-                 <div class="form-group">
+
+            <label for="customRange2" class="form-label">Минимален рейтинг на потребителя:   <span id="ratingValue" style="margin-left: 5px;">1</span></label>
+            <input asp-for="MinRatingRequired" type="range" class="form-range" min="1" max="7" id="customRange2">
+
             <div class="form-group">
-                <label asp-for="ParticipantsMaxCount"></label>
+                    <label asp-for="ParticipantsMaxCount">Максимален брой на участниците</label>
                 <input asp-for="ParticipantsMaxCount" class="form-control" placeholder="Максимален брой на участниците">
                 <span asp-validation-for="ParticipantsMaxCount" class="small text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MinAgeRequired"></label>
+                <label asp-for="MinAgeRequired">Минимална възраст на участниците</label>
                 <input asp-for="MinAgeRequired" class="form-control" placeholder="Минимална възраст на участниците">
                 <span asp-validation-for="MinAgeRequired" class="small text-danger"></span>
             </div>
@@ -39,16 +40,16 @@
                 <textarea asp-for="Description" rows="4" class="form-control" placeholder="Описание на събитието"></textarea>
                 <span asp-validation-for="Description" class="small text-danger"></span>
             </div>
-                    <label>Типове на събитие:</label>
-                    <br />
+                <label>Типове на събитие:</label>
+                <br />
                     @foreach (var eventType in Model.Types)
                     {
-                             <input type="checkbox" name="SelectedTypes" value="@eventType.Id" /> @eventType.Name <br />
+                    <input type="checkbox" name="SelectedTypes" value="@eventType.Id" /> @eventType.Name <br />
                     }
-                <h1>Choose Place</h1>
+                <span id="typesError" class="small text-danger" style="display: none;">Изберете поне един тип на събитие.</span>
+                <h1>Място на събитието:</h1>
 
                 <div class="form-group">
-                <label>Място на събитието:</label>
                  <select asp-for="SelectedPlaceId">
                     <option value="">Изберете място</option>
                             @foreach (var location in Model.Places)
@@ -66,3 +67,33 @@
 @section Scripts {
                 <partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+    document.getElementById('eventForm').addEventListener('submit', function (event) {
+        var checkboxes = document.getElementsByName('SelectedTypes');
+        var isChecked = false;
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                isChecked = true;
+                break;
+            }
+        }
+        if (!isChecked) {
+            event.preventDefault();
+            document.getElementById('typesError').style.display = 'block';
+        }
+    });
+</script>
+
+<script>
+    var rangeInput = document.getElementById('customRange2');
+    var ratingValue = document.getElementById('ratingValue');
+
+    function updateValue() {
+        ratingValue.innerText = rangeInput.value;
+    }
+
+    updateValue();
+
+    rangeInput.addEventListener('input', updateValue);
+</script>
